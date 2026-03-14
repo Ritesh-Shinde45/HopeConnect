@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ritesh.hoppeconnect"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- SMS: required for OTP sending via SmsManagerHelper -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -10,16 +31,93 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Hoppeconnect">
+        android:theme="@style/Theme.Hoppeconnect"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="33">
+
+        <!-- FileProvider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- Splash Activity (Launcher) -->
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Hoppeconnect">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- Explore -->
+        <activity
+            android:name=".ExploreActivity"
+            android:launchMode="singleTop" />
+
+        <!-- Profile -->
+        <activity
+            android:name=".ProfileActivity"
+            android:launchMode="singleTop" />
+
+        <!-- Chats -->
+        <activity
+            android:name=".ChatsActivity"
+            android:launchMode="singleTop" />
+
+        <!-- Detail screen -->
+        <activity
+            android:name=".MissedPersonDetailActivity"
+            android:parentActivityName=".ExploreActivity" />
+
+        <!-- Notifications -->
+        <activity
+            android:name=".NotificationsActivity"
+            android:parentActivityName=".MainActivity" />
+
+        <!-- My Reports -->
+        <activity
+            android:name=".MyReportsActivity"
+            android:parentActivityName=".ProfileActivity" />
+
+        <!-- Auth -->
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ForgotPasswordActivity" />
+
+        <!-- Admin Dashboard — only reachable after admin login/register -->
+        <activity
+            android:name=".AdminDashboardActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+
+        <!-- Profile sub-screens -->
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".HelpSupportActivity" />
+        <activity android:name=".PrivacyPolicyActivity" />
+        <activity android:name=".AboutActivity" />
+
+        <!-- Other screens -->
+        <activity android:name=".NewReportActivity" />
+        <activity android:name=".ChatRoomActivity" />
+        <activity android:name=".ChatDetailActivity" />
+        <activity android:name=".BuyTeaActivity" />
+        <activity android:name=".TechnologyWithHumanityActivity" />
+
     </application>
 
 </manifest>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "611469646802",
+    "project_id": "hopeconnect-2a494",
+    "storage_bucket": "hopeconnect-2a494.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611469646802:android:25a4077fcd6c29eda5060b",
+        "android_client_info": {
+          "package_name": "com.ritesh.hoppeconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPcFNAi6ZLPAazFp_zHQyIuGyC9C3XoUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/menu/admin_bottom_nav_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_overview"
+        android:icon="@drawable/ic_home"
+        android:title="Overview" />
+
+    <item
+        android:id="@+id/nav_approve_reports"
+        android:icon="@drawable/ic_add_report"
+        android:title="Approve" />
+
+    <item
+        android:id="@+id/nav_spammed_reports"
+        android:icon="@drawable/ic_report"
+        android:title="Spammed" />
+
+    <item
+        android:id="@+id/nav_admin_profile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile" />
+
+</menu>
+
+    <!--
+        ═══════════════════════════════════════════════════════════════════════
+        ICON NOTE: Replace the drawable references above with whatever icons
+        you already have in your project. Common Material alternatives:
+          ic_dashboard    → @drawable/ic_home  or any overview icon
+          ic_check_circle → @drawable/ic_done  or ic_check
+          ic_report       → @drawable/ic_flag  or ic_warning
+          ic_person       → @drawable/ic_account_circle
+
+        You can also use Material Icons from the vector asset studio in
+        Android Studio:  File > New > Vector Asset > Clip Art
+        ═══════════════════════════════════════════════════════════════════════
+    -->

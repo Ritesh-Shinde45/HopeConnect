@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="#FFFFFF"
+    android:padding="12dp">
+
+    <!-- Avatar circle with initial -->
+    <TextView
+        android:id="@+id/tvAvatar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/circle_purple_bg"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvAvatar"
+        android:layout_toStartOf="@id/tvTime"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="6dp"
+        android:textColor="#212121"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:singleLine="true"
+        android:ellipsize="end" />
+
+    <!-- Last message -->
+    <TextView
+        android:id="@+id/tvLastMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvAvatar"
+        android:layout_toStartOf="@id/tvUnreadCount"
+        android:layout_below="@id/tvName"
+        android:layout_marginTop="2dp"
+        android:textColor="#757575"
+        android:textSize="13sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="6dp"
+        android:textColor="#9E9E9E"
+        android:textSize="11sp" />
+
+    <!-- Unread badge -->
+    <TextView
+        android:id="@+id/tvUnreadCount"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/tvTime"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/circle_purple_bg"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="10sp"
+        android:visibility="gone" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@id/tvAvatar"
+        android:background="#E0E0E0" />
+
+</RelativeLayout>
