@@ -11,16 +11,19 @@ import kotlinx.coroutines.runBlocking
 
 object AppwriteService {
 
-    const val USERS_BUCKET_ID = "gvjgvjgvjgvjvg"
+    const val USERS_BUCKET_ID  = "gvjgvjgvjgvjvg"
     const val ENDPOINT         = "https://cloud.appwrite.io/v1"
     const val PROJECT_ID       = "hoppeconnect"
     const val DB_ID            = "69a559b30025d6fa1396"
     const val COL_USERS        = "users"
-    const val COL_REPORTS        = "approve_reports"
+    const val COL_REPORTS      = "approve_reports"
     const val COL_CHATS        = "chats"
-    const val COL_ADMINS        = "admins"
+    const val COL_ADMINS       = "admins"
     const val COL_MSGS         = "messages"
     const val CHAT_BUCKET_ID   = "chat_media"
+
+    // Admin email — anyone using this is always routed to AdminDashboard
+    const val ADMIN_EMAIL = "riteshshinde472@gmail.com"
 
     @JvmField val APPWRITE_ENDPOINT   = ENDPOINT
     @JvmField val APPWRITE_PROJECT_ID = PROJECT_ID
@@ -47,6 +50,10 @@ object AppwriteService {
     @JvmStatic fun getStorage()  : Storage   = _storage   ?: error("Call init() first")
 
     @JvmStatic
+    fun isAdminEmail(email: String): Boolean =
+        email.trim().lowercase() == ADMIN_EMAIL.lowercase()
+
+    @JvmStatic
     fun isLoggedIn(): Boolean {
         return try {
             runBlocking { _account?.get() ?: throw IllegalStateException("Call init() first") }
@@ -57,6 +64,30 @@ object AppwriteService {
     @JvmStatic
     fun getCurrentUserOrNull(): User<Map<String, Any>>? {
         return try { runBlocking { _account?.get() } } catch (e: Exception) { null }
+    }
+
+    /**
+     * Creates account + session.
+     * Sends verification email only for non-admin users.
+     * Verification failure is non-fatal — never blocks registration.
+     */
+    @JvmStatic
+    @Throws(Exception::class)
+    fun createAccountAndSignIn(email: String, password: String, name: String) {
+        runBlocking {
+            val account = _account ?: throw IllegalStateException("Call init() first")
+            account.create(ID.unique(), email, password, name)
+            account.createEmailPasswordSession(email, password)
+            // Admin email is trusted — skip verification entirely
+            if (!isAdminEmail(email)) {
+                try {
+                    account.createVerification("https://hoppeconnect.appwrite.io/verify")
+                } catch (e: Exception) {
+                    android.util.Log.w("AppwriteService",
+                        "createVerification non-fatal: ${e.message}")
+                }
+            }
+        }
     }
 
     @JvmStatic
@@ -77,13 +108,16 @@ object AppwriteService {
         }
     }
 
+    /**
+     * Returns true if the current Appwrite account has a verified email.
+     * Admin email is always considered verified — no gate applied.
+     */
     @JvmStatic
-    @Throws(Exception::class)
-    fun createAccountAndSignIn(email: String, password: String, name: String) {
-        runBlocking {
-            val account = _account ?: throw IllegalStateException("Call init() first")
-            account.create(ID.unique(), email, password, name)
-            account.createEmailPasswordSession(email, password)
-        }
+    fun isEmailVerified(): Boolean {
+        return try {
+            val user = runBlocking { _account?.get() } ?: return false
+            if (isAdminEmail(user.email)) return true
+            user.emailVerification
+        } catch (e: Exception) { false }
     }
 }

@@ -1,5 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">hoppeconnect</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="app_name">HoppeConnect</string>
+
+    <!-- Default fragment placeholder — required by fragment_achievement.xml,
+         fragment_help.xml, fragment_match.xml. Do not remove. -->
+    <string name="hello_blank_fragment">Fragment</string>
+
+    <!--
+        Replace the value below with your actual Web Client ID from Google Cloud Console.
+        How to get it:
+          1. https://console.cloud.google.com → APIs & Services → Credentials
+          2. Find the OAuth 2.0 Client ID of type "Web application"
+          3. Copy the Client ID ending in .apps.googleusercontent.com
+          4. Paste it below replacing the placeholder
+    -->
+    <string name="default_web_client_id">611469646802-p9g03lqmhd8878ltkc7v2lvl3803b1g4.apps.googleusercontent.com</string>
+
 </resources>

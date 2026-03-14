@@ -3,6 +3,10 @@
     package="com.ritesh.hoppeconnect"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--
+        No SEND_SMS / RECEIVE_SMS needed.
+        Verification is done via Appwrite email — no device SIM required.
+    -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -13,10 +17,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <!-- SMS: required for OTP sending via SmsManagerHelper -->
-    <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -57,48 +57,31 @@
             </intent-filter>
         </activity>
 
-        <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:launchMode="singleTop" />
 
-        <!-- Explore -->
-        <activity
-            android:name=".ExploreActivity"
-            android:launchMode="singleTop" />
+        <activity android:name=".ExploreActivity"  android:launchMode="singleTop" />
+        <activity android:name=".ProfileActivity"  android:launchMode="singleTop" />
+        <activity android:name=".ChatsActivity"    android:launchMode="singleTop" />
 
-        <!-- Profile -->
-        <activity
-            android:name=".ProfileActivity"
-            android:launchMode="singleTop" />
-
-        <!-- Chats -->
-        <activity
-            android:name=".ChatsActivity"
-            android:launchMode="singleTop" />
-
-        <!-- Detail screen -->
         <activity
             android:name=".MissedPersonDetailActivity"
             android:parentActivityName=".ExploreActivity" />
-
-        <!-- Notifications -->
         <activity
             android:name=".NotificationsActivity"
             android:parentActivityName=".MainActivity" />
-
-        <!-- My Reports -->
         <activity
             android:name=".MyReportsActivity"
             android:parentActivityName=".ProfileActivity" />
 
-        <!-- Auth -->
+        <!-- Auth screens -->
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ForgotPasswordActivity" />
 
-        <!-- Admin Dashboard — only reachable after admin login/register -->
+        <!-- Admin Dashboard -->
         <activity
             android:name=".AdminDashboardActivity"
             android:exported="false"

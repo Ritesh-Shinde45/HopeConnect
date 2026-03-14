@@ -19,7 +19,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.ritesh.hoppeconnect.databinding.LoginPageBinding;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,21 +28,11 @@ import io.appwrite.services.Databases;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG            = "LoginActivity";
-    private static final String PREFS          = "hoppe_prefs";
-    private static final String KEY_UID        = "logged_in_user_id";
-    private static final String KEY_NAME       = "logged_in_name";
-    private static final String KEY_ROLE       = "logged_in_role";
-    private static final String ADMIN_USERNAME = "Admin";
-
-    // ── Admin-designated mobile numbers (same list as RegisterActivity) ───────
-    // Login checks COL_ADMINS whenever the entered identifier is "Admin",
-    // an admin email, or an admin username. The mobile list here is used only
-    // as a secondary lookup if the user types their mobile at login.
-    private static final List<String> ADMIN_MOBILES = Arrays.asList(
-            "8080769308",
-            "9096548683"
-    );
+    private static final String TAG   = "LoginActivity";
+    private static final String PREFS = "hoppe_prefs";
+    private static final String KEY_UID  = "logged_in_user_id";
+    private static final String KEY_NAME = "logged_in_name";
+    private static final String KEY_ROLE = "logged_in_role";
 
     private LoginPageBinding   binding;
     private GoogleSignInClient googleSignInClient;
@@ -60,16 +49,10 @@ public class LoginActivity extends AppCompatActivity {
                             handleGoogleLogin(account);
                         } catch (ApiException e) {
                             Log.e(TAG, "Google login failed code=" + e.getStatusCode(), e);
-                            if (e.getStatusCode() == 10) {
-                                Toast.makeText(this,
-                                        "Google Sign-In config error (code 10). "
-                                                + "Add SHA-1 fingerprint to Google Cloud Console.",
-                                        Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(this,
-                                        "Google Sign-In failed (" + e.getStatusCode() + ")",
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            String msg = e.getStatusCode() == 10
+                                    ? "Google Sign-In error (code 10). Add SHA-1 + Web Client ID."
+                                    : "Google Sign-In failed (" + e.getStatusCode() + ")";
+                            Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -82,11 +65,10 @@ public class LoginActivity extends AppCompatActivity {
 
         AppwriteService.init(this);
 
-        // Auto-navigate only when already logged in AND screen wasn't opened deliberately
         boolean explicitOpen = getIntent().getBooleanExtra("explicit_login", false);
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         if (!explicitOpen && prefs.contains(KEY_UID)) {
-            routeLoggedInUser(prefs.getString(KEY_ROLE, "user"));
+            navigateTo(prefs.getString(KEY_ROLE, "user"));
             return;
         }
 
@@ -98,7 +80,9 @@ public class LoginActivity extends AppCompatActivity {
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+                .requestProfile()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
@@ -117,13 +101,10 @@ public class LoginActivity extends AppCompatActivity {
             Intent i = new Intent(this, RegisterActivity.class);
             i.putExtra("explicit_login", true);
             startActivity(i);
-            // Do NOT finish() — user can press back to return to Login
         });
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // MAIN LOGIN ENTRY POINT
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Manual login ──────────────────────────────────────────────────────────
     private void attemptLogin() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         String password   = binding.etLoginPassword.getText().toString();
@@ -133,112 +114,36 @@ public class LoginActivity extends AppCompatActivity {
 
         setLoading(true);
 
-        // ── Decide login path ─────────────────────────────────────────────────
-        //  a) Identifier is the literal "Admin" username   → admin path
-        //  b) Identifier is an admin mobile number         → admin path
-        //  c) Everything else                              → user path
-        if (identifier.equalsIgnoreCase(ADMIN_USERNAME)
-                || ADMIN_MOBILES.contains(identifier)) {
-            loginAsAdmin(identifier, password);
-        } else {
-            loginAsUser(identifier, password);
-        }
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // ADMIN LOGIN
-    // Admin can log in with:  username ("Admin") | email | mobile number
-    // No OTP required after first registration — just email/username + password.
-    // This handles the app-reinstall scenario cleanly.
-    // ─────────────────────────────────────────────────────────────────────────
-    private void loginAsAdmin(String identifier, String password) {
         new Thread(() -> {
             try {
-                Databases db = AppwriteService.getDatabases();
+                Databases db    = AppwriteService.getDatabases();
+                boolean isAdmin = AppwriteService.isAdminEmail(identifier);
+                boolean isEmail = Patterns.EMAIL_ADDRESS.matcher(identifier).matches();
 
-                // Determine which field to search in the admins collection
+                String collectionId;
                 String field;
-                if (identifier.equalsIgnoreCase(ADMIN_USERNAME)) {
-                    field = "username";
-                } else if (ADMIN_MOBILES.contains(identifier)) {
-                    field = "mobile";
-                } else if (Patterns.EMAIL_ADDRESS.matcher(identifier).matches()) {
-                    field = "email";
+
+                if (isAdmin) {
+                    collectionId = AppwriteService.COL_ADMINS;
+                    field        = "email";
+                } else if (isEmail) {
+                    collectionId = AppwriteService.COL_USERS;
+                    field        = "email";
                 } else {
-                    field = "username";
+                    collectionId = AppwriteService.COL_USERS;
+                    field        = "username";
                 }
 
                 List<? extends Document<?>> docs =
-                        AppwriteHelper.findUserByField(
-                                db, AppwriteService.COL_ADMINS, field, identifier
-                        ).getDocuments();
+                        AppwriteHelper.findUserByField(db, collectionId, field, identifier)
+                                .getDocuments();
 
-                // Fallback: if "Admin" username not found in admins, try email field
-                if (docs.isEmpty() && field.equals("username")) {
+                if (docs.isEmpty() && !isEmail && !isAdmin) {
                     docs = AppwriteHelper.findUserByField(
-                            db, AppwriteService.COL_ADMINS, "email", identifier
+                            db, AppwriteService.COL_ADMINS, "username", identifier
                     ).getDocuments();
+                    if (!docs.isEmpty()) collectionId = AppwriteService.COL_ADMINS;
                 }
-
-                if (docs.isEmpty()) {
-                    runOnUiThread(() -> {
-                        setLoading(false);
-                        binding.etLoginUsername.setError(
-                                "Admin account not found. Register first.");
-                    });
-                    return;
-                }
-
-                Document<?> adminDoc = docs.get(0);
-                @SuppressWarnings("unchecked")
-                Map<String, Object> adminData = (Map<String, Object>) adminDoc.getData();
-
-                String storedHash = (String) adminData.get("password");
-                if (!verifyPassword(password, storedHash)) {
-                    runOnUiThread(() -> {
-                        setLoading(false);
-                        binding.etLoginPassword.setError("Incorrect password");
-                    });
-                    return;
-                }
-
-                String uid  = adminDoc.getId();
-                String name = adminData.get("name") != null
-                        ? adminData.get("name").toString() : "Admin";
-
-                saveSession(uid, name, "admin");
-
-                runOnUiThread(() -> {
-                    setLoading(false);
-                    Toast.makeText(this, "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
-                    routeLoggedInUser("admin");
-                });
-
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    setLoading(false);
-                    Log.e(TAG, "Admin login error", e);
-                    Toast.makeText(this, "Login error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                });
-            }
-        }).start();
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // NORMAL USER LOGIN
-    // Accepts email or username. No OTP required for login.
-    // ─────────────────────────────────────────────────────────────────────────
-    private void loginAsUser(String identifier, String password) {
-        new Thread(() -> {
-            try {
-                Databases db = AppwriteService.getDatabases();
-
-                String field = Patterns.EMAIL_ADDRESS.matcher(identifier).matches()
-                        ? "email" : "username";
-
-                List<? extends Document<?>> docs =
-                        AppwriteHelper.findUserByField(db, field, identifier).getDocuments();
 
                 if (docs.isEmpty()) {
                     runOnUiThread(() -> {
@@ -261,86 +166,197 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
+                String emailInDoc = userData.get("email") != null
+                        ? userData.get("email").toString() : identifier;
+                Object roleObj = userData.get("role");
+                String role = (roleObj != null) ? roleObj.toString() : "user";
+                if (AppwriteService.isAdminEmail(emailInDoc)) role = "admin";
+
+                // Email verification gate — skip for admin
+                if (!"admin".equals(role)) {
+                    try {
+                        AppwriteService.createSessionSync(emailInDoc, password);
+                        if (!AppwriteService.isEmailVerified()) {
+                            runOnUiThread(() -> {
+                                setLoading(false);
+                                Toast.makeText(this,
+                                        "Email not verified. Check your inbox and click the link.",
+                                        Toast.LENGTH_LONG).show();
+                            });
+                            return;
+                        }
+                    } catch (Exception ignored) { }
+                }
+
                 String uid  = userDoc.getId();
                 String name = userData.get("name") != null
                         ? userData.get("name").toString() : "User";
-
-                // Check if this user is actually stored as admin (role field guard)
-                Object roleObj = userData.get("role");
-                String role = roleObj != null ? roleObj.toString() : "user";
 
                 saveSession(uid, name, role);
 
+                final String finalRole = role;
+                final String finalName = name;
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Toast.makeText(this, "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
-                    routeLoggedInUser(role);
+                    Toast.makeText(this,
+                            "Welcome back, " + finalName + "!", Toast.LENGTH_SHORT).show();
+                    navigateTo(finalRole);
                 });
 
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     setLoading(false);
+                    Log.e(TAG, "Login error", e);
                     Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             }
         }).start();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GOOGLE LOGIN
-    // Checks users collection only — admin never uses Google login.
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Google Sign-In ────────────────────────────────────────────────────────
     private void handleGoogleLogin(GoogleSignInAccount account) {
         if (account.getEmail() == null) return;
         setLoading(true);
-        String email = account.getEmail();
 
-        new Thread(() -> {
-            try {
-                Databases db = AppwriteService.getDatabases();
-                List<? extends Document<?>> docs =
-                        AppwriteHelper.findUserByField(db, "email", email).getDocuments();
+        String email       = account.getEmail();
+        String displayName = account.getDisplayName() != null
+                ? account.getDisplayName() : "Admin";
+        boolean isAdmin    = AppwriteService.isAdminEmail(email);
 
-                if (docs.isEmpty()) {
-                    runOnUiThread(() -> {
-                        setLoading(false);
-                        googleSignInClient.signOut();
-                        Intent i = new Intent(this, RegisterActivity.class);
-                        i.putExtra("google_email", email);
-                        i.putExtra("google_name",  account.getDisplayName());
-                        startActivity(i);
-                    });
-                    return;
+        googleSignInClient.signOut(); // always sign out of Google session immediately
+
+        if (isAdmin) {
+            // ── ADMIN GOOGLE PATH ─────────────────────────────────────────────
+            // We CANNOT query COL_ADMINS here without an authenticated Appwrite
+            // session — it throws "not authorized".
+            // Instead, use listAllDocuments which we'll call on background thread,
+            // BUT only if COL_ADMINS has "Any - Read" permission set in console.
+            // If that permission is missing too, we fall back to checking local prefs.
+            new Thread(() -> {
+                boolean alreadyRegistered = false;
+                String savedUid  = null;
+                String savedName = displayName;
+
+                // ── Try DB first ──────────────────────────────────────────────
+                try {
+                    List<? extends Document<?>> adminDocs =
+                            AppwriteHelper.listAllDocuments(
+                                    AppwriteService.getDatabases(),
+                                    AppwriteService.DB_ID,
+                                    AppwriteService.COL_ADMINS
+                            ).getDocuments();
+
+                    if (!adminDocs.isEmpty()) {
+                        // Admin document exists → already registered
+                        alreadyRegistered = true;
+                        Document<?> doc = adminDocs.get(0);
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> data = (Map<String, Object>) doc.getData();
+                        savedUid  = doc.getId();
+                        savedName = data.get("name") != null
+                                ? data.get("name").toString() : displayName;
+                    }
+                } catch (Exception dbEx) {
+                    Log.w(TAG, "COL_ADMINS list failed (permission?), falling back to prefs: "
+                            + dbEx.getMessage());
+                    // ── Fallback: check local SharedPreferences ───────────────
+                    SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+                    if (prefs.contains(KEY_UID)
+                            && "admin".equals(prefs.getString(KEY_ROLE, ""))) {
+                        alreadyRegistered = true;
+                        savedUid  = prefs.getString(KEY_UID, null);
+                        savedName = prefs.getString(KEY_NAME, displayName);
+                    }
                 }
 
-                Document<?> userDoc = docs.get(0);
-                @SuppressWarnings("unchecked")
-                Map<String, Object> userData = (Map<String, Object>) userDoc.getData();
-                String uid  = userDoc.getId();
-                String name = userData.get("name") != null
-                        ? userData.get("name").toString() : "User";
-
-                saveSession(uid, name, "user");
+                final boolean registered   = alreadyRegistered;
+                final String  finalUid     = savedUid;
+                final String  finalName    = savedName;
 
                 runOnUiThread(() -> {
                     setLoading(false);
-                    googleSignInClient.signOut();
-                    Toast.makeText(this, "Welcome, " + name + "!", Toast.LENGTH_SHORT).show();
-                    routeLoggedInUser("user");
+                    if (registered && finalUid != null) {
+                        // Already registered → restore session and go to dashboard
+                        saveSession(finalUid, finalName, "admin");
+                        Toast.makeText(this,
+                                "Welcome back, " + finalName + "!",
+                                Toast.LENGTH_SHORT).show();
+                        navigateTo("admin");
+                    } else {
+                        // Never registered → go to Register to complete the form
+                        Intent i = new Intent(this, RegisterActivity.class);
+                        i.putExtra("google_email", email);
+                        i.putExtra("google_name",  displayName);
+                        startActivity(i);
+                    }
                 });
+            }).start();
 
-            } catch (Exception e) {
-                runOnUiThread(() -> {
-                    setLoading(false);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
-            }
-        }).start();
+        } else {
+            // ── NORMAL USER GOOGLE PATH ───────────────────────────────────────
+            new Thread(() -> {
+                try {
+                    Databases db = AppwriteService.getDatabases();
+
+                    List<? extends Document<?>> docs =
+                            AppwriteHelper.findUserByField(
+                                    db, AppwriteService.COL_USERS, "email", email
+                            ).getDocuments();
+
+                    if (docs.isEmpty()) {
+                        // Not registered → send to Register pre-filled
+                        runOnUiThread(() -> {
+                            setLoading(false);
+                            Intent i = new Intent(this, RegisterActivity.class);
+                            i.putExtra("google_email", email);
+                            i.putExtra("google_name",  displayName);
+                            startActivity(i);
+                        });
+                        return;
+                    }
+
+                    Document<?> doc = docs.get(0);
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> data = (Map<String, Object>) doc.getData();
+                    String uid  = doc.getId();
+                    String name = data.get("name") != null
+                            ? data.get("name").toString() : displayName;
+                    Object roleObj = data.get("role");
+                    String role = (roleObj != null) ? roleObj.toString() : "user";
+
+                    saveSession(uid, name, role);
+
+                    final String finalRole = role;
+                    final String finalName = name;
+                    runOnUiThread(() -> {
+                        setLoading(false);
+                        Toast.makeText(this,
+                                "Welcome, " + finalName + "!", Toast.LENGTH_SHORT).show();
+                        navigateTo(finalRole);
+                    });
+
+                } catch (Exception e) {
+                    runOnUiThread(() -> {
+                        setLoading(false);
+                        Log.e(TAG, "Google user login error", e);
+                        Toast.makeText(this,
+                                "Google login error: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    });
+                }
+            }).start();
+        }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    private void navigateTo(String role) {
+        Intent i = "admin".equals(role)
+                ? new Intent(this, AdminDashboardActivity.class)
+                : new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
+    }
 
     private void saveSession(String uid, String name, String role) {
         getSharedPreferences(PREFS, MODE_PRIVATE).edit()
@@ -348,15 +364,6 @@ public class LoginActivity extends AppCompatActivity {
                 .putString(KEY_NAME, name)
                 .putString(KEY_ROLE, role)
                 .apply();
-    }
-
-    private void routeLoggedInUser(String role) {
-        Intent i = "admin".equals(role)
-                ? new Intent(this, AdminDashboardActivity.class)
-                : new Intent(this, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-        finish();
     }
 
     private boolean verifyPassword(String plain, String storedHash) {

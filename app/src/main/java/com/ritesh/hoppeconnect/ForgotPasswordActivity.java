@@ -5,16 +5,22 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.ritesh.hoppeconnect.databinding.ForgotPasswordBinding;
+
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import io.appwrite.coroutines.CoroutineCallback;
 import io.appwrite.exceptions.AppwriteException;
 import io.appwrite.models.Document;
+import io.appwrite.services.Account;
 import io.appwrite.services.Databases;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
@@ -23,9 +29,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private ForgotPasswordBinding binding;
 
-    private String generatedOtp    = null;
-    private String foundDocumentId = null;
-    private String foundMobile     = null;   // for SMS delivery
+    private String foundDocumentId   = null;
+    private String foundEmail        = null;
+    private String foundCollectionId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,39 +42,64 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         AppwriteService.init(this);
 
         binding.layoutNewPassword.setVisibility(View.GONE);
+        binding.tvResendOTP.setText("Send Reset Email");
         setupClickListeners();
     }
 
     private void setupClickListeners() {
         binding.ivBack.setOnClickListener(v -> finish());
 
-        binding.tvResendOTP.setOnClickListener(v -> sendOtpForIdentifier());
+        binding.tvResendOTP.setOnClickListener(v -> findUserAndSendReset());
 
         binding.btnLogin.setOnClickListener(v -> {
             if (foundDocumentId == null) {
-                verifyAndReveal();
+                Toast.makeText(this,
+                        "Tap 'Send Reset Email' first to find your account.",
+                        Toast.LENGTH_SHORT).show();
             } else {
                 resetPassword();
             }
         });
     }
 
-    // ── Step 0: find user and send OTP ────────────────────────────────────────
-    private void sendOtpForIdentifier() {
+    // ── Step 1: find user → trigger Appwrite password recovery email ──────────
+    private void findUserAndSendReset() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         if (identifier.isEmpty()) {
-            binding.etLoginUsername.setError("Enter username or mobile number");
+            binding.etLoginUsername.setError("Enter your email or username");
             return;
         }
         setLoading(true);
 
         new Thread(() -> {
             try {
-                Databases db    = AppwriteService.getDatabases();
-                String field    = identifier.matches("\\d{10}") ? "mobile" : "username";
+                Databases db     = AppwriteService.getDatabases();
+                boolean isEmail  = identifier.contains("@");
+                String field;
+                String collectionId;
+
+                if (isEmail && AppwriteService.isAdminEmail(identifier)) {
+                    field        = "email";
+                    collectionId = AppwriteService.COL_ADMINS;
+                } else if (isEmail) {
+                    field        = "email";
+                    collectionId = AppwriteService.COL_USERS;
+                } else {
+                    field        = "username";
+                    collectionId = AppwriteService.COL_USERS;
+                }
 
                 List<? extends Document<?>> docs =
-                        AppwriteHelper.findUserByField(db, field, identifier).getDocuments();
+                        AppwriteHelper.findUserByField(db, collectionId, field, identifier)
+                                .getDocuments();
+
+                // Fallback: try admins collection for username
+                if (docs.isEmpty() && !isEmail) {
+                    docs = AppwriteHelper.findUserByField(
+                            db, AppwriteService.COL_ADMINS, "username", identifier
+                    ).getDocuments();
+                    if (!docs.isEmpty()) collectionId = AppwriteService.COL_ADMINS;
+                }
 
                 if (docs.isEmpty()) {
                     runOnUiThread(() -> {
@@ -79,70 +110,64 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
 
                 Document<?> doc = docs.get(0);
-                foundDocumentId = doc.getId();
-
                 @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) doc.getData();
-                foundMobile = data.get("mobile") != null
-                        ? data.get("mobile").toString() : null;
 
-                generatedOtp = SmsManagerHelper.generateOtp();
-                Log.d(TAG, "Reset OTP: " + generatedOtp); // REMOVE in production
+                foundDocumentId   = doc.getId();
+                foundCollectionId = collectionId;
+                foundEmail = data.get("email") != null
+                        ? data.get("email").toString() : null;
 
-                // Send real SMS if we have the mobile number
-                if (foundMobile != null && !foundMobile.isEmpty()) {
-                    runOnUiThread(() -> {
-                        SmsManagerHelper.sendOtp(this, foundMobile, generatedOtp);
-                        setLoading(false);
-                        Toast.makeText(this,
-                                "OTP sent to " + foundMobile, Toast.LENGTH_SHORT).show();
-                        binding.tvResendOTP.setText("Resend OTP");
-                    });
-                } else {
-                    runOnUiThread(() -> {
-                        setLoading(false);
-                        // Fallback – show in toast (dev only)
-                        Toast.makeText(this,
-                                "[DEV] OTP: " + generatedOtp
-                                        + " (no mobile on file)",
-                                Toast.LENGTH_LONG).show();
-                        binding.tvResendOTP.setText("Resend OTP");
-                    });
+                // ── Appwrite SDK 5.x: createRecovery needs a CoroutineCallback ─
+                if (foundEmail != null) {
+                    Account account = AppwriteService.getAccount();
+                    account.createRecovery(
+                            foundEmail,
+                            "https://hoppeconnect.appwrite.io/recovery",
+                            new CoroutineCallback<>((result, error) -> {
+                                if (error != null) {
+                                    Log.w(TAG, "createRecovery non-fatal: "
+                                            + error.getMessage());
+                                } else {
+                                    Log.d(TAG, "Recovery email dispatched to " + foundEmail);
+                                }
+                            })
+                    );
                 }
+
+                final String finalCollId = collectionId;
+                runOnUiThread(() -> {
+                    setLoading(false);
+                    foundCollectionId = finalCollId;
+                    binding.tvResendOTP.setText("Resend Reset Email");
+                    binding.btnLogin.setText("Reset Password");
+                    binding.layoutNewPassword.setVisibility(View.VISIBLE);
+                    binding.etLoginOTP.setVisibility(View.GONE);
+                    Toast.makeText(this,
+                            "Reset email sent to " + foundEmail
+                                    + ".\nClick the link in your inbox, "
+                                    + "then set a new password below.",
+                            Toast.LENGTH_LONG).show();
+                });
 
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "OTP send error", e);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Find user error", e);
+                    Toast.makeText(this,
+                            "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             }
         }).start();
     }
 
-    // ── Step 1: verify OTP ────────────────────────────────────────────────────
-    private void verifyAndReveal() {
-        if (generatedOtp == null) {
-            Toast.makeText(this, "Please request an OTP first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        String entered = binding.etLoginOTP.getText().toString().trim();
-        if (!entered.equals(generatedOtp)) {
-            binding.etLoginOTP.setError("Incorrect OTP");
-            return;
-        }
-        binding.layoutNewPassword.setVisibility(View.VISIBLE);
-        binding.btnLogin.setText("Reset Password");
-        Toast.makeText(this, "OTP verified! Set your new password.", Toast.LENGTH_SHORT).show();
-    }
-
-    // ── Step 2: update password ───────────────────────────────────────────────
+    // ── Step 2: update hashed password in Appwrite DB document ───────────────
     private void resetPassword() {
         String newPass  = binding.etNewPassword.getText().toString();
         String confPass = binding.etConfirmPassword.getText().toString();
 
-        if (newPass.isEmpty())   { binding.etNewPassword.setError("Required");    return; }
-        if (confPass.isEmpty())  { binding.etConfirmPassword.setError("Required"); return; }
+        if (newPass.isEmpty())         { binding.etNewPassword.setError("Required");      return; }
+        if (confPass.isEmpty())        { binding.etConfirmPassword.setError("Required");   return; }
         if (!newPass.equals(confPass)) {
             binding.etConfirmPassword.setError("Passwords do not match"); return;
         }
@@ -164,7 +189,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 AppwriteHelper.updateDocument(
                         db,
                         AppwriteService.DB_ID,
-                        AppwriteService.COL_USERS,
+                        foundCollectionId,
                         foundDocumentId,
                         update
                 );
@@ -172,7 +197,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     setLoading(false);
                     Toast.makeText(this,
-                            "Password reset! Please log in.", Toast.LENGTH_LONG).show();
+                            "Password updated! Please log in.", Toast.LENGTH_LONG).show();
                     finish();
                 });
 
@@ -201,6 +226,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         if (pwd.matches(".*[!@#$%^&*()_+\\-=\\[\\]{}|;':\",./<>?].*"))  s++;
         return s;
     }
+
     private boolean isPasswordStrong(String pwd) { return getPasswordScore(pwd) >= 5; }
 
     private String hashPassword(String plain) throws Exception {
