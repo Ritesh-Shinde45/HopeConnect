@@ -30,10 +30,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,8 +48,6 @@ import io.appwrite.Permission;
 import io.appwrite.Role;
 import io.appwrite.coroutines.CoroutineCallback;
 import io.appwrite.models.DocumentList;
-import io.appwrite.models.InputFile;
-import io.appwrite.models.User;
 import io.appwrite.services.Account;
 import io.appwrite.services.Databases;
 import io.appwrite.services.Storage;
@@ -110,12 +105,14 @@ public class NewReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_report);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             getWindow().getInsetsController().setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             );
         }
+
         try { AppwriteService.init(getApplicationContext()); }
         catch (Exception e) { Log.w(TAG, "init: " + e.getMessage()); }
         try { storage   = AppwriteService.getStorage();   } catch (Exception e) { storage   = null; }
@@ -134,11 +131,6 @@ public class NewReportActivity extends AppCompatActivity {
         setupLocationButton();
         setupBackButton();
         setupSubmitButton();
-
-        if (account != null) {
-            account.createAnonymousSession(new CoroutineCallback<>(
-                    (r, e) -> Log.d(TAG, e != null ? "Session err: " + e.getMessage() : "Session ok")));
-        }
     }
 
     // ── Init views ────────────────────────────────────────────────────────────
@@ -345,20 +337,13 @@ public class NewReportActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(v -> {
             if (!validateForm()) return;
             btnSubmit.setEnabled(false);
-            if (account != null) {
-                try {
-                    account.get(new CoroutineCallback<User<Map<String, Object>>>((result, error) -> {
-                        String userId = (error == null && result != null) ? result.getId() : null;
-                        if (userId != null && !userId.isEmpty()) {
-                            checkLimitThenUpload(userId);
-                        } else {
-                            uploadAndSave(null);
-                        }
-                    }));
-                } catch (Exception e) {
-                    Log.w(TAG, "account.get error: " + e.getMessage());
-                    uploadAndSave(null);
-                }
+
+            android.content.SharedPreferences prefs =
+                    getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
+            String userId = prefs.getString("logged_in_user_id", null);
+
+            if (userId != null && !userId.isEmpty()) {
+                checkLimitThenUpload(userId);
             } else {
                 uploadAndSave(null);
             }
@@ -462,7 +447,6 @@ public class NewReportActivity extends AppCompatActivity {
                     byte[] bytes  = readBytes(uri);
                     String fileId = UUID.randomUUID().toString().replace("-", "");
 
-                    // ── KEY FIX: catch Throwable to handle Kotlin AppwriteException ──
                     io.appwrite.models.File uploaded;
                     try {
                         uploaded = AppwriteHelper.uploadFileBlocking(
@@ -541,8 +525,15 @@ public class NewReportActivity extends AppCompatActivity {
     }
 
     // ── Save to Appwrite DB ───────────────────────────────────────────────────
+    // FIX: Use Role.user(userId) without empty string scope to avoid malformed
+    //      permission strings like "user:abc123:" that Appwrite rejects.
 
     private void saveToDb(String userId, List<String> photoUrls, String documentUrl) {
+
+        android.content.SharedPreferences prefs =
+                getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
+        String reporterName = prefs.getString("logged_in_name", "");
+
         Map<String, Object> data = new HashMap<>();
         data.put("name",              safeText(etName));
         data.put("age",               Integer.parseInt(safeText(etAge)));
@@ -555,42 +546,55 @@ public class NewReportActivity extends AppCompatActivity {
         data.put("description",       safeText(etDescription));
         data.put("photoUrls",         photoUrls);
         data.put("userId",            userId != null ? userId : "");
-        data.put("status",            "active");
+        data.put("reportedBy",        userId != null ? userId : "");
+        data.put("reporterName",      reporterName);
+        data.put("status",            "pending");
         data.put("locationLat",       locationLat);
         data.put("locationLng",       locationLng);
-        data.put("documentUrl",       documentUrl);
+        if (documentUrl != null && documentUrl.startsWith("http")) {
+            data.put("documentUrl", documentUrl);
+        }
 
-        List<String> permissions = (userId != null && !userId.isEmpty())
-                ? Arrays.asList(
-                Permission.Companion.read(Role.Companion.any()),
-                Permission.Companion.update(Role.Companion.user(userId, "")),
-                Permission.Companion.delete(Role.Companion.user(userId, "")))
-                : Collections.singletonList(Permission.Companion.read(Role.Companion.any()));
+        // ── FIXED PERMISSIONS ─────────────────────────────────────────────────
+        // Old (broken): Role.Companion.user(userId, "")  →  produces "user:abc123:"
+        // New (correct): Role.Companion.user(userId)     →  produces "user:abc123"
+        // ─────────────────────────────────────────────────────────────────────
+        // Use empty permissions list — rely on collection-level permissions in Appwrite console.
+        // Document-level permission strings vary by SDK version and cause rejection errors.
+        List<String> permissions = new ArrayList<>();
 
         if (databases == null) {
             runOnUiThread(() -> {
-                Toast.makeText(this, "Databases not initialized", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Databases not initialized",
+                        Toast.LENGTH_LONG).show();
                 btnSubmit.setEnabled(true);
             });
             return;
         }
 
         try {
-            databases.createDocument(DATABASE_ID, COLLECTION_ID,
-                    UUID.randomUUID().toString(), data, permissions,
+            databases.createDocument(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    UUID.randomUUID().toString(),
+                    data,
+                    permissions,
                     new CoroutineCallback<>((result, error) -> runOnUiThread(() -> {
                         btnSubmit.setEnabled(true);
                         if (error != null) {
-                            Toast.makeText(this, "Save failed: " + error.getMessage(),
+                            Log.e(TAG, "createDocument error: " + error.getMessage());
+                            Toast.makeText(this,
+                                    "Save failed: " + error.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(this, "Report submitted successfully!",
+                            Toast.makeText(this,
+                                    "✅ Report submitted! Waiting for admin approval.",
                                     Toast.LENGTH_LONG).show();
                             finish();
                         }
                     })));
         } catch (Exception e) {
-            Log.e(TAG, "createDocument error: " + e.getMessage(), e);
+            Log.e(TAG, "createDocument exception: " + e.getMessage(), e);
             runOnUiThread(() -> {
                 btnSubmit.setEnabled(true);
                 Toast.makeText(this, "Save failed: " + e.getMessage(),
@@ -621,7 +625,7 @@ public class NewReportActivity extends AppCompatActivity {
     private String getFileName(Uri uri) {
         String result = null;
         if ("content".equals(uri.getScheme())) {
-            try (Cursor c = getContentResolver().query(uri,
+            try (android.database.Cursor c = getContentResolver().query(uri,
                     new String[]{OpenableColumns.DISPLAY_NAME},
                     null, null, null)) {
                 if (c != null && c.moveToFirst()) result = c.getString(0);

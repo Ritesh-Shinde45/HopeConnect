@@ -16,5 +16,13 @@
           4. Paste it below replacing the placeholder
     -->
     <string name="default_web_client_id">611469646802-p9g03lqmhd8878ltkc7v2lvl3803b1g4.apps.googleusercontent.com</string>
-
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_users">All Users</string>
+    <string name="nav_pending">Pending Reports</string>
+    <string name="nav_approved">Approved Reports</string>
+    <string name="nav_all_reports">All Reports</string>
+    <string name="nav_by_date">Reports by Date</string>
+    <string name="nav_announcements">Announcements</string>
+    <string name="nav_export">Export Data</string>
+    <string name="nav_settings">Settings</string>
 </resources>

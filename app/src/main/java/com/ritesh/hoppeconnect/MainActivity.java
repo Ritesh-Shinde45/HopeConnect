@@ -41,10 +41,10 @@ import io.appwrite.models.DocumentList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG           = "MainActivity";
-    private static final String PREFS         = "AppPrefs";
-    private static final String KEY_LOGGED_IN = "isLoggedIn";
-    private static final String KEY_FIRST_LAUNCH = "firstLaunch";
+    private static final String TAG  = "MainActivity";
+    private static final String PREFS    = "hoppe_prefs";
+    private static final String KEY_UID  = "logged_in_user_id";
+    private static final String KEY_ROLE = "logged_in_role";
 
     private ActivityResultLauncher<String[]> permissionLauncher;
 
@@ -61,15 +61,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnNotification;
     private ProgressBar homeProgressBar;
 
-    // Case cards RecyclerView
     private RecyclerView casesRecyclerView;
     private ReportAdapter caseAdapter;
     private final List<ReportModel> caseList = new ArrayList<>();
 
     private String storagePermission;
     private long backPressedTime = 0;
-
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,31 +84,27 @@ public class MainActivity extends AppCompatActivity {
                 : Manifest.permission.READ_EXTERNAL_STORAGE;
 
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String uid  = prefs.getString(KEY_UID, null);
+        String role = prefs.getString(KEY_ROLE, "user");
 
-        if (prefs.getBoolean(KEY_FIRST_LAUNCH, true)) {
-            prefs.edit().putBoolean(KEY_FIRST_LAUNCH, false).apply();
-            startActivity(new Intent(this, RegisterActivity.class));
+        if (uid == null) {
+            Intent i = new Intent(this, LoginActivity.class);
+            i.putExtra("explicit_login", true);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
             finish();
             return;
         }
 
-        if (prefs.getBoolean(KEY_LOGGED_IN, false)) {
-            proceedToInitUI();
+        if ("admin".equals(role)) {
+            Intent i = new Intent(this, AdminDashboardActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
             return;
         }
 
-        new Thread(() -> {
-            boolean loggedIn = AppwriteService.isLoggedIn();
-            if (loggedIn) prefs.edit().putBoolean(KEY_LOGGED_IN, true).apply();
-            runOnUiThread(() -> {
-                if (loggedIn) {
-                    proceedToInitUI();
-                } else {
-                    startActivity(new Intent(this, RegisterActivity.class));
-                    finish();
-                }
-            });
-        }).start();
+        proceedToInitUI();
     }
 
     @Override
@@ -120,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
         if (bottomNav != null) bottomNav.setSelectedItemId(R.id.nav_home);
         loadUserProfile();
     }
-
-    // ── Init ──────────────────────────────────────────────────────────────────
 
     private void proceedToInitUI() {
         setContentView(R.layout.activity_main);
@@ -134,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
         setupPromoCard();
         setupBackPress();
         loadUserProfile();
-        loadRecentCases("all", null);
+        // ── Only load APPROVED (active) reports on home screen ──
+        loadApprovedCases("all", null);
     }
 
     private void initializeViews() {
@@ -169,14 +161,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, NotificationActivity.class)));
     }
 
-    // ── RecyclerView setup ────────────────────────────────────────────────────
-
     private void setupCasesRecyclerView() {
         if (casesRecyclerView == null) return;
-
         casesRecyclerView.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
         caseAdapter = new ReportAdapter(this, caseList, model -> {
             ReportModelCache.put(model);
             Intent intent = new Intent(this, MissedPersonDetailActivity.class);
@@ -191,8 +179,6 @@ public class MainActivity extends AppCompatActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
     }
-
-    // ── Double-back to exit ───────────────────────────────────────────────────
 
     private void setupBackPress() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -210,19 +196,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ── Permissions ───────────────────────────────────────────────────────────
-
     private void registerPermissionLauncher() {
         permissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestMultiplePermissions(),
                 result -> Log.d(TAG, "permissions: " + result));
     }
 
-    // ── User profile ──────────────────────────────────────────────────────────
-
     private void loadUserProfile() {
-        SharedPreferences prefs = getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
-        String userId = prefs.getString("logged_in_user_id", null);
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String userId = prefs.getString(KEY_UID, null);
 
         String cached = prefs.getString("user_display_name", "");
         if (!cached.isEmpty() && userName != null)
@@ -232,12 +214,22 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                Document<?> doc = AppwriteHelper.getDocument(
-                        AppwriteService.getDatabases(),
-                        AppwriteService.DB_ID,
-                        AppwriteService.COL_USERS,
-                        userId);
+                Document<?> doc;
+                try {
+                    doc = AppwriteHelper.getDocument(
+                            AppwriteService.getDatabases(),
+                            AppwriteService.DB_ID,
+                            AppwriteService.COL_USERS,
+                            userId);
+                } catch (Exception e) {
+                    doc = AppwriteHelper.getDocument(
+                            AppwriteService.getDatabases(),
+                            AppwriteService.DB_ID,
+                            AppwriteService.COL_ADMINS,
+                            userId);
+                }
 
+                @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) doc.getData();
                 String name = data.get("name") != null ? data.get("name").toString() : "User";
                 prefs.edit().putString("user_display_name", name).apply();
@@ -246,17 +238,12 @@ public class MainActivity extends AppCompatActivity {
                     if (userName != null) userName.setText("Hi, " + name);
 
                     Object photoId = data.get("photoId");
-
                     if (photoId != null && profileImage != null) {
-
                         String url = AppwriteService.ENDPOINT
                                 + "/storage/buckets/"
                                 + AppwriteService.USERS_BUCKET_ID
-                                + "/files/"
-                                + photoId
-                                + "/view?project="
-                                + AppwriteService.PROJECT_ID;
-
+                                + "/files/" + photoId
+                                + "/view?project=" + AppwriteService.PROJECT_ID;
                         Glide.with(MainActivity.this)
                                 .load(url)
                                 .circleCrop()
@@ -272,20 +259,32 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Load cases ────────────────────────────────────────────────────────────
-
-    private void loadRecentCases(String filterType, String filterValue) {
+    /**
+     * Loads ONLY approved (status = "active") or found reports.
+     * filterType: "all"      → active + found (all approved)
+     *             "missing"  → active only
+     *             "found"    → found only
+     *             "ageGroup" → approved + age filter
+     */
+    private void loadApprovedCases(String filterType, String filterValue) {
         if (homeProgressBar != null) homeProgressBar.setVisibility(View.VISIBLE);
 
         new Thread(() -> {
             try {
                 List<String> queries = new ArrayList<>();
                 queries.add(io.appwrite.Query.Companion.orderDesc("$createdAt"));
-                queries.add(io.appwrite.Query.Companion.limit(10));
+                queries.add(io.appwrite.Query.Companion.limit(20));
 
-                if ("status".equals(filterType) && filterValue != null) {
-                    queries.add(io.appwrite.Query.Companion.equal("status", filterValue));
+                // ── Status filter — always restrict to approved reports ──
+                if ("missing".equals(filterType)) {
+                    // Active (approved missing) only
+                    queries.add(io.appwrite.Query.Companion.equal("status", "active"));
+                } else if ("found".equals(filterType)) {
+                    // Found only
+                    queries.add(io.appwrite.Query.Companion.equal("status", "found"));
                 } else if ("ageGroup".equals(filterType) && filterValue != null) {
+                    // Approved reports in this age group
+                    queries.add(io.appwrite.Query.Companion.equal("status", "active"));
                     switch (filterValue) {
                         case "Children":
                             queries.add(io.appwrite.Query.Companion.lessThanEqual("age", 17));
@@ -297,11 +296,16 @@ public class MainActivity extends AppCompatActivity {
                             queries.add(io.appwrite.Query.Companion.greaterThanEqual("age", 60));
                             break;
                     }
+                } else {
+                    // "all" — show both active and found (approved reports only)
+                    // Appwrite free plan doesn't support OR queries easily,
+                    // so we fetch active reports — found reports show in "Found" tab
+                    queries.add(io.appwrite.Query.Companion.equal("status", "active"));
                 }
 
                 AppwriteService.getDatabases().listDocuments(
                         AppwriteService.DB_ID,
-                        "reports",
+                        AppwriteService.COL_REPORTS,
                         queries,
                         new CoroutineCallback<DocumentList<Map<String, Object>>>(
                                 (result, error) -> {
@@ -309,73 +313,89 @@ public class MainActivity extends AppCompatActivity {
                                         if (homeProgressBar != null)
                                             homeProgressBar.setVisibility(View.GONE);
                                     });
-
                                     if (error != null) {
-                                        Log.e(TAG, "loadRecentCases error: " + error.getMessage());
+                                        Log.e(TAG, "loadApprovedCases error: "
+                                                + error.getMessage());
                                         return;
                                     }
-
                                     List<ReportModel> fresh = new ArrayList<>();
                                     for (io.appwrite.models.Document<Map<String, Object>> doc
                                             : result.getDocuments()) {
-                                        fresh.add(MissedFragment.parseDocument(
-                                                doc.getId(), doc.getData()));
+                                        ReportModel m = MissedFragment.parseDocument(
+                                                doc.getId(), doc.getData());
+                                        // Double-check status in memory
+                                        // (in case Appwrite index is stale)
+                                        if ("active".equals(m.status)
+                                                || "found".equals(m.status)) {
+                                            fresh.add(m);
+                                        }
                                     }
-
                                     runOnUiThread(() -> {
                                         caseList.clear();
                                         caseList.addAll(fresh);
                                         if (caseAdapter != null)
                                             caseAdapter.notifyDataSetChanged();
+                                        if (fresh.isEmpty() && txtMissingCases != null) {
+                                            Log.d(TAG, "No approved cases found");
+                                        }
                                     });
                                 })
                 );
-
             } catch (Exception e) {
-                Log.e(TAG, "loadRecentCases exception: " + e.getMessage(), e);
+                Log.e(TAG, "loadApprovedCases exception: " + e.getMessage(), e);
                 runOnUiThread(() -> {
-                    if (homeProgressBar != null) homeProgressBar.setVisibility(View.GONE);
+                    if (homeProgressBar != null)
+                        homeProgressBar.setVisibility(View.GONE);
                 });
             }
         }).start();
     }
-
-    // ── Search ────────────────────────────────────────────────────────────────
 
     private void setupSearchBar() {
         if (searchBar == null) return;
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void afterTextChanged(Editable s) {}
-
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String q = s.toString().trim();
-                if (q.isEmpty()) loadRecentCases("all", null);
-                else searchCases(q);
+                if (q.isEmpty()) loadApprovedCases("all", null);
+                else searchApprovedCases(q);
             }
         });
     }
 
-    private void searchCases(String query) {
+    /**
+     * Searches only within approved reports.
+     */
+    private void searchApprovedCases(String query) {
         new Thread(() -> {
             try {
                 List<String> queries = new ArrayList<>();
                 queries.add(io.appwrite.Query.Companion.search("name", query));
-                queries.add(io.appwrite.Query.Companion.limit(10));
+                queries.add(io.appwrite.Query.Companion.equal("status", "active"));
+                queries.add(io.appwrite.Query.Companion.limit(20));
 
                 AppwriteService.getDatabases().listDocuments(
                         AppwriteService.DB_ID,
-                        "reports",
+                        AppwriteService.COL_REPORTS,
                         queries,
                         new CoroutineCallback<DocumentList<Map<String, Object>>>(
                                 (result, error) -> {
-                                    if (error != null) return;
+                                    if (error != null) {
+                                        Log.e(TAG, "searchApprovedCases error: "
+                                                + error.getMessage());
+                                        return;
+                                    }
                                     List<ReportModel> found = new ArrayList<>();
                                     for (io.appwrite.models.Document<Map<String, Object>> doc
                                             : result.getDocuments()) {
-                                        found.add(MissedFragment.parseDocument(
-                                                doc.getId(), doc.getData()));
+                                        ReportModel m = MissedFragment.parseDocument(
+                                                doc.getId(), doc.getData());
+                                        if ("active".equals(m.status)
+                                                || "found".equals(m.status)) {
+                                            found.add(m);
+                                        }
                                     }
                                     runOnUiThread(() -> {
                                         caseList.clear();
@@ -386,12 +406,10 @@ public class MainActivity extends AppCompatActivity {
                                 })
                 );
             } catch (Exception e) {
-                Log.e(TAG, "searchCases: " + e.getMessage(), e);
+                Log.e(TAG, "searchApprovedCases: " + e.getMessage(), e);
             }
         }).start();
     }
-
-    // ── Filter buttons ────────────────────────────────────────────────────────
 
     private void setupFilterButtons() {
         List<MaterialButton> all = new ArrayList<>();
@@ -400,38 +418,39 @@ public class MainActivity extends AppCompatActivity {
 
         btnAllCases.setOnClickListener(v -> {
             selectFilter(btnAllCases, all);
-            txtMissingCases.setText("Recent Cases");
-            loadRecentCases("all", null);
+            if (txtMissingCases != null) txtMissingCases.setText("Approved Cases");
+            loadApprovedCases("all", null);
         });
         btnMissing.setOnClickListener(v -> {
             selectFilter(btnMissing, all);
-            txtMissingCases.setText("Recent Missing Cases");
-            loadRecentCases("status", "active");
+            if (txtMissingCases != null) txtMissingCases.setText("Active Missing Cases");
+            loadApprovedCases("missing", null);
         });
         btnFound.setOnClickListener(v -> {
             selectFilter(btnFound, all);
-            txtMissingCases.setText("Recent Found Cases");
-            loadRecentCases("status", "found");
+            if (txtMissingCases != null) txtMissingCases.setText("Found Cases");
+            loadApprovedCases("found", null);
         });
         btnChildren.setOnClickListener(v -> {
             selectFilter(btnChildren, all);
-            txtMissingCases.setText("Recent Children Cases");
-            loadRecentCases("ageGroup", "Children");
+            if (txtMissingCases != null) txtMissingCases.setText("Children Cases");
+            loadApprovedCases("ageGroup", "Children");
         });
         btnAdults.setOnClickListener(v -> {
             selectFilter(btnAdults, all);
-            txtMissingCases.setText("Recent Adults Cases");
-            loadRecentCases("ageGroup", "Adults");
+            if (txtMissingCases != null) txtMissingCases.setText("Adults Cases");
+            loadApprovedCases("ageGroup", "Adults");
         });
         btnElderly.setOnClickListener(v -> {
             selectFilter(btnElderly, all);
-            txtMissingCases.setText("Recent Elderly Cases");
-            loadRecentCases("ageGroup", "Elderly");
+            if (txtMissingCases != null) txtMissingCases.setText("Elderly Cases");
+            loadApprovedCases("ageGroup", "Elderly");
         });
     }
 
     private void selectFilter(MaterialButton selected, List<MaterialButton> all) {
         for (MaterialButton b : all) {
+            if (b == null) continue;
             b.setBackgroundColor(Color.WHITE);
             b.setTextColor(ContextCompat.getColor(this, R.color.filter_text_unselected));
             b.setStrokeColor(ColorStateList.valueOf(
@@ -439,6 +458,7 @@ public class MainActivity extends AppCompatActivity {
             b.setIconTint(ColorStateList.valueOf(
                     ContextCompat.getColor(this, R.color.filter_icon_unselected)));
         }
+        if (selected == null) return;
         selected.setBackgroundColor(
                 ContextCompat.getColor(this, R.color.filter_bg_selected));
         selected.setTextColor(
@@ -451,18 +471,17 @@ public class MainActivity extends AppCompatActivity {
         selectedFilterButton = selected;
     }
 
-    // ── Bottom Nav ────────────────────────────────────────────────────────────
-
     private void setupBottomNavigation() {
+        if (bottomNav == null) return;
         bottomNav.setSelectedItemId(R.id.nav_home);
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_home) return true;
 
             Intent i = null;
-            if      (id == R.id.nav_explore)    i = new Intent(this, ExploreActivity.class);
-            else if (id == R.id.nav_chat)        i = new Intent(this, ChatsActivity.class);
-            else if (id == R.id.nav_profile)     i = new Intent(this, ProfileActivity.class);
+            if      (id == R.id.nav_explore)   i = new Intent(this, ExploreActivity.class);
+            else if (id == R.id.nav_chat)       i = new Intent(this, ChatsActivity.class);
+            else if (id == R.id.nav_profile)    i = new Intent(this, ProfileActivity.class);
             else if (id == R.id.nav_new_report) {
                 startActivity(new Intent(this, NewReportActivity.class));
                 return true;

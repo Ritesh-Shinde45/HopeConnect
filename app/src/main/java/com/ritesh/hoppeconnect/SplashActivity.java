@@ -14,6 +14,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
+
+    private static final String PREFS    = "hoppe_prefs";
+    private static final String KEY_UID  = "logged_in_user_id";
+    private static final String KEY_ROLE = "logged_in_role";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +63,6 @@ public class SplashActivity extends AppCompatActivity {
         if (ripple1 != null) startRipple(ripple1, 100);
         if (ripple2 != null) startRipple(ripple2, 600);
 
-        // use main looper explicitly
         new Handler(Looper.getMainLooper()).postDelayed(this::goNext, 2800);
     }
 
@@ -76,9 +80,26 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void goNext() {
-        SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
-        boolean loggedIn = prefs.getBoolean("isLoggedIn", false);
-        startActivity(new Intent(this, loggedIn ? MainActivity.class : LoginActivity.class));
+        // FIX: read from "hoppe_prefs" — the same file Login/Register write to
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String uid  = prefs.getString(KEY_UID, null);
+        String role = prefs.getString(KEY_ROLE, "user");
+
+        Intent next;
+        if (uid != null) {
+            // Session exists → route to correct dashboard
+            if ("admin".equals(role)) {
+                next = new Intent(this, AdminDashboardActivity.class);
+            } else {
+                next = new Intent(this, MainActivity.class);
+            }
+        } else {
+            // No session → go to login
+            next = new Intent(this, LoginActivity.class);
+            next.putExtra("explicit_login", true);
+        }
+
+        startActivity(next);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }

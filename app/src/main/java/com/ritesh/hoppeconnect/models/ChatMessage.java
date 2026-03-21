@@ -11,5 +11,8 @@ public class ChatMessage {
         this.text = text;
         this.timestamp = timestamp;
         this.isMine = isMine;
+
+
     }
 }
+

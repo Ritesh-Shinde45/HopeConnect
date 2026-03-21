@@ -2,57 +2,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:gravity="start"
-    android:orientation="vertical"
-    android:padding="4dp">
+    android:paddingStart="10dp"
+    android:paddingEnd="48dp"
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
 
-    <TextView
-        android:id="@+id/tvMessageText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
+        android:orientation="vertical"
         android:background="@drawable/bubble_received"
         android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="15sp"
-        android:visibility="gone" />
+        android:maxWidth="260dp">
 
-    <ImageView
-        android:id="@+id/ivImageMessage"
-        android:layout_width="200dp"
-        android:layout_height="150dp"
-        android:layout_marginEnd="64dp"
-        android:scaleType="centerCrop"
-        android:visibility="gone" />
+        <!-- Sender name (shown in group chats; fine to leave visible always) -->
+        <TextView
+            android:id="@+id/tvSenderName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4A4E9D"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tvFileMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:background="@drawable/bubble_received"
-        android:padding="10dp"
-        android:textColor="#1565C0"
-        android:textSize="14sp"
-        android:visibility="gone" />
+        <!-- Text message -->
+        <TextView
+            android:id="@+id/tvMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp"
+            android:lineSpacingExtra="2dp"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tvLocationMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:background="@drawable/bubble_received"
-        android:padding="10dp"
-        android:textColor="#1565C0"
-        android:textSize="14sp"
-        android:visibility="gone" />
+        <!-- Image message -->
+        <ImageView
+            android:id="@+id/ivImageMessage"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tvMessageTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="#9E9E9E"
-        android:textSize="10sp" />
+        <!-- File message -->
+        <TextView
+            android:id="@+id/tvFileMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3F51B5"
+            android:textSize="14sp"
+            android:drawableStart="@android:drawable/ic_menu_share"
+            android:drawablePadding="6dp"
+            android:visibility="gone" />
+
+        <!-- Location message -->
+        <TextView
+            android:id="@+id/tvLocationMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#3F51B5"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <!-- Timestamp -->
+        <TextView
+            android:id="@+id/tvMessageTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="4dp"
+            android:textColor="#888888"
+            android:textSize="10sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

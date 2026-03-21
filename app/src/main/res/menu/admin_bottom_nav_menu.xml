@@ -4,23 +4,26 @@
 
     <item
         android:id="@+id/nav_overview"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_dashboard"
         android:title="Overview" />
 
     <item
         android:id="@+id/nav_approve_reports"
-        android:icon="@drawable/ic_add_report"
+        android:icon="@drawable/ic_approve"
         android:title="Approve" />
-
     <item
-        android:id="@+id/nav_spammed_reports"
-        android:icon="@drawable/ic_report"
-        android:title="Spammed" />
-
+        android:id="@+id/nav_all_reports"
+        android:icon="@drawable/ic_document"
+        android:title="Reports" />
     <item
-        android:id="@+id/nav_admin_profile"
+        android:id="@+id/nav_manage_users"
         android:icon="@drawable/ic_person"
-        android:title="Profile" />
+        android:title="Manage" />
+
+    <item
+        android:id="@+id/nav_admin_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
 
 </menu>
 

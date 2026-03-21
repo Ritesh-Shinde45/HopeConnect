@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
+
+    <!-- ── Primary / Brand ───────────────────────────────────────────────── -->
     <color name="primary">#3F51B5</color>
     <color name="primary_dark">#303F9F</color>
     <color name="primary_light">#C5CAE9</color>
     <color name="accent">#FF5722</color>
+    <color name="brand_primary">#2563EB</color>
+    <color name="brand_secondary">#1565C0</color>
 
-    <!-- Background Colors -->
-    <color name="background">#F8F9FB</color>
-    <color name=    "white">#FFFFFF</color>
+    <!-- ── Basic ─────────────────────────────────────────────────────────── -->
+    <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
 
-    <!-- Text Colors -->
-    <color name="text_primary">#000000</color>
+    <!-- ── Backgrounds ───────────────────────────────────────────────────── -->
+    <color name="background">#F8F9FB</color>
+    <color name="bg_primary">#FFFFFF</color>
+    <color name="bg_secondary">#F5F5F5</color>
+    <color name="bg_tertiary">#F0F0F0</color>
+
+    <!-- ── Text ──────────────────────────────────────────────────────────── -->
+    <color name="text_primary">#1A1A1A</color>
     <color name="text_secondary">#666666</color>
+    <color name="text_tertiary">#999999</color>
     <color name="text_hint">#999999</color>
     <color name="text_light_gray">#808080</color>
 
-    <!-- Filter Button Colors -->
+    <!-- ── Status ────────────────────────────────────────────────────────── -->
+    <color name="status_success">#16A34A</color>
+    <color name="status_danger">#DC2626</color>
+    <color name="status_warning">#D97706</color>
+    <color name="status_info">#2563EB</color>
+    <color name="status_missing">#E53935</color>
+    <color name="status_found">#43A047</color>
+
+    <!-- ── Chip Backgrounds ───────────────────────────────────────────────── -->
+    <color name="chip_success_bg">#DCFCE7</color>
+    <color name="chip_danger_bg">#FEE2E2</color>
+    <color name="chip_warning_bg">#FEF3C7</color>
+    <color name="chip_info_bg">#DBEAFE</color>
+
+    <!-- ── Borders ───────────────────────────────────────────────────────── -->
+    <color name="border_light">#E5E7EB</color>
+    <color name="border_medium">#D1D5DB</color>
+
+    <!-- ── Filter Buttons ────────────────────────────────────────────────── -->
     <color name="filter_bg_selected">#E3F2FD</color>
     <color name="filter_text_selected">#2196F3</color>
     <color name="filter_text_unselected">#666666</color>
@@ -26,14 +53,17 @@
     <color name="filter_icon_unselected">#666666</color>
     <color name="fire_orange">#FF6B35</color>
 
-    <!-- Status Badge Colors -->
-    <color name="status_missing">#E53935</color>
-    <color name="status_found">#43A047</color>
-
-    <!-- Navigation Colors -->
-    <color name="nav_selected">#3F51B5</color>
+    <!-- ── Navigation ────────────────────────────────────────────────────── -->
+    <color name="nav_selected">#2563EB</color>
     <color name="nav_unselected">#9E9E9E</color>
 
-    <!-- Border Colors -->
-    <color name="border_light">#E0E0E0</color>
+    <!-- ── Dots (activity log) ───────────────────────────────────────────── -->
+    <color name="dot_success">#16A34A</color>
+    <color name="dot_danger">#DC2626</color>
+    <color name="dot_warning">#D97706</color>
+    <color name="dot_info">#2563EB</color>
+
+    <!-- ── Ripple ─────────────────────────────────────────────────────────── -->
+    <color name="ripple_primary">#1A2563EB</color>
+
 </resources>

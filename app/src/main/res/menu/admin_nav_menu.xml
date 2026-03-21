@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/menu/admin_nav_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@drawable/ic_nav_dashboard"
+            android:title="Dashboard" />
+
+    </group>
+
+    <item android:title="Users">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_users"
+                    android:icon="@drawable/ic_nav_users"
+                    android:title="All Users" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Reports">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_pending"
+                    android:icon="@drawable/ic_nav_pending"
+                    android:title="Pending" />
+                <item
+                    android:id="@+id/nav_approved"
+                    android:icon="@drawable/ic_nav_approved"
+                    android:title="Approved" />
+                <item
+                    android:id="@+id/nav_all_reports"
+                    android:icon="@drawable/ic_nav_reports"
+                    android:title="All Reports" />
+                <item
+                    android:id="@+id/nav_by_date"
+                    android:icon="@drawable/ic_nav_calendar"
+                    android:title="By Date" />
+            </group>
+        </menu>
+    </item>
+
+    <item android:title="Tools">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_announcements"
+                    android:icon="@drawable/ic_nav_announce"
+                    android:title="Announcements" />
+                <item
+                    android:id="@+id/nav_export"
+                    android:icon="@drawable/ic_nav_export"
+                    android:title="Export Data" />
+                <item
+                    android:id="@+id/nav_settings"
+                    android:icon="@drawable/ic_nav_settings"
+                    android:title="Settings" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

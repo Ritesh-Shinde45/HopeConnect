@@ -65,9 +65,12 @@ public class LoginActivity extends AppCompatActivity {
 
         AppwriteService.init(this);
 
+        // Auto-navigate only when NOT opened explicitly AND a session cookie exists
         boolean explicitOpen = getIntent().getBooleanExtra("explicit_login", false);
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+
         if (!explicitOpen && prefs.contains(KEY_UID)) {
+            Log.d(TAG, "Session found in prefs — auto-navigating");
             navigateTo(prefs.getString(KEY_ROLE, "user"));
             return;
         }
@@ -76,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── Setup ─────────────────────────────────────────────────────────────────
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -104,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // ── Manual login ──────────────────────────────────────────────────────────
+    // ── Manual email / username login ─────────────────────────────────────────
     private void attemptLogin() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         String password   = binding.etLoginPassword.getText().toString();
@@ -113,6 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         if (password.isEmpty())   { binding.etLoginPassword.setError("Required"); return; }
 
         setLoading(true);
+        Log.d(TAG, "attemptLogin — identifier=" + identifier);
 
         new Thread(() -> {
             try {
@@ -134,11 +138,15 @@ public class LoginActivity extends AppCompatActivity {
                     field        = "username";
                 }
 
+                Log.d(TAG, "Searching collection=" + collectionId + "  field=" + field);
+
                 List<? extends Document<?>> docs =
                         AppwriteHelper.findUserByField(db, collectionId, field, identifier)
                                 .getDocuments();
 
+                // Fallback: username might exist in admins collection
                 if (docs.isEmpty() && !isEmail && !isAdmin) {
+                    Log.d(TAG, "Not found in users — trying admins collection");
                     docs = AppwriteHelper.findUserByField(
                             db, AppwriteService.COL_ADMINS, "username", identifier
                     ).getDocuments();
@@ -146,6 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 if (docs.isEmpty()) {
+                    Log.w(TAG, "No account found for identifier=" + identifier);
                     runOnUiThread(() -> {
                         setLoading(false);
                         binding.etLoginUsername.setError("No account found");
@@ -159,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String storedHash = (String) userData.get("password");
                 if (!verifyPassword(password, storedHash)) {
+                    Log.w(TAG, "Password mismatch for identifier=" + identifier);
                     runOnUiThread(() -> {
                         setLoading(false);
                         binding.etLoginPassword.setError("Incorrect password");
@@ -168,24 +178,42 @@ public class LoginActivity extends AppCompatActivity {
 
                 String emailInDoc = userData.get("email") != null
                         ? userData.get("email").toString() : identifier;
-                Object roleObj = userData.get("role");
-                String role = (roleObj != null) ? roleObj.toString() : "user";
-                if (AppwriteService.isAdminEmail(emailInDoc)) role = "admin";
+                String role = AppwriteService.isAdminEmail(emailInDoc) ? "admin" : "user";
+                Log.d(TAG, "Password OK — email=" + emailInDoc + "  role=" + role);
 
-                // Email verification gate — skip for admin
+                // ── Email verification gate (skipped for admin) ───────────────
                 if (!"admin".equals(role)) {
                     try {
+                        Log.d(TAG, "Creating session to check email verification");
                         AppwriteService.createSessionSync(emailInDoc, password);
-                        if (!AppwriteService.isEmailVerified()) {
+
+                        boolean verified = AppwriteService.isEmailVerified();
+                        Log.d(TAG, "Email verified=" + verified);
+
+                        if (!verified) {
+                            // Automatically resend the verification email so the
+                            // user gets a fresh link without extra steps.
+                            Log.d(TAG, "Email not verified — resending verification email");
+                            new Thread(AppwriteService::resendVerificationEmail).start();
+
                             runOnUiThread(() -> {
                                 setLoading(false);
                                 Toast.makeText(this,
-                                        "Email not verified. Check your inbox and click the link.",
+                                        "Email not verified.\n"
+                                                + "A new verification link has been sent to:\n"
+                                                + emailInDoc + "\n"
+                                                + "Check your inbox and spam folder.",
                                         Toast.LENGTH_LONG).show();
                             });
                             return;
                         }
-                    } catch (Exception ignored) { }
+                    } catch (Exception sessionEx) {
+                        // Session creation failed (e.g. wrong password in Appwrite auth,
+                        // or Appwrite auth account doesn't exist yet).
+                        // Log it but don't block login — DB password already matched.
+                        Log.w(TAG, "Session create for verification check failed: "
+                                + sessionEx.getMessage());
+                    }
                 }
 
                 String uid  = userDoc.getId();
@@ -193,6 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                         ? userData.get("name").toString() : "User";
 
                 saveSession(uid, name, role);
+                Log.d(TAG, "Login success — uid=" + uid + "  name=" + name + "  role=" + role);
 
                 final String finalRole = role;
                 final String finalName = name;
@@ -204,10 +233,11 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
+                Log.e(TAG, "Login error", e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "Login error", e);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,
+                            "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             }
         }).start();
@@ -220,24 +250,18 @@ public class LoginActivity extends AppCompatActivity {
 
         String email       = account.getEmail();
         String displayName = account.getDisplayName() != null
-                ? account.getDisplayName() : "Admin";
+                ? account.getDisplayName() : "User";
         boolean isAdmin    = AppwriteService.isAdminEmail(email);
 
-        googleSignInClient.signOut(); // always sign out of Google session immediately
+        Log.d(TAG, "handleGoogleLogin — email=" + email + "  isAdmin=" + isAdmin);
+        googleSignInClient.signOut();
 
         if (isAdmin) {
-            // ── ADMIN GOOGLE PATH ─────────────────────────────────────────────
-            // We CANNOT query COL_ADMINS here without an authenticated Appwrite
-            // session — it throws "not authorized".
-            // Instead, use listAllDocuments which we'll call on background thread,
-            // BUT only if COL_ADMINS has "Any - Read" permission set in console.
-            // If that permission is missing too, we fall back to checking local prefs.
             new Thread(() -> {
                 boolean alreadyRegistered = false;
                 String savedUid  = null;
                 String savedName = displayName;
 
-                // ── Try DB first ──────────────────────────────────────────────
                 try {
                     List<? extends Document<?>> adminDocs =
                             AppwriteHelper.listAllDocuments(
@@ -247,7 +271,6 @@ public class LoginActivity extends AppCompatActivity {
                             ).getDocuments();
 
                     if (!adminDocs.isEmpty()) {
-                        // Admin document exists → already registered
                         alreadyRegistered = true;
                         Document<?> doc = adminDocs.get(0);
                         @SuppressWarnings("unchecked")
@@ -257,9 +280,8 @@ public class LoginActivity extends AppCompatActivity {
                                 ? data.get("name").toString() : displayName;
                     }
                 } catch (Exception dbEx) {
-                    Log.w(TAG, "COL_ADMINS list failed (permission?), falling back to prefs: "
+                    Log.w(TAG, "COL_ADMINS list failed, falling back to prefs: "
                             + dbEx.getMessage());
-                    // ── Fallback: check local SharedPreferences ───────────────
                     SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
                     if (prefs.contains(KEY_UID)
                             && "admin".equals(prefs.getString(KEY_ROLE, ""))) {
@@ -269,21 +291,18 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
-                final boolean registered   = alreadyRegistered;
-                final String  finalUid     = savedUid;
-                final String  finalName    = savedName;
+                final boolean registered = alreadyRegistered;
+                final String  finalUid   = savedUid;
+                final String  finalName  = savedName;
 
                 runOnUiThread(() -> {
                     setLoading(false);
                     if (registered && finalUid != null) {
-                        // Already registered → restore session and go to dashboard
                         saveSession(finalUid, finalName, "admin");
                         Toast.makeText(this,
-                                "Welcome back, " + finalName + "!",
-                                Toast.LENGTH_SHORT).show();
+                                "Welcome back, " + finalName + "!", Toast.LENGTH_SHORT).show();
                         navigateTo("admin");
                     } else {
-                        // Never registered → go to Register to complete the form
                         Intent i = new Intent(this, RegisterActivity.class);
                         i.putExtra("google_email", email);
                         i.putExtra("google_name",  displayName);
@@ -293,18 +312,16 @@ public class LoginActivity extends AppCompatActivity {
             }).start();
 
         } else {
-            // ── NORMAL USER GOOGLE PATH ───────────────────────────────────────
             new Thread(() -> {
                 try {
                     Databases db = AppwriteService.getDatabases();
-
                     List<? extends Document<?>> docs =
                             AppwriteHelper.findUserByField(
                                     db, AppwriteService.COL_USERS, "email", email
                             ).getDocuments();
 
                     if (docs.isEmpty()) {
-                        // Not registered → send to Register pre-filled
+                        Log.d(TAG, "Google user not found — redirecting to RegisterActivity");
                         runOnUiThread(() -> {
                             setLoading(false);
                             Intent i = new Intent(this, RegisterActivity.class);
@@ -321,24 +338,20 @@ public class LoginActivity extends AppCompatActivity {
                     String uid  = doc.getId();
                     String name = data.get("name") != null
                             ? data.get("name").toString() : displayName;
-                    Object roleObj = data.get("role");
-                    String role = (roleObj != null) ? roleObj.toString() : "user";
 
-                    saveSession(uid, name, role);
+                    saveSession(uid, name, "user");
+                    Log.d(TAG, "Google login success — uid=" + uid + "  name=" + name);
 
-                    final String finalRole = role;
-                    final String finalName = name;
                     runOnUiThread(() -> {
                         setLoading(false);
-                        Toast.makeText(this,
-                                "Welcome, " + finalName + "!", Toast.LENGTH_SHORT).show();
-                        navigateTo(finalRole);
+                        Toast.makeText(this, "Welcome, " + name + "!", Toast.LENGTH_SHORT).show();
+                        navigateTo("user");
                     });
 
                 } catch (Exception e) {
+                    Log.e(TAG, "Google user login error", e);
                     runOnUiThread(() -> {
                         setLoading(false);
-                        Log.e(TAG, "Google user login error", e);
                         Toast.makeText(this,
                                 "Google login error: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show();
@@ -378,7 +391,10 @@ public class LoginActivity extends AppCompatActivity {
             StringBuilder hex = new StringBuilder();
             for (byte b : hb) hex.append(String.format(Locale.ROOT, "%02x", b));
             return hex.toString().equals(hash);
-        } catch (Exception e) { return false; }
+        } catch (Exception e) {
+            Log.e(TAG, "verifyPassword error", e);
+            return false;
+        }
     }
 
     private void setLoading(boolean loading) {

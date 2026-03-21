@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.ritesh.hoppeconnect" />
-                  <option name="mobileSdkAppId" value="1:611469646802:android:25a4077fcd6c29eda5060b" />
-                  <option name="projectId" value="hopeconnect-2a494" />
-                  <option name="projectNumber" value="611469646802" />
+                  <option name="appId" value="PLACEHOLDER" />
+                  <option name="mobileSdkAppId" value="" />
+                  <option name="projectId" value="" />
+                  <option name="projectNumber" value="" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

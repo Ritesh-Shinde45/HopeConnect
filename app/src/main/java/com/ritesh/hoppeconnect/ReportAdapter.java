@@ -20,8 +20,11 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder> {
 
@@ -29,18 +32,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         void onItemClick(ReportModel model);
     }
 
-    /**
-     * HORIZONTAL → 200dp fixed-width cards (home screen horizontal scroll)
-     * VERTICAL   → match_parent width (staggered grid in Explore / MyReports)
-     */
     public enum Mode { HORIZONTAL, VERTICAL }
 
-    private final Context context;
+    private final Context ctx;
     private final List<ReportModel> reports;
     private final OnItemClickListener listener;
     private final Mode mode;
 
-    /** Backward-compatible constructor — defaults to VERTICAL */
     public ReportAdapter(Context context, List<ReportModel> reports,
                          OnItemClickListener listener) {
         this(context, reports, listener, Mode.VERTICAL);
@@ -48,7 +46,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     public ReportAdapter(Context context, List<ReportModel> reports,
                          OnItemClickListener listener, Mode mode) {
-        this.context  = context;
+        this.ctx      = context;
         this.reports  = reports;
         this.listener = listener;
         this.mode     = mode;
@@ -57,13 +55,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context)
+        View view = LayoutInflater.from(ctx)
                 .inflate(R.layout.item_case_card, parent, false);
 
-        // Fixed width for horizontal scroll on home screen
         if (mode == Mode.HORIZONTAL) {
-            int dp200 = (int) (200 * context.getResources().getDisplayMetrics().density);
-            int dp12  = (int) (12  * context.getResources().getDisplayMetrics().density);
+            int dp200 = (int) (200 * ctx.getResources().getDisplayMetrics().density);
+            int dp12  = (int) (12  * ctx.getResources().getDisplayMetrics().density);
             RecyclerView.LayoutParams lp =
                     new RecyclerView.LayoutParams(dp200,
                             RecyclerView.LayoutParams.WRAP_CONTENT);
@@ -89,7 +86,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
                 model.description != null && !model.description.isEmpty()
                         ? model.description : "No description");
 
-        // Missing since date
+        // Missing since
         if (model.createdAt > 0) {
             String dateStr = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                     .format(new Date(model.createdAt));
@@ -114,7 +111,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
         // Photo
         if (model.photoUrls != null && !model.photoUrls.isEmpty()) {
-            Glide.with(context)
+            Glide.with(ctx)
                     .load(model.photoUrls.get(0))
                     .placeholder(R.drawable.person_placeholder)
                     .error(R.drawable.person_placeholder)
@@ -124,128 +121,183 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.personImage.setImageResource(R.drawable.person_placeholder);
         }
 
-        // ── View Details ──────────────────────────────────────────────────────
+        // View Details button
         holder.btnViewDetails.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(model);
             } else {
                 ReportModelCache.put(model);
-                Intent intent = new Intent(context, MissedPersonDetailActivity.class);
+                Intent intent = new Intent(ctx, MissedPersonDetailActivity.class);
                 intent.putExtra(MissedPersonDetailActivity.EXTRA_REPORT_ID, model.id);
-                context.startActivity(intent);
+                ctx.startActivity(intent);
             }
         });
 
-        // Card click = same as View Details
+        // Card click
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onItemClick(model);
         });
 
-        // ── Chat button ───────────────────────────────────────────────────────
+        // ── Chat button — start chat with the person who uploaded this report ──
         holder.chatBtn.setOnClickListener(v -> {
             SharedPreferences prefs =
-                    context.getSharedPreferences("hoppe_prefs", Context.MODE_PRIVATE);
+                    ctx.getSharedPreferences("hoppe_prefs", Context.MODE_PRIVATE);
             String myUserId = prefs.getString("logged_in_user_id", null);
+
             if (myUserId == null) {
-                Toast.makeText(context, "Please log in to chat", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ctx, "Please log in to chat", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (model.userId == null || model.userId.isEmpty()) {
-                Toast.makeText(context, "Uploader info unavailable", Toast.LENGTH_SHORT).show();
+
+            // userId field on the report = who uploaded it
+            String reporterUserId = model.userId;
+            if (reporterUserId == null || reporterUserId.isEmpty()) {
+                Toast.makeText(ctx, "Reporter info unavailable", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (myUserId.equals(model.userId)) {
-                Toast.makeText(context, "This is your own report", Toast.LENGTH_SHORT).show();
+
+            if (myUserId.equals(reporterUserId)) {
+                Toast.makeText(ctx, "This is your own report", Toast.LENGTH_SHORT).show();
                 return;
             }
-            ReportModelCache.put(model);
-            startChatWithUploader(context, myUserId, model.userId, model.name);
+
+            Toast.makeText(ctx, "Opening chat with reporter...", Toast.LENGTH_SHORT).show();
+            startChatWithReporter(myUserId, reporterUserId, model.name);
         });
 
-        // ── Call button ───────────────────────────────────────────────────────
+        // ── Call button ──
         holder.callBtn.setOnClickListener(v -> {
             String number = model.emergencyContact1;
             if (number == null || number.isEmpty()) number = model.contact;
             if (number != null && !number.isEmpty()) {
                 Intent callIntent = new Intent(Intent.ACTION_DIAL,
                         Uri.parse("tel:" + number.replaceAll("[^0-9+]", "")));
-                context.startActivity(callIntent);
+                ctx.startActivity(callIntent);
             } else {
-                Toast.makeText(context, "No emergency contact available",
+                Toast.makeText(ctx, "No emergency contact available",
                         Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // ── Chat helper (unchanged from your original) ────────────────────────────
-
-    private void startChatWithUploader(Context ctx, String myUserId,
-                                       String otherUserId, String reportName) {
-        Toast.makeText(ctx, "Opening chat...", Toast.LENGTH_SHORT).show();
+    /**
+     * Finds or creates a chat with the reporter, then opens ChatRoomActivity.
+     */
+    private void startChatWithReporter(String myUserId,
+                                       String reporterUserId,
+                                       String reportName) {
         new Thread(() -> {
             try {
                 AppwriteService.init(ctx);
+                android.app.Activity activity = getActivity();
+
+                // Get my name from prefs
+                SharedPreferences prefs =
+                        ctx.getSharedPreferences("hoppe_prefs", Context.MODE_PRIVATE);
+                String myName = prefs.getString("logged_in_name", "User");
+
                 io.appwrite.services.Databases db = AppwriteService.getDatabases();
 
-                java.util.List<? extends io.appwrite.models.Document<?>> existingChats =
-                        AppwriteHelper.getUserChats(db, myUserId).getDocuments();
-
-                String chatId = null;
-                for (io.appwrite.models.Document<?> c : existingChats) {
+                // Try to get reporter's name from users collection
+                String reporterName = "Reporter";
+                try {
+                    io.appwrite.models.Document<?> reporterDoc =
+                            AppwriteHelper.getDocument(
+                                    db,
+                                    AppwriteService.DB_ID,
+                                    AppwriteService.COL_USERS,
+                                    reporterUserId);
                     @SuppressWarnings("unchecked")
-                    java.util.Map<String, Object> cd =
-                            (java.util.Map<String, Object>) c.getData();
-                    String p1 = cd.get("participant1") != null
-                            ? cd.get("participant1").toString() : "";
-                    String p2 = cd.get("participant2") != null
-                            ? cd.get("participant2").toString() : "";
-                    if ((p1.equals(myUserId) && p2.equals(otherUserId)) ||
-                            (p1.equals(otherUserId) && p2.equals(myUserId))) {
-                        chatId = c.getId();
-                        break;
+                    Map<String, Object> rd =
+                            (Map<String, Object>) reporterDoc.getData();
+                    if (rd.get("name") != null)
+                        reporterName = rd.get("name").toString();
+                } catch (Exception ignored) {
+                    // Use default "Reporter" if lookup fails
+                }
+
+                // Check for existing chat between these two users
+                String chatId = null;
+                try {
+                    java.util.List<? extends io.appwrite.models.Document<?>> existingChats =
+                            AppwriteHelper.getUserChats(db, myUserId).getDocuments();
+
+                    for (io.appwrite.models.Document<?> c : existingChats) {
+                        @SuppressWarnings("unchecked")
+                        Map<String, Object> cd =
+                                (Map<String, Object>) c.getData();
+                        String p1 = cd.get("participant1") != null
+                                ? cd.get("participant1").toString() : "";
+                        String p2 = cd.get("participant2") != null
+                                ? cd.get("participant2").toString() : "";
+                        if ((p1.equals(myUserId)       && p2.equals(reporterUserId)) ||
+                                (p1.equals(reporterUserId) && p2.equals(myUserId))) {
+                            chatId = c.getId();
+                            break;
+                        }
                     }
-                }
+                } catch (Exception ignored) {}
 
+                // Create new chat if none exists
                 if (chatId == null) {
-                    chatId = java.util.UUID.randomUUID().toString()
+                    chatId = UUID.randomUUID().toString()
                             .replace("-", "").substring(0, 20);
-                    SharedPreferences prefs = ctx.getSharedPreferences(
-                            "hoppe_prefs", Context.MODE_PRIVATE);
-                    String myName = prefs.getString("logged_in_name", "User");
 
-                    java.util.Map<String, Object> chatData = new java.util.HashMap<>();
-                    chatData.put("participant1", myUserId);
-                    chatData.put("participant2", otherUserId);
+                    Map<String, Object> chatData = new HashMap<>();
+                    chatData.put("participant1",     myUserId);
+                    chatData.put("participant2",     reporterUserId);
                     chatData.put("participant1Name", myName);
-                    chatData.put("participant2Name", "Report Uploader");
-                    chatData.put("participants", myUserId + "," + otherUserId);
-                    chatData.put("lastMessage", "Re: Missing case - " + reportName);
+                    chatData.put("participant2Name", reporterName);
+                    chatData.put("participants",     myUserId + "," + reporterUserId);
+                    chatData.put("lastMessage",
+                            "Re: Missing case - " + (reportName != null ? reportName : ""));
                     chatData.put("lastMessageTime", "");
-                    AppwriteHelper.createDocument(db, AppwriteService.DB_ID,
-                            AppwriteService.COL_CHATS, chatId, chatData);
+
+                    AppwriteHelper.createDocument(
+                            db,
+                            AppwriteService.DB_ID,
+                            AppwriteService.COL_CHATS,
+                            chatId,
+                            chatData);
                 }
 
-                final String finalChatId = chatId;
-                new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
+                final String finalChatId     = chatId;
+                final String finalReporterName = reporterName;
+                final String finalReporterId   = reporterUserId;
+
+                android.os.Handler handler =
+                        new android.os.Handler(android.os.Looper.getMainLooper());
+                handler.post(() -> {
                     Intent i = new Intent(ctx, ChatRoomActivity.class);
-                    i.putExtra("chatId", finalChatId);
-                    i.putExtra("otherUserId", otherUserId);
-                    i.putExtra("otherName", "Report Uploader");
+                    i.putExtra("chatId",      finalChatId);
+                    i.putExtra("otherUserId", finalReporterId);
+                    i.putExtra("otherName",   finalReporterName);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     ctx.startActivity(i);
                 });
 
             } catch (Exception e) {
-                new android.os.Handler(android.os.Looper.getMainLooper()).post(() ->
-                        Toast.makeText(ctx, "Chat error: " + e.getMessage(),
+                android.os.Handler handler =
+                        new android.os.Handler(android.os.Looper.getMainLooper());
+                handler.post(() ->
+                        Toast.makeText(ctx,
+                                "Chat error: " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
 
+    /**
+     * Helper to get Activity from Context for runOnUiThread.
+     * Returns null safely if context is not an Activity.
+     */
+    private android.app.Activity getActivity() {
+        if (ctx instanceof android.app.Activity) return (android.app.Activity) ctx;
+        return null;
+    }
+
     @Override
     public int getItemCount() { return reports.size(); }
-
-    // ── ViewHolder ────────────────────────────────────────────────────────────
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView personImage;

@@ -48,9 +48,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void setupClickListeners() {
         binding.ivBack.setOnClickListener(v -> finish());
-
         binding.tvResendOTP.setOnClickListener(v -> findUserAndSendReset());
-
         binding.btnLogin.setOnClickListener(v -> {
             if (foundDocumentId == null) {
                 Toast.makeText(this,
@@ -69,12 +67,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             binding.etLoginUsername.setError("Enter your email or username");
             return;
         }
+
+        Log.d(TAG, "findUserAndSendReset — identifier=" + identifier);
         setLoading(true);
 
         new Thread(() -> {
             try {
-                Databases db     = AppwriteService.getDatabases();
-                boolean isEmail  = identifier.contains("@");
+                Databases db    = AppwriteService.getDatabases();
+                boolean isEmail = identifier.contains("@");
                 String field;
                 String collectionId;
 
@@ -89,12 +89,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     collectionId = AppwriteService.COL_USERS;
                 }
 
+                Log.d(TAG, "Searching collection=" + collectionId + "  field=" + field);
                 List<? extends Document<?>> docs =
                         AppwriteHelper.findUserByField(db, collectionId, field, identifier)
                                 .getDocuments();
 
-                // Fallback: try admins collection for username
+                // Fallback: username might be in admins collection
                 if (docs.isEmpty() && !isEmail) {
+                    Log.d(TAG, "Not found in users — trying admins collection");
                     docs = AppwriteHelper.findUserByField(
                             db, AppwriteService.COL_ADMINS, "username", identifier
                     ).getDocuments();
@@ -102,6 +104,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 }
 
                 if (docs.isEmpty()) {
+                    Log.w(TAG, "No account found for identifier=" + identifier);
                     runOnUiThread(() -> {
                         setLoading(false);
                         binding.etLoginUsername.setError("No account found");
@@ -118,21 +121,32 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 foundEmail = data.get("email") != null
                         ? data.get("email").toString() : null;
 
-                // ── Appwrite SDK 5.x: createRecovery needs a CoroutineCallback ─
+                Log.d(TAG, "User found — docId=" + foundDocumentId
+                        + "  email=" + foundEmail + "  collection=" + foundCollectionId);
+
+                // ── Send Appwrite password recovery email ─────────────────────
+                // Uses Appwrite's default mailer (no SMTP needed on Free plan).
+                // The redirect URL below is intentional — Appwrite sends the email
+                // regardless of whether the redirect is a real deep-link.
                 if (foundEmail != null) {
                     Account account = AppwriteService.getAccount();
+                    Log.d(TAG, "Calling account.createRecovery for email=" + foundEmail);
                     account.createRecovery(
                             foundEmail,
-                            "https://hoppeconnect.appwrite.io/recovery",
+                            "https://cloud.appwrite.io",   // ← fixed redirect URL
                             new CoroutineCallback<>((result, error) -> {
                                 if (error != null) {
-                                    Log.w(TAG, "createRecovery non-fatal: "
-                                            + error.getMessage());
+                                    Log.e(TAG, "createRecovery FAILED ["
+                                            + error.getClass().getSimpleName()
+                                            + "]: " + error.getMessage(), error);
                                 } else {
-                                    Log.d(TAG, "Recovery email dispatched to " + foundEmail);
+                                    Log.d(TAG, "createRecovery SUCCESS — recovery email sent to "
+                                            + foundEmail);
                                 }
                             })
                     );
+                } else {
+                    Log.w(TAG, "foundEmail is null — skipping createRecovery");
                 }
 
                 final String finalCollId = collectionId;
@@ -146,14 +160,15 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     Toast.makeText(this,
                             "Reset email sent to " + foundEmail
                                     + ".\nClick the link in your inbox, "
-                                    + "then set a new password below.",
+                                    + "then set a new password below.\n"
+                                    + "(Also check spam folder)",
                             Toast.LENGTH_LONG).show();
                 });
 
             } catch (Exception e) {
+                Log.e(TAG, "findUserAndSendReset error", e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "Find user error", e);
                     Toast.makeText(this,
                             "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
@@ -166,9 +181,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         String newPass  = binding.etNewPassword.getText().toString();
         String confPass = binding.etConfirmPassword.getText().toString();
 
-        if (newPass.isEmpty())         { binding.etNewPassword.setError("Required");      return; }
-        if (confPass.isEmpty())        { binding.etConfirmPassword.setError("Required");   return; }
-        if (!newPass.equals(confPass)) {
+        if (newPass.isEmpty())          { binding.etNewPassword.setError("Required");      return; }
+        if (confPass.isEmpty())         { binding.etConfirmPassword.setError("Required");   return; }
+        if (!newPass.equals(confPass))  {
             binding.etConfirmPassword.setError("Passwords do not match"); return;
         }
         if (!isPasswordStrong(newPass)) {
@@ -176,6 +191,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                     "Min 8 chars: uppercase, lowercase, digit & special char"); return;
         }
 
+        Log.d(TAG, "resetPassword — docId=" + foundDocumentId
+                + "  collection=" + foundCollectionId);
         setLoading(true);
 
         new Thread(() -> {
@@ -194,6 +211,8 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         update
                 );
 
+                Log.d(TAG, "Password updated successfully in DB");
+
                 runOnUiThread(() -> {
                     setLoading(false);
                     Toast.makeText(this,
@@ -202,15 +221,18 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 });
 
             } catch (AppwriteException e) {
+                Log.e(TAG, "resetPassword AppwriteException: " + e.getMessage(), e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,
+                            "Failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             } catch (Exception e) {
+                Log.e(TAG, "resetPassword error", e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "Reset error", e);
-                    Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,
+                            "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
             }
         }).start();

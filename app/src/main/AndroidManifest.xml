@@ -23,6 +23,9 @@
         android:required="false" />
 
     <application
+
+
+        android:forceDarkAllowed="false"
         android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -34,7 +37,10 @@
         android:theme="@style/Theme.Hoppeconnect"
         android:usesCleartextTraffic="true"
         tools:targetApi="33">
-
+        <activity android:name=".AdminReportsListActivity"/>
+        <activity android:name=".AdminUsersListActivity"/>
+        <activity android:name=".AdminAnnouncementActivity"/>
+        <activity android:name=".AdminExportActivity"/>
         <!-- FileProvider -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -100,6 +106,7 @@
         <activity android:name=".ChatDetailActivity" />
         <activity android:name=".BuyTeaActivity" />
         <activity android:name=".TechnologyWithHumanityActivity" />
+        <activity android:name=".NotificationActivity"/>
 
     </application>
 

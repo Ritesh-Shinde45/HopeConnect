@@ -14,7 +14,11 @@ object AppwriteHelper {
         db: Databases, databaseId: String, collectionId: String,
         documentId: String, data: Map<String, Any>
     ) = runBlocking { db.createDocument(databaseId, collectionId, documentId, data) }
-
+    @JvmStatic
+    @Throws(Exception::class)
+    fun deleteCurrentSession(account: io.appwrite.services.Account) = runBlocking {
+        account.deleteSession("current")
+    }
     // ── GET ───────────────────────────────────────────────────────────────────
     @JvmStatic
     fun getDocument(

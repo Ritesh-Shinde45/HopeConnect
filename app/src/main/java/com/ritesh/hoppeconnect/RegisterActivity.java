@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
+import io.appwrite.exceptions.AppwriteException;
 import io.appwrite.models.Document;
 import io.appwrite.services.Databases;
 
@@ -76,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
         prefillFromIntent();
     }
 
-    // ── Pre-fill from intent (Google redirect from LoginActivity) ────────────
+    // ── Pre-fill from Google intent ───────────────────────────────────────────
     private void prefillFromIntent() {
         String googleEmail = getIntent().getStringExtra("google_email");
         String googleName  = getIntent().getStringExtra("google_name");
@@ -101,17 +102,13 @@ public class RegisterActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, gso);
     }
 
-    /**
-     * Google result on Register screen:
-     * - If email already in DB → log in directly (no re-registration needed)
-     * - If new email → pre-fill fields, let user complete form
-     */
     private void handleGoogleResult(GoogleSignInAccount account) {
         if (account.getEmail() == null) return;
         String email       = account.getEmail();
         String displayName = account.getDisplayName() != null ? account.getDisplayName() : "";
         boolean isAdmin    = AppwriteService.isAdminEmail(email);
 
+        Log.d(TAG, "handleGoogleResult — email=" + email + "  isAdmin=" + isAdmin);
         setLoading(true);
 
         new Thread(() -> {
@@ -123,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                         AppwriteHelper.findUserByField(db, col, "email", email).getDocuments();
 
                 if (!docs.isEmpty()) {
-                    // ── Already registered → log in directly ─────────────────
+                    // Already registered — restore session
                     Document<?> doc = docs.get(0);
                     @SuppressWarnings("unchecked")
                     Map<String, Object> data = (Map<String, Object>) doc.getData();
@@ -132,6 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
                             ? data.get("name").toString() : displayName;
                     String role = isAdmin ? "admin" : "user";
 
+                    Log.d(TAG, "Google user already registered — uid=" + uid + "  role=" + role);
                     saveSession(uid, name, role);
                     googleSignInClient.signOut();
 
@@ -139,10 +137,11 @@ public class RegisterActivity extends AppCompatActivity {
                         setLoading(false);
                         Toast.makeText(this,
                                 "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
-                        navigateTo(role);   // clears entire back stack
+                        navigateTo(role);
                     });
                 } else {
-                    // ── New account → pre-fill fields ─────────────────────────
+                    // Not registered yet — pre-fill the form
+                    Log.d(TAG, "Google user not found in DB — pre-filling registration form");
                     runOnUiThread(() -> {
                         setLoading(false);
                         googleSignInClient.signOut();
@@ -159,9 +158,9 @@ public class RegisterActivity extends AppCompatActivity {
                     });
                 }
             } catch (Exception e) {
+                Log.e(TAG, "Google handleResult error", e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "Google handleResult error", e);
                     Toast.makeText(this,
                             "Google sign-in error: " + e.getMessage(),
                             Toast.LENGTH_LONG).show();
@@ -172,12 +171,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void showGoogleError(int code) {
         String msg = code == 10
-                ? "Google Sign-In error (code 10). Add SHA-1 + Web Client ID to Google Cloud Console."
+                ? "Google Sign-In error (code 10). Add SHA-1 + Web Client ID."
                 : "Google Sign-In failed (code " + code + ")";
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    // ── Password strength ─────────────────────────────────────────────────────
+    // ── Password strength indicator ───────────────────────────────────────────
     private void setupPasswordStrengthWatcher() {
         binding.etPass.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -185,21 +184,28 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
-                if (pwd.isEmpty()) { binding.tvPasswordStrength.setVisibility(View.GONE); return; }
+                if (pwd.isEmpty()) {
+                    binding.tvPasswordStrength.setVisibility(View.GONE);
+                    return;
+                }
                 binding.tvPasswordStrength.setVisibility(View.VISIBLE);
                 switch (getPasswordScore(pwd)) {
                     case 0: case 1:
                         binding.tvPasswordStrength.setText("Weak");
-                        binding.tvPasswordStrength.setTextColor(Color.RED); break;
+                        binding.tvPasswordStrength.setTextColor(Color.RED);
+                        break;
                     case 2: case 3:
                         binding.tvPasswordStrength.setText("Moderate");
-                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#FFA500")); break;
+                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#FFA500"));
+                        break;
                     case 4:
                         binding.tvPasswordStrength.setText("Strong");
-                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#4CAF50")); break;
+                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#4CAF50"));
+                        break;
                     default:
                         binding.tvPasswordStrength.setText("Very Strong");
-                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#1B5E20")); break;
+                        binding.tvPasswordStrength.setTextColor(Color.parseColor("#1B5E20"));
+                        break;
                 }
             }
         });
@@ -225,12 +231,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         binding.btnSignUp.setOnClickListener(v -> attemptRegistration());
 
-        // FIX: always finish() this activity when going to Login
-        // so it is fully removed from the back stack
         binding.tvSignIn.setOnClickListener(v -> {
             Intent i = new Intent(this, LoginActivity.class);
             i.putExtra("explicit_login", true);
-            // Clear the task so LoginActivity is the only screen
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
             finish();
@@ -241,12 +244,17 @@ public class RegisterActivity extends AppCompatActivity {
     private void attemptRegistration() {
         String name     = binding.etName.getText().toString().trim();
         String username = binding.etUsername.getText().toString().trim();
+        String mobile   = binding.etMobile.getText().toString().trim();
         String email    = binding.etEmail.getText().toString().trim();
         String password = binding.etPass.getText().toString();
         String address  = binding.etAddress.getText().toString().trim();
 
-        if (name.isEmpty())    { binding.etName.setError("Required");     return; }
-        if (username.isEmpty()){ binding.etUsername.setError("Required"); return; }
+        // ── Validation ────────────────────────────────────────────────────────
+        if (name.isEmpty())     { binding.etName.setError("Required");     return; }
+        if (username.isEmpty()) { binding.etUsername.setError("Required"); return; }
+        if (!mobile.isEmpty() && !mobile.matches("\\d{10}")) {
+            binding.etMobile.setError("Enter a valid 10-digit number"); return;
+        }
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.etEmail.setError("Valid email required"); return;
         }
@@ -256,7 +264,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
         if (address.isEmpty()) { binding.etAddress.setError("Required"); return; }
 
-        boolean isAdmin = AppwriteService.isAdminEmail(email);
+        boolean isAdmin      = AppwriteService.isAdminEmail(email);
+        final String fMobile = mobile;
+
+        Log.d(TAG, "attemptRegistration — email=" + email + "  isAdmin=" + isAdmin);
         setLoading(true);
 
         new Thread(() -> {
@@ -266,20 +277,40 @@ public class RegisterActivity extends AppCompatActivity {
                         ? AppwriteService.COL_ADMINS
                         : AppwriteService.COL_USERS;
 
-                // ── Duplicate email check ─────────────────────────────────────
-                if (!AppwriteHelper.findUserByField(db, checkCol, "email", email)
-                        .getDocuments().isEmpty()) {
+                // ── Already registered? ───────────────────────────────────────
+                List<? extends Document<?>> existingDocs =
+                        AppwriteHelper.findUserByField(db, checkCol, "email", email)
+                                .getDocuments();
+
+                if (!existingDocs.isEmpty()) {
+                    Log.d(TAG, "Email already registered — restoring session");
+                    Document<?> doc = existingDocs.get(0);
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> existingData =
+                            (Map<String, Object>) doc.getData();
+                    String uid  = doc.getId();
+                    String nm   = existingData.get("name") != null
+                            ? existingData.get("name").toString() : name;
+                    String role = isAdmin ? "admin" : "user";
+
+                    saveSession(uid, nm, role);
+                    final String finalRole = role;
+                    final String finalName = nm;
                     runOnUiThread(() -> {
                         setLoading(false);
-                        binding.etEmail.setError("Email already registered");
+                        Toast.makeText(this,
+                                "Already registered! Logging you in as " + finalName,
+                                Toast.LENGTH_SHORT).show();
+                        navigateTo(finalRole);
                     });
                     return;
                 }
 
                 // ── Duplicate username check (non-admin only) ─────────────────
                 if (!isAdmin && !AppwriteHelper
-                        .findUserByField(db, "username", username)
+                        .findUserByField(db, AppwriteService.COL_USERS, "username", username)
                         .getDocuments().isEmpty()) {
+                    Log.w(TAG, "Username already taken: " + username);
                     runOnUiThread(() -> {
                         setLoading(false);
                         binding.etUsername.setError("Username already taken");
@@ -287,29 +318,57 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 1) Appwrite auth account + session (+ verification email for non-admin)
-                AppwriteService.createAccountAndSignIn(email, password, name);
+                // ── Create Appwrite auth account + session + verification email
+                // createAccountAndSignIn() handles all three steps in order:
+                //   1. account.create()
+                //   2. createEmailPasswordSession()
+                //   3. account.createVerification("https://cloud.appwrite.io")
+                // Check Logcat tag "AppwriteService" to see if step 3 succeeds.
+                boolean authAlreadyExists = false;
+                try {
+                    Log.d(TAG, "Calling createAccountAndSignIn for email=" + email);
+                    AppwriteService.createAccountAndSignIn(email, password, name);
+                    Log.d(TAG, "createAccountAndSignIn completed");
+                } catch (AppwriteException ae) {
+                    Log.w(TAG, "AppwriteException during account creation: code="
+                            + ae.getCode() + "  msg=" + ae.getMessage());
+                    // Code 409 = user_already_exists in Appwrite auth
+                    if (ae.getCode() == 409
+                            || (ae.getMessage() != null
+                            && ae.getMessage().toLowerCase().contains("already"))) {
+                        authAlreadyExists = true;
+                        Log.w(TAG, "Auth account already exists — attempting session only");
+                        try {
+                            AppwriteService.createSessionSync(email, password);
+                            Log.d(TAG, "Session created for existing auth account");
+                        } catch (Exception sessionEx) {
+                            Log.w(TAG, "Session create failed (non-fatal): "
+                                    + sessionEx.getMessage());
+                        }
+                    } else {
+                        throw ae;
+                    }
+                }
 
-                // 2) Hash password for DB
+                // ── Save user document to Appwrite DB ─────────────────────────
                 String hashed = hashPassword(password);
                 String userId = UUID.randomUUID().toString()
                         .replace("-", "").substring(0, 20);
 
-                // 3) Build document
                 Map<String, Object> data = new HashMap<>();
                 data.put("name",     name);
                 data.put("username", username);
+                data.put("mobile",   fMobile);
                 data.put("email",    email);
                 data.put("password", hashed);
                 data.put("address",  address);
-                data.put("role",     isAdmin ? "admin" : "user");
 
-                // 4) Save to correct collection
+                Log.d(TAG, "Saving DB document to collection=" + checkCol + "  userId=" + userId);
                 AppwriteHelper.createDocument(
                         db, AppwriteService.DB_ID, checkCol, userId, data);
+                Log.d(TAG, "DB document saved successfully");
 
-                // 5) For admin: save session and go directly to dashboard
-                //    For users: go to login to verify email first
+                // ── Navigate based on role ────────────────────────────────────
                 if (isAdmin) {
                     saveSession(userId, name, "admin");
                     runOnUiThread(() -> {
@@ -320,13 +379,16 @@ public class RegisterActivity extends AppCompatActivity {
                         navigateTo("admin");
                     });
                 } else {
+                    // Normal user: redirect to login and ask them to verify email first.
                     runOnUiThread(() -> {
                         setLoading(false);
                         Toast.makeText(this,
-                                "Account created! Check your email (" + email
-                                        + ") for a verification link, then log in.",
+                                "Account created!\n"
+                                        + "A verification link has been sent to:\n"
+                                        + email + "\n"
+                                        + "Check your inbox (and spam folder), "
+                                        + "then log in.",
                                 Toast.LENGTH_LONG).show();
-                        // FIX: clear entire task so Register is gone from back stack
                         Intent i = new Intent(this, LoginActivity.class);
                         i.putExtra("explicit_login", true);
                         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -337,11 +399,12 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
+                Log.e(TAG, "Registration failed", e);
                 runOnUiThread(() -> {
                     setLoading(false);
-                    Log.e(TAG, "Registration failed", e);
                     Toast.makeText(this,
-                            "Failed: " + (e.getMessage() != null ? e.getMessage() : "Unknown"),
+                            "Failed: " + (e.getMessage() != null
+                                    ? e.getMessage() : "Unknown error"),
                             Toast.LENGTH_LONG).show();
                 });
             }
@@ -349,11 +412,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
-
-    /**
-     * Navigate to the correct screen and CLEAR the entire back stack.
-     * This is the fix for the redirect loop — no previous activity remains.
-     */
     private void navigateTo(String role) {
         Intent i = "admin".equals(role)
                 ? new Intent(this, AdminDashboardActivity.class)
