@@ -1,4 +1,5 @@
 # HopeConnect
+<<<<<<< HEAD
 
 HopeConnect is an **Android-based social impact application** designed to help locate missing persons and reconnect families using modern technology. The platform enables users to report missing individuals, search for possible matches, and collaborate with the community to increase the chances of recovery.
 
@@ -218,3 +219,6 @@ This project is licensed under the **MIT License**.
 If you find this project useful, please consider giving it a **star on GitHub** ⭐
 
 [1]: https://github.com/gaganmanku96/Finding-missing-person-using-AI?utm_source=chatgpt.com "GitHub - gaganmanku96/Finding-missing-person-using-AI: The project focuses on Tracking missing people. We are using Image processing and Machine learning along with Postgres Database."
+=======
+App
+>>>>>>> 2fe29c1 (Trust me this is final)
