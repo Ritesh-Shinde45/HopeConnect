@@ -97,8 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                 googleSignInClient.signOut().addOnCompleteListener(t ->
                         googleSignInLauncher.launch(googleSignInClient.getSignInIntent())));
 
-        binding.tvForgotPassword.setOnClickListener(v ->
-                startActivity(new Intent(this, ForgotPasswordActivity.class)));
+
 
         binding.tvSignUp.setOnClickListener(v -> {
             Intent i = new Intent(this, RegisterActivity.class);
