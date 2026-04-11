@@ -1,4 +1,4 @@
-// app/build.gradle.kts
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -50,11 +50,11 @@ configurations.all {
 }
 
 dependencies {
-    // ── Appwrite ──────────────────────────────────────────────────────────────
+   
     implementation("io.appwrite:sdk-for-android:5.1.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    // ── AndroidX & Material ───────────────────────────────────────────────────
+   
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -63,36 +63,36 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.lifecycle.runtime)
 
-    // ── UI ────────────────────────────────────────────────────────────────────
+   
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // ── Glide ─────────────────────────────────────────────────────────────────
+   
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
-    // ── QR Code ───────────────────────────────────────────────────────────────
+   
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.3")
 
-    // ── Google (Sign-In + Location) ───────────────────────────────────────────
+   
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("com.google.android.gms:play-services-location:21.0.1")
 
-    // ── ML Kit ────────────────────────────────────────────────────────────────
+   
     implementation("com.google.mlkit:face-detection:16.1.5")
     implementation("org.tensorflow:tensorflow-lite:2.14.0")
 
-    // ── Coroutines ────────────────────────────────────────────────────────────
+   
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
 
     implementation("org.tensorflow:tensorflow-lite:2.12.0")
     implementation("com.google.mlkit:face-detection:16.1.5")
-    // ── Testing ───────────────────────────────────────────────────────────────
+   
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

@@ -74,18 +74,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ReportModel model = reports.get(position);
 
-        // ── Name ──────────────────────────────────────────────────────────────
+       
         holder.personName.setText(model.name != null ? model.name : "Unknown");
 
-        // ── Age ───────────────────────────────────────────────────────────────
+       
         holder.personAge.setText(model.age > 0 ? model.age + " yrs" : "Age N/A");
 
-        // ── Location / description ────────────────────────────────────────────
+       
         holder.personLocation.setText(
                 model.description != null && !model.description.isEmpty()
                         ? model.description : "No description");
 
-        // ── Missing since ─────────────────────────────────────────────────────
+       
         if (model.createdAt > 0) {
             holder.missingDate.setText("Missing since: "
                     + new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
@@ -96,7 +96,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.missingDate.setText("Missing since: Unknown");
         }
 
-        // ── Status badge ──────────────────────────────────────────────────────
+       
         if (holder.statusBadge != null) {
             String status = model.status != null
                     ? model.status.toLowerCase(Locale.ROOT) : "active";
@@ -125,7 +125,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             }
         }
 
-        // ── Photo ─────────────────────────────────────────────────────────────
+       
         if (model.photoUrls != null && !model.photoUrls.isEmpty()) {
             Glide.with(ctx)
                     .load(model.photoUrls.get(0))
@@ -137,7 +137,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.personImage.setImageResource(R.drawable.person_placeholder);
         }
 
-        // ── View Details ──────────────────────────────────────────────────────
+       
         holder.btnViewDetails.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(model);
@@ -149,12 +149,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             }
         });
 
-        // ── Card click ────────────────────────────────────────────────────────
+       
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onItemClick(model);
         });
 
-        // ── Chat button ───────────────────────────────────────────────────────
+       
         holder.chatBtn.setOnClickListener(v -> {
             SharedPreferences prefs =
                     ctx.getSharedPreferences("hoppe_prefs", Context.MODE_PRIVATE);
@@ -181,7 +181,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             startChatWithReporter(myUserId, reporterUserId, model.name);
         });
 
-        // ── Call button ───────────────────────────────────────────────────────
+       
         holder.callBtn.setOnClickListener(v -> {
             String number = model.emergencyContact1;
             if (number == null || number.isEmpty()) number = model.contact;
@@ -208,7 +208,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
                 io.appwrite.services.Databases db = AppwriteService.getDatabases();
 
-                // Resolve reporter name
+               
                 String reporterName = "Reporter";
                 try {
                     io.appwrite.models.Document<?> reporterDoc =
@@ -222,7 +222,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
                         reporterName = rd.get("name").toString();
                 } catch (Exception ignored) {}
 
-                // Find existing chat
+               
                 String chatId = null;
                 try {
                     java.util.List<? extends io.appwrite.models.Document<?>> existing =
@@ -243,7 +243,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
                     }
                 } catch (Exception ignored) {}
 
-                // Create new chat if not found
+               
                 if (chatId == null) {
                     chatId = UUID.randomUUID().toString()
                             .replace("-", "").substring(0, 20);

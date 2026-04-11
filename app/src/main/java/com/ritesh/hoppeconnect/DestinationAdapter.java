@@ -33,7 +33,7 @@ public class DestinationAdapter extends RecyclerView.Adapter<DestinationAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        // 🔥 stagger effect (right side down)
+       
         if (position % 2 == 1) {
             float dp = 36;
             float px = dp * holder.itemView.getResources().getDisplayMetrics().density;

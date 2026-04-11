@@ -44,7 +44,7 @@ public class ChatsActivity extends AppCompatActivity {
     private String myUserId;
     private String myName;
 
-    // Auto-refresh every 5 seconds
+   
     private final Handler refreshHandler = new Handler(Looper.getMainLooper());
     private final Runnable refreshRunnable = new Runnable() {
         @Override public void run() {
@@ -115,7 +115,7 @@ public class ChatsActivity extends AppCompatActivity {
     private void loadChats() {
         new Thread(() -> {
             try {
-                // ✅ Fixed: assign to db + use static call
+               
                 Databases db = AppwriteService.getDatabases();
                 List<? extends Document<?>> docs =
                         AppwriteHelper.getUserChats(db, myUserId).getDocuments();
@@ -146,12 +146,12 @@ public class ChatsActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-                // Silent refresh
+               
             }
         }).start();
     }
 
-    // ── New Chat Dialog ───────────────────────────────────────────────────────
+   
     private void showNewChatDialog() {
         android.widget.EditText input = new android.widget.EditText(this);
         input.setHint("Enter username to chat with");
@@ -192,7 +192,7 @@ public class ChatsActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Check if chat already exists
+               
                 List<? extends Document<?>> existingChats =
                         AppwriteHelper.getUserChats(db, myUserId).getDocuments();
 
@@ -209,7 +209,7 @@ public class ChatsActivity extends AppCompatActivity {
                     }
                 }
 
-                // Create new chat if none found
+               
                 if (chatId == null) {
                     chatId = UUID.randomUUID().toString().replace("-", "").substring(0, 20);
                     Map<String, Object> chatData = new HashMap<>();
@@ -247,7 +247,7 @@ public class ChatsActivity extends AppCompatActivity {
         Object v = m.get(k); return v != null ? v.toString() : "";
     }
 
-    // ── Data model ────────────────────────────────────────────────────────────
+   
     public static class ChatItem {
         public final String chatId, otherUserId, otherName, lastMessage, lastTime;
         public final int unreadCount;
@@ -262,7 +262,7 @@ public class ChatsActivity extends AppCompatActivity {
         }
     }
 
-    // ── RecyclerView Adapter ──────────────────────────────────────────────────
+   
     interface OnChatClickListener { void onChatClick(ChatItem chat); }
 
     static class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.VH> {
@@ -291,7 +291,7 @@ public class ChatsActivity extends AppCompatActivity {
             } else {
                 h.tvUnread.setVisibility(View.GONE);
             }
-            // Avatar initials
+           
             String initial = c.otherName.isEmpty() ? "?" :
                     String.valueOf(c.otherName.charAt(0)).toUpperCase(Locale.ROOT);
             h.tvAvatar.setText(initial);

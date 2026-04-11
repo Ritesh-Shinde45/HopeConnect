@@ -59,7 +59,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView text;
         SentViewHolder(View v) {
             super(v);
-            // ✅ Fixed: matches id in item_message_sent.xml
+           
             text = v.findViewById(R.id.tvMessageText);
         }
     }
@@ -68,7 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView text;
         ReceivedViewHolder(View v) {
             super(v);
-            // ✅ Fixed: matches id in item_message_received.xml
+           
             text = v.findViewById(R.id.tvMessageText);
         }
     }

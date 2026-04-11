@@ -64,7 +64,7 @@ public class AchievementFragment extends Fragment implements SearchableFragment 
         loadAllHelps();
     }
 
-    /** Loads ALL helps across all users — shows community achievements */
+    
     private void loadAllHelps() {
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
 

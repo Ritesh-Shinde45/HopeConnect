@@ -37,7 +37,7 @@ public class BuyTeaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donate);
 
-        // wire UI
+       
         btn10 = findViewById(R.id.btn10);
         btn20 = findViewById(R.id.btn20);
         btn50 = findViewById(R.id.btn50);
@@ -52,14 +52,14 @@ public class BuyTeaActivity extends AppCompatActivity {
 
         imgQR = findViewById(R.id.imgQR);
 
-        // Preset amounts: fill amount and generate QR immediately
+       
         btn10.setOnClickListener(v -> onAmountSelected("10"));
         btn20.setOnClickListener(v -> onAmountSelected("20"));
         btn50.setOnClickListener(v -> onAmountSelected("50"));
         btn100.setOnClickListener(v -> onAmountSelected("100"));
         btn1000.setOnClickListener(v -> onAmountSelected("1000"));
 
-        // custom button: show amount field and focus it
+       
         btnCustom.setOnClickListener(v -> {
             etAmount.setVisibility(View.VISIBLE);
             etAmount.setText("");
@@ -67,7 +67,7 @@ public class BuyTeaActivity extends AppCompatActivity {
             showKeyboard(etAmount);
         });
 
-        // Pay button: use whatever amount is in etAmount
+       
         btnPay.setOnClickListener(v -> {
             String amount = (etAmount.getText() != null) ? etAmount.getText().toString().trim() : "";
             if (TextUtils.isEmpty(amount)) {
@@ -78,7 +78,7 @@ public class BuyTeaActivity extends AppCompatActivity {
             generateAndShowQr(amount, note);
         });
 
-        // Copy UPI id to clipboard
+       
         btnCopy.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null) {
@@ -94,13 +94,13 @@ public class BuyTeaActivity extends AppCompatActivity {
     private void onAmountSelected(String amount) {
         etAmount.setVisibility(View.VISIBLE);
         etAmount.setText(amount);
-        // Use existing note text if any
+       
         String note = (etNote.getText() != null) ? etNote.getText().toString().trim() : "Buy Tea Support";
         generateAndShowQr(amount, note);
     }
 
     private void generateAndShowQr(String amount, String note) {
-        // sanitize amount: allow digits and dot only
+       
         amount = amount.replaceAll("[^0-9.]", "");
         if (TextUtils.isEmpty(amount)) {
             Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show();
@@ -109,7 +109,7 @@ public class BuyTeaActivity extends AppCompatActivity {
 
         String upiUri;
         try {
-            // encode name and note
+           
             String encodedName = URLEncoder.encode(NAME, "UTF-8");
             String encodedNote = URLEncoder.encode(note == null ? "" : note, "UTF-8");
 
@@ -127,7 +127,7 @@ public class BuyTeaActivity extends AppCompatActivity {
 
     private void createQrBitmapAndSet(String text) {
         QRCodeWriter writer = new QRCodeWriter();
-        final int sizePx = 800; // QR resolution
+        final int sizePx = 800;
         try {
             BitMatrix bitMatrix = writer.encode(text, BarcodeFormat.QR_CODE, sizePx, sizePx);
 
@@ -141,7 +141,7 @@ public class BuyTeaActivity extends AppCompatActivity {
             imgQR.setImageBitmap(bmp);
             imgQR.setVisibility(View.VISIBLE);
 
-            // Hide keyboard if visible
+           
             hideKeyboard();
 
             Toast.makeText(this, "Scan this QR from your UPI app", Toast.LENGTH_SHORT).show();

@@ -4,7 +4,7 @@ public class ChatMessage {
     public String senderId;
     public String text;
     public long timestamp;
-    public boolean isMine; // Used to decide which layout to show (sent vs received)
+    public boolean isMine;
 
     public ChatMessage(String senderId, String text, long timestamp, boolean isMine) {
         this.senderId = senderId;

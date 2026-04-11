@@ -3,10 +3,7 @@ package com.ritesh.hoppeconnect;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Lightweight in-memory cache to pass ReportModel between activities
- * without serialization, avoiding the need for Parcelable/JSON.
- */
+
 public class ReportModelCache {
     private static final Map<String, ReportModel> cache = new HashMap<>();
 

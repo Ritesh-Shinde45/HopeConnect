@@ -25,7 +25,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private String generatedOtp    = null;
     private String foundDocumentId = null;
-    private String foundMobile     = null;   // for SMS delivery
+    private String foundMobile     = null;  
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    // ── Step 0: find user and send OTP ────────────────────────────────────────
+   
     private void sendOtpForIdentifier() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         if (identifier.isEmpty()) {
@@ -87,9 +87,9 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         ? data.get("mobile").toString() : null;
 
                 generatedOtp = SmsManagerHelper.generateOtp();
-                Log.d(TAG, "Reset OTP: " + generatedOtp); // REMOVE in production
+                Log.d(TAG, "Reset OTP: " + generatedOtp);
 
-                // Send real SMS if we have the mobile number
+               
                 if (foundMobile != null && !foundMobile.isEmpty()) {
                     runOnUiThread(() -> {
                         SmsManagerHelper.sendOtp(this, foundMobile, generatedOtp);
@@ -101,7 +101,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 } else {
                     runOnUiThread(() -> {
                         setLoading(false);
-                        // Fallback – show in toast (dev only)
+                       
                         Toast.makeText(this,
                                 "[DEV] OTP: " + generatedOtp
                                         + " (no mobile on file)",
@@ -120,7 +120,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Step 1: verify OTP ────────────────────────────────────────────────────
+   
     private void verifyAndReveal() {
         if (generatedOtp == null) {
             Toast.makeText(this, "Please request an OTP first", Toast.LENGTH_SHORT).show();
@@ -136,7 +136,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         Toast.makeText(this, "OTP verified! Set your new password.", Toast.LENGTH_SHORT).show();
     }
 
-    // ── Step 2: update password ───────────────────────────────────────────────
+   
     private void resetPassword() {
         String newPass  = binding.etNewPassword.getText().toString();
         String confPass = binding.etConfirmPassword.getText().toString();
@@ -191,7 +191,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private int getPasswordScore(String pwd) {
         int s = 0;
         if (pwd.length() >= 8)                                           s++;

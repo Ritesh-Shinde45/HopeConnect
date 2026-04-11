@@ -63,7 +63,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
     private String myUserId        = "";
     private String myRole          = "";
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +96,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }
     }
 
-    // ── Init views ────────────────────────────────────────────────────────────
+   
     private void initViews() {
         imageViewPager    = findViewById(R.id.imageViewPager);
         dotsContainer     = findViewById(R.id.dotsContainer);
@@ -131,7 +131,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
     }
 
-    // ── Bind data ─────────────────────────────────────────────────────────────
+   
     private void bindData(ReportModel model) {
         uploaderUserId = nz(model.userId, "");
 
@@ -153,22 +153,22 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
             tvEmergency3.setText(model.emergencyContact3);
         }
 
-        // ── Report ID ─────────────────────────────────────────────────────────
+       
         tvReportId.setText(model.id != null
                 ? "#" + model.id.substring(0, Math.min(8, model.id.length())) : "—");
 
-        // ── Reported On — parse from createdAt or $createdAt ISO string ───────
+       
         if (model.createdAt > 0) {
-            // createdAt is a long timestamp
+           
             tvReportedOn.setText(new SimpleDateFormat(
                     "dd MMM yyyy, hh:mm a", Locale.getDefault())
                     .format(new Date(model.createdAt)));
         } else {
-            // Try to get $createdAt ISO string directly from DB
+           
             tvReportedOn.setText("—");
         }
 
-        // ── Reporter Name — load from users collection ────────────────────────
+       
         if (tvReporterName != null) {
             tvReporterName.setText("Loading...");
             if (!uploaderUserId.isEmpty()) {
@@ -178,7 +178,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
             }
         }
 
-        // ── Status badge ──────────────────────────────────────────────────────
+       
         if (tvStatusBadge != null && model.status != null) {
             String status = model.status.toLowerCase(Locale.ROOT);
             switch (status) {
@@ -203,7 +203,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
             }
         }
 
-        // ── GPS ───────────────────────────────────────────────────────────────
+       
         if (model.locationLat != null && !model.locationLat.isEmpty()) {
             tvMissingSince.setText("Missing since: " + nz(model.missingSince, "Unknown")
                     + "\n📍 " + model.locationLat + ", " + model.locationLng);
@@ -220,7 +220,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
             });
         }
 
-        // ── Document link ─────────────────────────────────────────────────────
+       
         if (model.documentUrl != null && !model.documentUrl.isEmpty()) {
             tvDescription.append("\n\n📄 Supporting document attached. Tap to view.");
             tvDescription.setOnClickListener(v ->
@@ -230,19 +230,19 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                             "Open Document")));
         }
 
-        // ── Delete button visibility ──────────────────────────────────────────
+       
         boolean isReporter = !myUserId.isEmpty() && myUserId.equals(uploaderUserId);
         boolean isAdmin    = "admin".equals(myRole);
         if ((isReporter || isAdmin) && cardDeleteReport != null) {
             cardDeleteReport.setVisibility(View.VISIBLE);
         }
 
-        // ── "I've Seen" button: hide for reporter, disable/hide for found ──────
+       
         if (btnIveSeenPerson != null) {
             String status = model.status != null
                     ? model.status.toLowerCase(Locale.ROOT) : "active";
             if (isReporter || "found".equals(status) || "resolved".equals(status)) {
-                // Hide button entirely if reporter or already found
+               
                 btnIveSeenPerson.setVisibility(View.GONE);
             } else {
                 btnIveSeenPerson.setVisibility(View.VISIBLE);
@@ -254,7 +254,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         setupActionButtons(model);
     }
 
-    // ── Load reporter name asynchronously ─────────────────────────────────────
+   
     private void loadReporterName(String userId) {
         new Thread(() -> {
             try {
@@ -280,7 +280,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Image slider ──────────────────────────────────────────────────────────
+   
     private void setupImageSlider(List<String> photoUrls) {
         if (photoUrls.isEmpty()) {
             photoUrls = new ArrayList<>();
@@ -348,7 +348,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }
     }
 
-    // ── Action buttons ────────────────────────────────────────────────────────
+   
     private void setupActionButtons(ReportModel model) {
         btnDownloadPdf.setOnClickListener(v -> generateAndSharePdf(model));
 
@@ -403,18 +403,18 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                     "Report Uploader", model.name);
         });
 
-        // ── I've Seen This Person ─────────────────────────────────────────────
+       
         if (btnIveSeenPerson != null) {
             btnIveSeenPerson.setOnClickListener(v -> showIveSeenDialog(model));
         }
 
-        // ── Delete report ─────────────────────────────────────────────────────
+       
         if (btnDeleteReport != null) {
             btnDeleteReport.setOnClickListener(v -> confirmDeleteReport(model));
         }
     }
 
-    // ── I've Seen dialog ──────────────────────────────────────────────────────
+   
     private void showIveSeenDialog(ReportModel model) {
         if (myUserId.isEmpty()) {
             Toast.makeText(this, "Please log in first",
@@ -540,7 +540,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Delete report ─────────────────────────────────────────────────────────
+   
     private void confirmDeleteReport(ReportModel model) {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Report")
@@ -574,7 +574,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Chat ──────────────────────────────────────────────────────────────────
+   
     private void startChatWithUser(String myUid, String otherUid,
                                    String otherName, String reportName) {
         Toast.makeText(this, "Opening chat…", Toast.LENGTH_SHORT).show();
@@ -647,7 +647,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── PDF ───────────────────────────────────────────────────────────────────
+   
     private void generateAndSharePdf(ReportModel model) {
         Toast.makeText(this, "Generating PDF with photos…",
                 Toast.LENGTH_SHORT).show();
@@ -658,13 +658,13 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 Paint p = new Paint();
                 p.setAntiAlias(true);
 
-                // ── Page 1: Text info ──────────────────────────────────────────
+               
                 PdfDocument.PageInfo page1Info =
                         new PdfDocument.PageInfo.Builder(595, 842, 1).create();
                 PdfDocument.Page page1 = pdf.startPage(page1Info);
                 Canvas canvas = page1.getCanvas();
 
-                // Header
+               
                 p.setColor(Color.parseColor("#3F51B5"));
                 canvas.drawRect(0, 0, 595, 80, p);
                 p.setColor(Color.WHITE);
@@ -675,17 +675,17 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                         "MMM dd, yyyy  HH:mm", Locale.getDefault())
                         .format(new Date()), 16, 55, p);
 
-                // Name
+               
                 p.setColor(Color.parseColor("#1A1A2E"));
                 p.setTextSize(20f); p.setFakeBoldText(true);
                 canvas.drawText(nz(model.name, "Unknown"), 16, 110, p);
 
-                // Fields
+               
                 p.setTextSize(12f); p.setFakeBoldText(false);
                 p.setColor(Color.parseColor("#555555"));
                 int y = 140; int lh = 24;
 
-                // Section: Basic info
+               
                 drawSectionTitle(canvas, p, "BASIC INFORMATION", y);
                 y += lh;
                 drawField(canvas, p, "Age",           model.age > 0
@@ -709,7 +709,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 }
                 y += 8;
 
-                // Section: Description
+               
                 drawSectionTitle(canvas, p, "CASE DESCRIPTION", y); y += lh;
                 p.setColor(Color.parseColor("#333333"));
                 p.setTextSize(12f); p.setFakeBoldText(false);
@@ -717,7 +717,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 y = drawWrappedText(canvas, p, desc, 16, y, 563, lh);
                 y += 8;
 
-                // Section: Contacts
+               
                 drawSectionTitle(canvas, p, "CONTACT INFORMATION", y); y += lh;
                 p.setColor(Color.parseColor("#555555"));
                 p.setTextSize(12f);
@@ -730,7 +730,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                     drawField(canvas, p, "Emergency 3", model.emergencyContact3, y); y += lh;
                 }
 
-                // Footer
+               
                 p.setColor(Color.parseColor("#AAAAAA")); p.setTextSize(9f);
                 p.setFakeBoldText(false);
                 canvas.drawText(
@@ -739,7 +739,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
                 pdf.finishPage(page1);
 
-                // ── Pages 2+: Photos ───────────────────────────────────────────
+               
                 if (model.photoUrls != null && !model.photoUrls.isEmpty()) {
                     int photoPage = 2;
                     for (String photoUrl : model.photoUrls) {
@@ -747,7 +747,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
                         android.graphics.Bitmap bmp = null;
                         try {
-                            // Download bitmap synchronously
+                           
                             bmp = com.bumptech.glide.Glide.with(
                                             getApplicationContext())
                                     .asBitmap()
@@ -765,12 +765,12 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                         PdfDocument.Page photoP = pdf.startPage(photoPageInfo);
                         Canvas photoCanvas = photoP.getCanvas();
 
-                        // Page background
+                       
                         Paint bg = new Paint();
                         bg.setColor(Color.WHITE);
                         photoCanvas.drawRect(0, 0, 595, 842, bg);
 
-                        // Header strip
+                       
                         bg.setColor(Color.parseColor("#3F51B5"));
                         photoCanvas.drawRect(0, 0, 595, 44, bg);
                         bg.setColor(Color.WHITE);
@@ -781,7 +781,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                                 16, 28, bg);
 
                         if (bmp != null) {
-                            // Scale bitmap to fit page width keeping aspect ratio
+                           
                             float scale = Math.min(
                                     563f / bmp.getWidth(),
                                     740f / bmp.getHeight());
@@ -796,7 +796,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                             photoCanvas.drawBitmap(bmp, null, dst, null);
                             bmp.recycle();
                         } else {
-                            // Photo failed to load — show placeholder text
+                           
                             Paint ph = new Paint();
                             ph.setColor(Color.parseColor("#EEEEEE"));
                             photoCanvas.drawRect(16, 54, 579, 794, ph);
@@ -807,7 +807,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                                     297, 424, ph);
                         }
 
-                        // Page footer
+                       
                         Paint foot = new Paint();
                         foot.setColor(Color.parseColor("#AAAAAA"));
                         foot.setTextSize(9f); foot.setAntiAlias(true);
@@ -819,7 +819,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                     }
                 }
 
-                // ── Save & share ───────────────────────────────────────────────
+               
                 File outFile = new File(getCacheDir(), "report_"
                         + (model.id != null
                         ? model.id.substring(0, Math.min(6, model.id.length()))
@@ -857,7 +857,6 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-// ── PDF helper methods ────────────────────────────────────────────────────────
 
     private void drawSectionTitle(Canvas canvas, Paint p,
                                   String title, int y) {
@@ -865,7 +864,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         p.setTextSize(11f);
         p.setFakeBoldText(true);
         canvas.drawText(title, 16, y, p);
-        // Underline
+       
         p.setStrokeWidth(1f);
         canvas.drawLine(16, y + 3, 579, y + 3, p);
         p.setFakeBoldText(false);
@@ -907,7 +906,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         return y;
     }
 
-    // ── Fetch from DB ─────────────────────────────────────────────────────────
+   
     private void fetchReportFromDb(String id) {
         new Thread(() -> {
             try {
@@ -917,7 +916,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                                 db, AppwriteService.DB_ID,
                                 AppwriteService.COL_REPORTS, id);
 
-                // Parse $createdAt from Appwrite metadata for "Reported On"
+               
                 ReportModel rm = MissedFragment.parseDocument(
                         doc.getId(), doc.getData(), doc.getCreatedAt());
 
@@ -936,7 +935,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private String nz(String s, String fallback) {
         return (s != null && !s.isEmpty()) ? s : fallback;
     }

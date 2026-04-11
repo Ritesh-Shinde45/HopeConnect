@@ -14,7 +14,7 @@ public class TechnologyWithHumanityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.technology_with_humanity);
 
-        // Initialize TextView
+       
 
     }
 }

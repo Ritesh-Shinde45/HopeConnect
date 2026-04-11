@@ -45,7 +45,7 @@ public class AdminProfileFragment extends Fragment {
     }
 
     private void logout() {
-        // Clear session
+       
         requireContext().getSharedPreferences(PREFS, MODE_PRIVATE).edit().clear().apply();
 
         Intent i = new Intent(requireContext(), LoginActivity.class);

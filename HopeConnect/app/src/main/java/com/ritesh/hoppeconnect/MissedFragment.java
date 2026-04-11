@@ -134,11 +134,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    /**
-     * Central parser — reads EVERY field saved by NewReportActivity.
-     * Also fixes photo URLs by appending ?project=PROJECT_ID so Appwrite
-     * actually serves the image to unauthenticated viewers.
-     */
+    
     public static ReportModel parseDocument(String docId, Map<String, Object> data) {
         ReportModel rm = new ReportModel();
         rm.id = docId;
@@ -157,7 +153,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         rm.locationLng = str(data, "locationLng", "");
         rm.documentUrl = str(data, "documentUrl", "");
 
-        // Age
+       
         Object ageObj = data.get("age");
         if (ageObj instanceof Number) {
             rm.age = ((Number) ageObj).intValue();
@@ -165,14 +161,14 @@ public class MissedFragment extends Fragment implements SearchableFragment {
             try { rm.age = Integer.parseInt(ageObj.toString()); } catch (Exception ignored) {}
         }
 
-        // createdAt — Appwrite stores $createdAt as ISO string in metadata,
-        // but if you stored a custom long field use that:
+       
+       
         Object timeObj = data.get("createdAt");
         if (timeObj instanceof Number) {
             rm.createdAt = ((Number) timeObj).longValue();
         }
 
-        // Photo URLs — append project ID so Appwrite serves them publicly
+       
         Object pf = data.get("photoUrls");
         if (pf instanceof List) {
             List<?> pL = (List<?>) pf;
@@ -180,7 +176,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
             for (Object u : pL) {
                 if (u != null) {
                     String url = u.toString();
-                    // Add project param if missing
+                   
                     if (!url.contains("project=")) {
                         url = url + "?project=" + AppwriteService.PROJECT_ID;
                     }

@@ -8,39 +8,39 @@ import kotlinx.coroutines.runBlocking
 
 object AppwriteHelper {
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun createDocument(
         db: Databases, databaseId: String, collectionId: String,
         documentId: String, data: Map<String, Any>
     ) = runBlocking { db.createDocument(databaseId, collectionId, documentId, data) }
 
-    // ── GET ───────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun getDocument(
         db: Databases, databaseId: String, collectionId: String, documentId: String
     ) = runBlocking { db.getDocument(databaseId, collectionId, documentId) }
 
-    // ── LIST ──────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun listDocuments(
         db: Databases, databaseId: String, collectionId: String, queries: List<String>
     ) = runBlocking { db.listDocuments(databaseId, collectionId, queries) }
 
-    // ── UPDATE ────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun updateDocument(
         db: Databases, databaseId: String, collectionId: String,
         documentId: String, data: Map<String, Any>
     ) = runBlocking { db.updateDocument(databaseId, collectionId, documentId, data) }
 
-    // ── DELETE ────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun deleteDocument(
         db: Databases, databaseId: String, collectionId: String, documentId: String
     ) = runBlocking { db.deleteDocument(databaseId, collectionId, documentId) }
 
-    // ── Find user by field (users collection — existing) ─────────────────────
+   
     @JvmStatic
     fun findUserByField(db: Databases, field: String, value: String) = runBlocking {
         db.listDocuments(
@@ -50,9 +50,9 @@ object AppwriteHelper {
         )
     }
 
-    // ── Find document by field in ANY collection (admin login, reports, etc.) ─
-    // Used by: LoginActivity (admin lookup), AdminApproveReportsFragment,
-    //          AdminSpammedReportsFragment
+   
+   
+   
     @JvmStatic
     fun findUserByField(
         db: Databases,
@@ -67,9 +67,9 @@ object AppwriteHelper {
         )
     }
 
-    // ── Find documents by field in any db/collection (generic) ───────────────
-    // Used by: AdminOverviewFragment, AdminApproveReportsFragment,
-    //          AdminSpammedReportsFragment
+   
+   
+   
     @JvmStatic
     fun findDocumentsByField(
         db: Databases,
@@ -85,8 +85,8 @@ object AppwriteHelper {
         )
     }
 
-    // ── List ALL documents in a collection (no filter) ────────────────────────
-    // Used by: AdminOverviewFragment (total user count, etc.)
+   
+   
     @JvmStatic
     fun listAllDocuments(
         db: Databases,
@@ -100,7 +100,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── Chat: get messages for a chatId ───────────────────────────────────────
+   
     @JvmStatic
     fun getChatMessages(db: Databases, chatId: String) = runBlocking {
         db.listDocuments(
@@ -114,7 +114,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── Chat: get all chats for a userId ──────────────────────────────────────
+   
     @JvmStatic
     fun getUserChats(db: Databases, userId: String) = runBlocking {
         db.listDocuments(
@@ -124,11 +124,7 @@ object AppwriteHelper {
         )
     }
 
-    /**
-     * Upload file bytes — declared to throw Exception so Java callers
-     * MUST wrap in try/catch. This is the key fix: @Throws(Exception::class)
-     * makes the Kotlin AppwriteException visible to Java as a checked exception.
-     */
+    
     @JvmStatic
     @Throws(Exception::class)
     fun uploadFileBlocking(

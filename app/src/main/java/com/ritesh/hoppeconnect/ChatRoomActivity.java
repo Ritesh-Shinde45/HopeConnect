@@ -130,12 +130,12 @@ public class ChatRoomActivity extends AppCompatActivity {
             return;
         }
 
-        // Set name immediately from intent
+       
         binding.tvOtherName.setText(
                 otherName != null && !otherName.isEmpty() ? otherName : "User");
         binding.tvOtherUsername.setText("loading...");
 
-        // Show text avatar initially
+       
         String initial = (otherName != null && !otherName.isEmpty())
                 ? String.valueOf(otherName.charAt(0)).toUpperCase(Locale.ROOT) : "?";
         binding.tvAvatar.setText(initial);
@@ -144,7 +144,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         binding.ivBack.setOnClickListener(v -> finish());
 
-        // Load full profile of other user
+       
         loadOtherUserProfile();
 
         setupRecycler();
@@ -161,7 +161,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override protected void onResume() { super.onResume(); pollHandler.post(pollRunnable); }
     @Override protected void onPause()  { super.onPause();  pollHandler.removeCallbacks(pollRunnable); }
 
-    // ── Load the other user's profile (name, username, photo) ─────────────────
+   
     private void loadOtherUserProfile() {
         if (otherUserId == null || otherUserId.isEmpty()) return;
 
@@ -216,7 +216,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── RecyclerView ──────────────────────────────────────────────────────────
+   
     private void setupRecycler() {
         adapter = new MessageAdapter(messages, myUserId);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -225,7 +225,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         binding.rvMessages.setAdapter(adapter);
     }
 
-    // ── Input bar ─────────────────────────────────────────────────────────────
+   
     private void setupInput() {
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -245,7 +245,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-        // Send on keyboard send action
+       
         binding.etMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEND) {
                 String text = binding.etMessage.getText().toString().trim();
@@ -259,7 +259,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-    // ── Attachment panel ──────────────────────────────────────────────────────
+   
     private void setupAttachmentPanel() {
         binding.btnAttach.setOnClickListener(v -> {
             boolean shown = binding.attachPanel.getVisibility() == View.VISIBLE;
@@ -295,7 +295,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-    // ── Send helpers ──────────────────────────────────────────────────────────
+   
     private void sendTextMessage(String text) {
         buildAndSendMessage(TYPE_TEXT, text, null, null);
     }
@@ -363,7 +363,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         msgData.put("timeStr",    timeStr);
         msgData.put("read",       false);
 
-        // Optimistic UI
+       
         messages.add(new Message(msgId, myUserId, myName, type,
                 text     != null ? text     : "",
                 fileUrl  != null ? fileUrl  : "",
@@ -496,7 +496,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
-    // ── Message Model ─────────────────────────────────────────────────────────
+   
     public static class Message {
         public final String id, senderId, senderName, text, fileUrl, fileName, timeStr;
         public final int type;
@@ -517,7 +517,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ── MessageAdapter ────────────────────────────────────────────────────────
+   
     static class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int VIEW_SENT     = 0;

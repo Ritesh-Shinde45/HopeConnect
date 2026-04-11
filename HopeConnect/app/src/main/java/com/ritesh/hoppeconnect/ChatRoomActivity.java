@@ -99,7 +99,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // ✅ Fixed: static call, not .INSTANCE
+       
         AppwriteService.init(getApplicationContext());
         fusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
@@ -244,7 +244,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         msgData.put("timeStr",    timeStr);
         msgData.put("read",       false);
 
-        // Optimistic UI update
+       
         messages.add(new Message(msgId, myUserId, myName, type,
                 text != null ? text : "",
                 fileUrl != null ? fileUrl : "",
@@ -259,7 +259,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                // ✅ Fixed: static calls
+               
                 Databases db = AppwriteService.getDatabases();
 
                 AppwriteHelper.createDocument(db, AppwriteService.DB_ID,
@@ -288,7 +288,7 @@ public class ChatRoomActivity extends AppCompatActivity {
     private void loadMessages() {
         new Thread(() -> {
             try {
-                // ✅ Fixed: static call
+               
                 Databases db = AppwriteService.getDatabases();
                 List<? extends Document<?>> docs =
                         AppwriteHelper.getChatMessages(db, chatId).getDocuments();
@@ -330,7 +330,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         String fileName  = getFileName(uri);
         byte[] bytes     = readBytes(uri);
 
-        // ✅ Fixed: static call
+       
         Storage storage = AppwriteService.getStorage();
 
         io.appwrite.models.File uploaded = AppwriteHelper.uploadFileBlocking(
@@ -378,7 +378,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         Object v = m.get(k); return v != null ? v.toString() : "";
     }
 
-    // ── Message model ─────────────────────────────────────────────────────────
+   
     public static class Message {
         public final String id, senderId, senderName, text, fileUrl, fileName, timeStr;
         public final int type;
@@ -391,7 +391,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-    // ── MessageAdapter ────────────────────────────────────────────────────────
+   
     static class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private static final int VIEW_SENT     = 0;
         private static final int VIEW_RECEIVED = 1;
@@ -421,7 +421,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             MsgVH h = (MsgVH) holder;
             h.tvTime.setText(msg.timeStr);
 
-            // Hide all first
+           
             h.tvText.setVisibility(View.GONE);
             h.ivImage.setVisibility(View.GONE);
             h.tvFile.setVisibility(View.GONE);

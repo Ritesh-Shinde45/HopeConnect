@@ -46,12 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterPageBinding binding;
     private GoogleSignInClient  googleSignInClient;
 
-    // ── Google auth gate ──────────────────────────────────────────────────────
-    // Set to true only after a successful Google Sign-In in this session.
-    // The Sign Up button is disabled until this flag is true.
+   
+   
+   
     private boolean googleAuthCompleted = false;
 
-    // ── Google Sign-In launcher ───────────────────────────────────────────────
+   
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -67,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,28 +80,19 @@ public class RegisterActivity extends AppCompatActivity {
         setupPasswordStrengthWatcher();
         setupClickListeners();
         prefillFromIntent();
-        applyGoogleGate();  // lock UI until Google auth done
+        applyGoogleGate(); 
     }
 
-    // ── Lock/unlock the form based on googleAuthCompleted ────────────────────
-    /**
-     * When Google auth is NOT yet completed:
-     *   • Sign Up button is disabled and shows a hint
-     *   • Email field is read-only (will be filled by Google)
-     *   • All other fields are editable so users can browse, but submit is gated
-     *
-     * When Google auth IS completed:
-     *   • Email is locked (cannot be changed after Google sets it)
-     *   • Sign Up button becomes active
-     */
+   
+    
     private void applyGoogleGate() {
         if (!googleAuthCompleted) {
-            // Disable Sign Up button with explanatory hint
+           
             binding.btnSignUp.setEnabled(false);
             binding.btnSignUp.setAlpha(0.5f);
             binding.btnSignUp.setText("Sign in with Google first");
 
-            // Email is set by Google — make it non-editable and show hint
+           
             binding.etEmail.setFocusable(false);
             binding.etEmail.setFocusableInTouchMode(false);
             binding.etEmail.setClickable(false);
@@ -109,12 +100,12 @@ public class RegisterActivity extends AppCompatActivity {
             binding.etEmail.setAlpha(0.6f);
 
         } else {
-            // Google done — enable form submission
+           
             binding.btnSignUp.setEnabled(true);
             binding.btnSignUp.setAlpha(1.0f);
             binding.btnSignUp.setText("SIGNUP");
 
-            // Lock the email so the user cannot change what Google provided
+           
             binding.etEmail.setFocusable(false);
             binding.etEmail.setFocusableInTouchMode(false);
             binding.etEmail.setClickable(false);
@@ -122,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // ── Pre-fill from Google intent (called when navigated from LoginActivity) ─
+   
     private void prefillFromIntent() {
         String googleEmail = getIntent().getStringExtra("google_email");
         String googleName  = getIntent().getStringExtra("google_name");
@@ -135,13 +126,13 @@ public class RegisterActivity extends AppCompatActivity {
                                 .replace(" ", "_")
                                 .replaceAll("[^a-z0-9_]", ""));
             }
-            // Treat a pre-filled Google intent as having already authenticated
+           
             googleAuthCompleted = true;
             applyGoogleGate();
         }
     }
 
-    // ── Google Sign-In ────────────────────────────────────────────────────────
+   
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -170,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity {
                         AppwriteHelper.findUserByField(db, col, "email", email).getDocuments();
 
                 if (!docs.isEmpty()) {
-                    // Already registered — restore session and navigate directly
+                   
                     Document<?> doc = docs.get(0);
                     @SuppressWarnings("unchecked")
                     Map<String, Object> data = (Map<String, Object>) doc.getData();
@@ -191,7 +182,7 @@ public class RegisterActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    // New user — pre-fill form fields and unlock the Sign Up button
+                   
                     Log.d(TAG, "Google user not found in DB — pre-filling registration form");
                     googleSignInClient.signOut();
 
@@ -205,7 +196,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         .replace(" ", "_")
                                         .replaceAll("[^a-z0-9_]", ""));
 
-                        // ── Unlock the form ───────────────────────────────────
+                       
                         googleAuthCompleted = true;
                         applyGoogleGate();
 
@@ -233,7 +224,7 @@ public class RegisterActivity extends AppCompatActivity {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
 
-    // ── Password strength indicator ───────────────────────────────────────────
+   
     private void setupPasswordStrengthWatcher() {
         binding.etPass.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -280,14 +271,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isPasswordStrong(String pwd) { return getPasswordScore(pwd) >= 5; }
 
-    // ── Click listeners ───────────────────────────────────────────────────────
+   
     private void setupClickListeners() {
         binding.btnGoogleAuth.setOnClickListener(v ->
                 googleSignInClient.signOut().addOnCompleteListener(t ->
                         googleSignInLauncher.launch(googleSignInClient.getSignInIntent())));
 
         binding.btnSignUp.setOnClickListener(v -> {
-            // Double-check gate in case somehow the button is tapped while disabled
+           
             if (!googleAuthCompleted) {
                 Toast.makeText(this,
                         "Please sign in with Google first to verify your identity.",
@@ -306,7 +297,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // ── Registration ──────────────────────────────────────────────────────────
+   
     private void attemptRegistration() {
         String name     = binding.etName.getText().toString().trim();
         String username = binding.etUsername.getText().toString().trim();
@@ -315,14 +306,14 @@ public class RegisterActivity extends AppCompatActivity {
         String password = binding.etPass.getText().toString();
         String address  = binding.etAddress.getText().toString().trim();
 
-        // ── Validation ────────────────────────────────────────────────────────
+       
         if (name.isEmpty())     { binding.etName.setError("Required");     return; }
         if (username.isEmpty()) { binding.etUsername.setError("Required"); return; }
-        // Mobile is optional but must be valid if provided
+       
         if (!mobile.isEmpty() && !mobile.matches("\\d{10}")) {
             binding.etMobile.setError("Enter a valid 10-digit number"); return;
         }
-        // Email is set by Google — just sanity-check it is present
+       
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this,
                     "Email is missing. Please sign in with Google again.",
@@ -350,7 +341,7 @@ public class RegisterActivity extends AppCompatActivity {
                         ? AppwriteService.COL_ADMINS
                         : AppwriteService.COL_USERS;
 
-                // ── Already registered? ───────────────────────────────────────
+               
                 List<? extends Document<?>> existingDocs =
                         AppwriteHelper.findUserByField(db, checkCol, "email", email)
                                 .getDocuments();
@@ -379,7 +370,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // ── Duplicate username check (non-admin only) ─────────────────
+               
                 if (!isAdmin && !AppwriteHelper
                         .findUserByField(db, AppwriteService.COL_USERS, "username", username)
                         .getDocuments().isEmpty()) {
@@ -391,7 +382,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // ── Create Appwrite auth account + session + verification email ─
+               
                 boolean authAlreadyExists = false;
                 try {
                     Log.d(TAG, "Calling createAccountAndSignIn for email=" + email);
@@ -417,7 +408,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-                // ── Save user document to Appwrite DB ─────────────────────────
+               
                 String hashed = hashPassword(password);
                 String userId = UUID.randomUUID().toString()
                         .replace("-", "").substring(0, 20);
@@ -435,7 +426,7 @@ public class RegisterActivity extends AppCompatActivity {
                         db, AppwriteService.DB_ID, checkCol, userId, data);
                 Log.d(TAG, "DB document saved successfully");
 
-                // ── Navigate based on role ────────────────────────────────────
+               
                 if (isAdmin) {
                     saveSession(userId, name, "admin");
                     runOnUiThread(() -> {
@@ -473,7 +464,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private void navigateTo(String role) {
         Intent i = "admin".equals(role)
                 ? new Intent(this, AdminDashboardActivity.class)

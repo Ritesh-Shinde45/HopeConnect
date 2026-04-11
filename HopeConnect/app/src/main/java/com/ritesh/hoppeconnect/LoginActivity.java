@@ -36,10 +36,10 @@ public class LoginActivity extends AppCompatActivity {
     private static final String KEY_ROLE       = "logged_in_role";
     private static final String ADMIN_USERNAME = "Admin";
 
-    // ── Admin-designated mobile numbers (same list as RegisterActivity) ───────
-    // Login checks COL_ADMINS whenever the entered identifier is "Admin",
-    // an admin email, or an admin username. The mobile list here is used only
-    // as a secondary lookup if the user types their mobile at login.
+   
+   
+   
+   
     private static final List<String> ADMIN_MOBILES = Arrays.asList(
             "8080769308",
             "9096548683"
@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginPageBinding   binding;
     private GoogleSignInClient googleSignInClient;
 
-    // ── Google Sign-In launcher ───────────────────────────────────────────────
+   
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
 
         AppwriteService.init(this);
 
-        // Auto-navigate only when already logged in AND screen wasn't opened deliberately
+       
         boolean explicitOpen = getIntent().getBooleanExtra("explicit_login", false);
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         if (!explicitOpen && prefs.contains(KEY_UID)) {
@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -117,13 +117,13 @@ public class LoginActivity extends AppCompatActivity {
             Intent i = new Intent(this, RegisterActivity.class);
             i.putExtra("explicit_login", true);
             startActivity(i);
-            // Do NOT finish() — user can press back to return to Login
+           
         });
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // MAIN LOGIN ENTRY POINT
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
     private void attemptLogin() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         String password   = binding.etLoginPassword.getText().toString();
@@ -133,10 +133,10 @@ public class LoginActivity extends AppCompatActivity {
 
         setLoading(true);
 
-        // ── Decide login path ─────────────────────────────────────────────────
-        //  a) Identifier is the literal "Admin" username   → admin path
-        //  b) Identifier is an admin mobile number         → admin path
-        //  c) Everything else                              → user path
+       
+       
+       
+       
         if (identifier.equalsIgnoreCase(ADMIN_USERNAME)
                 || ADMIN_MOBILES.contains(identifier)) {
             loginAsAdmin(identifier, password);
@@ -145,18 +145,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // ADMIN LOGIN
-    // Admin can log in with:  username ("Admin") | email | mobile number
-    // No OTP required after first registration — just email/username + password.
-    // This handles the app-reinstall scenario cleanly.
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
+   
+   
+   
     private void loginAsAdmin(String identifier, String password) {
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
 
-                // Determine which field to search in the admins collection
+               
                 String field;
                 if (identifier.equalsIgnoreCase(ADMIN_USERNAME)) {
                     field = "username";
@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity {
                                 db, AppwriteService.COL_ADMINS, field, identifier
                         ).getDocuments();
 
-                // Fallback: if "Admin" username not found in admins, try email field
+               
                 if (docs.isEmpty() && field.equals("username")) {
                     docs = AppwriteHelper.findUserByField(
                             db, AppwriteService.COL_ADMINS, "email", identifier
@@ -225,10 +225,10 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // NORMAL USER LOGIN
-    // Accepts email or username. No OTP required for login.
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
+   
     private void loginAsUser(String identifier, String password) {
         new Thread(() -> {
             try {
@@ -265,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
                 String name = userData.get("name") != null
                         ? userData.get("name").toString() : "User";
 
-                // Check if this user is actually stored as admin (role field guard)
+               
                 Object roleObj = userData.get("role");
                 String role = roleObj != null ? roleObj.toString() : "user";
 
@@ -286,10 +286,10 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // GOOGLE LOGIN
-    // Checks users collection only — admin never uses Google login.
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
+   
     private void handleGoogleLogin(GoogleSignInAccount account) {
         if (account.getEmail() == null) return;
         setLoading(true);
@@ -338,9 +338,9 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // HELPERS
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void saveSession(String uid, String name, String role) {
         getSharedPreferences(PREFS, MODE_PRIVATE).edit()

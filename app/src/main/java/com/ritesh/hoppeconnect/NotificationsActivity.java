@@ -40,7 +40,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     private void loadNotificationSettings() {
-        // Load saved notification preferences
+       
         switchAllNotifications.setChecked(preferences.getBoolean("all_notifications", true));
         switchNewPosts.setChecked(preferences.getBoolean("new_posts", true));
         switchComments.setChecked(preferences.getBoolean("comments", true));
@@ -52,54 +52,54 @@ public class NotificationsActivity extends AppCompatActivity {
     private void setupClickListeners() {
         ivBack.setOnClickListener(v -> onBackPressed());
 
-        // All Notifications Switch
+       
         switchAllNotifications.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("all_notifications", isChecked);
 
-            // If turning off all notifications, disable all others
+           
             if (!isChecked) {
                 switchNewPosts.setChecked(false);
                 switchComments.setChecked(false);
                 switchEvents.setChecked(false);
             }
 
-            // Enable/disable other switches based on master switch
+           
             switchNewPosts.setEnabled(isChecked);
             switchComments.setEnabled(isChecked);
             switchEvents.setEnabled(isChecked);
         });
 
-        // New Posts Notifications
+       
         switchNewPosts.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("new_posts", isChecked);
             updateMasterSwitch();
         });
 
-        // Comments Notifications
+       
         switchComments.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("comments", isChecked);
             updateMasterSwitch();
         });
 
-        // Events Notifications
+       
         switchEvents.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("events", isChecked);
             updateMasterSwitch();
         });
 
-        // Email Digest
+       
         switchEmailDigest.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("email_digest", isChecked);
         });
 
-        // Promotional Emails
+       
         switchPromotional.setOnCheckedChangeListener((buttonView, isChecked) -> {
             savePreference("promotional", isChecked);
         });
     }
 
     private void updateMasterSwitch() {
-        // If all individual switches are off, turn off master switch
+       
         boolean anyEnabled = switchNewPosts.isChecked() ||
                 switchComments.isChecked() ||
                 switchEvents.isChecked();
@@ -116,32 +116,16 @@ public class NotificationsActivity extends AppCompatActivity {
         editor.putBoolean(key, value);
         editor.apply();
 
-        // Here you can also send the preference to your backend server
-        // to sync notification settings across devices
-        // syncNotificationSettings(key, value);
+       
+       
+       
     }
 
-    // Method to sync notification settings with server
+   
     private void syncNotificationSettings(String key, boolean value) {
-        // Implement API call to sync notification preferences
-        // Example:
-        /*
-        Map<String, Boolean> settings = new HashMap<>();
-        settings.put(key, value);
-
-        ApiService.updateNotificationSettings(settings)
-            .enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    // Handle success
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    // Handle failure
-                }
-            });
-        */
+       
+       
+        
     }
 
     @Override

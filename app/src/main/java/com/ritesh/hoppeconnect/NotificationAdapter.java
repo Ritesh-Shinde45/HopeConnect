@@ -49,7 +49,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         h.dot.setVisibility(n.isRead ? View.INVISIBLE : View.VISIBLE);
         h.itemView.setAlpha(n.isRead ? 0.7f : 1.0f);
 
-        // Badge color + label by type
+       
         switch (n.type) {
             case NotificationModel.TYPE_ANNOUNCEMENT:
                 h.tvBadge.setText("ANNOUNCEMENT");
@@ -59,13 +59,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                 h.tvBadge.setText("YOUR REPORT");
                 h.tvBadge.setBackgroundColor(Color.parseColor("#16A34A"));
                 break;
-            default: // TYPE_REPORT
+            default:
                 h.tvBadge.setText("REPORT");
                 h.tvBadge.setBackgroundColor(Color.parseColor("#2563EB"));
                 break;
         }
 
-        // Photo
+       
         if (n.photoUrl != null && !n.photoUrl.isEmpty()) {
             Glide.with(ctx)
                     .load(n.photoUrl)

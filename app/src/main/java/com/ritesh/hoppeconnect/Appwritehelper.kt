@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 
 object AppwriteHelper {
 
-    // ── CREATE ────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun createDocument(
         db: Databases, databaseId: String, collectionId: String,
@@ -21,34 +21,34 @@ object AppwriteHelper {
         account.deleteSession("current")
     }
 
-    // ── GET ───────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun getDocument(
         db: Databases, databaseId: String, collectionId: String, documentId: String
     ) = runBlocking { db.getDocument(databaseId, collectionId, documentId) }
 
-    // ── LIST ──────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun listDocuments(
         db: Databases, databaseId: String, collectionId: String, queries: List<String>
     ) = runBlocking { db.listDocuments(databaseId, collectionId, queries) }
 
-    // ── UPDATE ────────────────────────────────────────────────────────────────
+   
     @JvmStatic
     fun updateDocument(
         db: Databases, databaseId: String, collectionId: String,
         documentId: String, data: Map<String, Any>
     ) = runBlocking { db.updateDocument(databaseId, collectionId, documentId, data) }
 
-    // ── DELETE ────────────────────────────────────────────────────────────────
-    // Single deleteDocument — no overloads, no duplicates
+   
+   
     @JvmStatic
     @Throws(Exception::class)
     fun deleteDocument(
         db: Databases, databaseId: String, collectionId: String, documentId: String
     ) = runBlocking { db.deleteDocument(databaseId, collectionId, documentId) }
 
-    // ── Find user by field (shorthand — uses COL_USERS) ───────────────────────
+   
     @JvmStatic
     fun findUserByField(
         db: Databases, field: String, value: String
@@ -60,7 +60,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── Find document by field in ANY collection ──────────────────────────────
+   
     @JvmStatic
     fun findUserByField(
         db: Databases, collectionId: String, field: String, value: String
@@ -72,7 +72,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── Find documents by field in any db/collection ──────────────────────────
+   
     @JvmStatic
     fun findDocumentsByField(
         db: Databases, databaseId: String, collectionId: String,
@@ -85,7 +85,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── List ALL documents (no filter) ────────────────────────────────────────
+   
     @JvmStatic
     fun listAllDocuments(
         db: Databases, databaseId: String, collectionId: String
@@ -93,7 +93,7 @@ object AppwriteHelper {
         db.listDocuments(databaseId, collectionId, emptyList())
     }
 
-    // ── Chat: messages for a chatId ───────────────────────────────────────────
+   
     @JvmStatic
     fun getChatMessages(db: Databases, chatId: String) = runBlocking {
         db.listDocuments(
@@ -108,7 +108,7 @@ object AppwriteHelper {
     }
 
 
-    // ── Chat: all chats for a userId ──────────────────────────────────────────
+   
     @JvmStatic
     fun getUserChats(db: Databases, userId: String) = runBlocking {
         db.listDocuments(
@@ -118,7 +118,7 @@ object AppwriteHelper {
         )
     }
 
-    // ── File upload ───────────────────────────────────────────────────────────
+   
     @JvmStatic
     @Throws(Exception::class)
     fun uploadFileBlocking(

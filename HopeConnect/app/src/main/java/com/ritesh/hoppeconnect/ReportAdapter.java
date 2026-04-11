@@ -29,10 +29,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         void onItemClick(ReportModel model);
     }
 
-    /**
-     * HORIZONTAL → 200dp fixed-width cards (home screen horizontal scroll)
-     * VERTICAL   → match_parent width (staggered grid in Explore / MyReports)
-     */
+    
     public enum Mode { HORIZONTAL, VERTICAL }
 
     private final Context context;
@@ -40,7 +37,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     private final OnItemClickListener listener;
     private final Mode mode;
 
-    /** Backward-compatible constructor — defaults to VERTICAL */
+    
     public ReportAdapter(Context context, List<ReportModel> reports,
                          OnItemClickListener listener) {
         this(context, reports, listener, Mode.VERTICAL);
@@ -60,7 +57,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         View view = LayoutInflater.from(context)
                 .inflate(R.layout.item_case_card, parent, false);
 
-        // Fixed width for horizontal scroll on home screen
+       
         if (mode == Mode.HORIZONTAL) {
             int dp200 = (int) (200 * context.getResources().getDisplayMetrics().density);
             int dp12  = (int) (12  * context.getResources().getDisplayMetrics().density);
@@ -78,18 +75,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ReportModel model = reports.get(position);
 
-        // Name
+       
         holder.personName.setText(model.name != null ? model.name : "Unknown");
 
-        // Age
+       
         holder.personAge.setText(model.age > 0 ? model.age + " yrs" : "Age N/A");
 
-        // Location / description
+       
         holder.personLocation.setText(
                 model.description != null && !model.description.isEmpty()
                         ? model.description : "No description");
 
-        // Missing since date
+       
         if (model.createdAt > 0) {
             String dateStr = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                     .format(new Date(model.createdAt));
@@ -100,7 +97,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.missingDate.setText("Missing since: Unknown");
         }
 
-        // Status badge
+       
         if (holder.statusBadge != null) {
             String status = model.status != null ? model.status.toLowerCase() : "active";
             if ("found".equals(status)) {
@@ -112,7 +109,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             }
         }
 
-        // Photo
+       
         if (model.photoUrls != null && !model.photoUrls.isEmpty()) {
             Glide.with(context)
                     .load(model.photoUrls.get(0))
@@ -124,7 +121,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             holder.personImage.setImageResource(R.drawable.person_placeholder);
         }
 
-        // ── View Details ──────────────────────────────────────────────────────
+       
         holder.btnViewDetails.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onItemClick(model);
@@ -136,12 +133,12 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             }
         });
 
-        // Card click = same as View Details
+       
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onItemClick(model);
         });
 
-        // ── Chat button ───────────────────────────────────────────────────────
+       
         holder.chatBtn.setOnClickListener(v -> {
             SharedPreferences prefs =
                     context.getSharedPreferences("hoppe_prefs", Context.MODE_PRIVATE);
@@ -162,7 +159,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             startChatWithUploader(context, myUserId, model.userId, model.name);
         });
 
-        // ── Call button ───────────────────────────────────────────────────────
+       
         holder.callBtn.setOnClickListener(v -> {
             String number = model.emergencyContact1;
             if (number == null || number.isEmpty()) number = model.contact;
@@ -177,7 +174,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         });
     }
 
-    // ── Chat helper (unchanged from your original) ────────────────────────────
+   
 
     private void startChatWithUploader(Context ctx, String myUserId,
                                        String otherUserId, String reportName) {
@@ -245,7 +242,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @Override
     public int getItemCount() { return reports.size(); }
 
-    // ── ViewHolder ────────────────────────────────────────────────────────────
+   
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView personImage;

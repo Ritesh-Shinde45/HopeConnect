@@ -32,24 +32,24 @@ public class AdminOverviewFragment extends Fragment {
             try {
                 Databases db = AppwriteService.getDatabases();
 
-                // Total users
+               
                 int totalUsers = AppwriteHelper
                         .listAllDocuments(db, AppwriteService.DB_ID, AppwriteService.COL_USERS)
                         .getDocuments().size();
 
-                // Pending reports (status == "pending")
+               
                 int pending = AppwriteHelper
                         .findDocumentsByField(db, AppwriteService.DB_ID,
                                 AppwriteService.COL_REPORTS, "status", "pending")
                         .getDocuments().size();
 
-                // Approved reports
+               
                 int approved = AppwriteHelper
                         .findDocumentsByField(db, AppwriteService.DB_ID,
                                 AppwriteService.COL_REPORTS, "status", "approved")
                         .getDocuments().size();
 
-                // Spammed reports
+               
                 int spammed = AppwriteHelper
                         .findDocumentsByField(db, AppwriteService.DB_ID,
                                 AppwriteService.COL_REPORTS, "status", "spammed")
@@ -67,7 +67,7 @@ public class AdminOverviewFragment extends Fragment {
                     if (tvSpammed  != null) tvSpammed.setText("Spammed/Flagged: " + spammed);
                 });
             } catch (Exception e) {
-                // silently log; add error UI as needed
+               
                 android.util.Log.e("AdminOverview", "Stats load error", e);
             }
         }).start();

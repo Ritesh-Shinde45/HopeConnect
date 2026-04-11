@@ -18,7 +18,7 @@ object AppwriteService {
     const val PROJECT_ID       = "hoppeconnect"
     const val DB_ID            = "69a559b30025d6fa1396"
 
-    // ── Collections ───────────────────────────────────────────────────────────
+   
     const val COL_USERS         = "users"
     const val COL_REPORTS       = "reports"
     const val COL_NOTIFICATIONS = "notifications"
@@ -28,21 +28,21 @@ object AppwriteService {
     const val COL_ADMINS        = "admins"
     const val COL_MSGS          = "messages"
 
-    // ── Storage Buckets ───────────────────────────────────────────────────────
-    // Single bucket for ALL files — profile photos, report photos, documents, chat media
-    // Bucket ID: gvjgvjgvjgvjvg  Name: photos
+   
+   
+   
     const val USERS_BUCKET_ID   = "gvjgvjgvjgvjvg"
-    const val REPORT_BUCKET_ID  = "gvjgvjgvjgvjvg"   // same bucket — all files stored here
-    const val CHAT_BUCKET_ID    = "gvjgvjgvjgvjvg"   // same bucket
+    const val REPORT_BUCKET_ID  = "gvjgvjgvjgvjvg"  
+    const val CHAT_BUCKET_ID    = "gvjgvjgvjgvjvg"  
 
-    // ── Admin ─────────────────────────────────────────────────────────────────
+   
     const val ADMIN_EMAIL = "riteshshinde472@gmail.com"
 
-    // ── Java interop aliases ──────────────────────────────────────────────────
+   
     @JvmField val APPWRITE_ENDPOINT   = ENDPOINT
     @JvmField val APPWRITE_PROJECT_ID = PROJECT_ID
 
-    // ── Client ────────────────────────────────────────────────────────────────
+   
     private var client    : Client?    = null
     private var _account  : Account?   = null
     private var _databases: Databases? = null
@@ -163,20 +163,13 @@ object AppwriteService {
         }
     }
 
-    /**
-     * Builds a download URL for a file in the REPORT bucket.
-     * Use this anywhere you need to display or download a report photo.
-     *
-     * @param fileId  The file ID stored in the report's photoUrls field
-     */
+    
     @JvmStatic
     fun buildReportPhotoUrl(fileId: String): String {
         return "$ENDPOINT/storage/buckets/$REPORT_BUCKET_ID/files/$fileId/download?project=$PROJECT_ID"
     }
 
-    /**
-     * Builds a download URL for a file in the USER PROFILE bucket.
-     */
+    
     @JvmStatic
     fun buildUserPhotoUrl(fileId: String): String {
         return "$ENDPOINT/storage/buckets/$USERS_BUCKET_ID/files/$fileId/view?project=$PROJECT_ID"

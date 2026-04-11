@@ -71,7 +71,7 @@ public class NotificationActivity extends AppCompatActivity {
         btnMarkAllRead = findViewById(R.id.btnMarkAllRead);
         tabLayout      = findViewById(R.id.tabLayout);
 
-        // ── Back button → MainActivity ────────────────────────────────────────
+       
         findViewById(R.id.btnBack).setOnClickListener(v -> goHome());
 
         tabLayout.addTab(tabLayout.newTab().setText("📢 Announcements"));
@@ -119,7 +119,7 @@ public class NotificationActivity extends AppCompatActivity {
         loadAll();
     }
 
-    // ── Back button: always go to MainActivity ────────────────────────────────
+   
     @Override
     public void onBackPressed() {
         goHome();
@@ -132,7 +132,7 @@ public class NotificationActivity extends AppCompatActivity {
         finish();
     }
 
-    // ── Load ──────────────────────────────────────────────────────────────────
+   
     private void loadAll() {
         allAnnouncements.clear();
         allReports.clear();
@@ -148,7 +148,7 @@ public class NotificationActivity extends AppCompatActivity {
                 loadApprovedReports(db);
                 if (!myUserId.isEmpty()) loadMyReports(db);
 
-                // ── Sort each list: most recent first ─────────────────────────
+               
                 sortByTime(allAnnouncements);
                 sortByTime(allReports);
                 sortByTime(myReports);
@@ -169,21 +169,16 @@ public class NotificationActivity extends AppCompatActivity {
         }).start();
     }
 
-    /**
-     * Sort a list of NotificationModel so the most recent item comes first.
-     * Items whose time cannot be parsed are pushed to the bottom.
-     */
+    
     private void sortByTime(List<NotificationModel> list) {
         Collections.sort(list, (a, b) -> {
             long ta = parseTimestamp(a.time);
             long tb = parseTimestamp(b.time);
-            return Long.compare(tb, ta); // descending
+            return Long.compare(tb, ta);
         });
     }
 
-    /**
-     * Tries multiple date formats and returns epoch millis, or 0 on failure.
-     */
+    
     private long parseTimestamp(String raw) {
         if (raw == null || raw.isEmpty()) return 0L;
         String[] formats = {
@@ -202,7 +197,7 @@ public class NotificationActivity extends AppCompatActivity {
         return 0L;
     }
 
-    // ── Load Announcements ────────────────────────────────────────────────────
+   
     private void loadAnnouncements(Databases db) {
         try {
             List<? extends Document<?>> docs =
@@ -232,7 +227,7 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    // ── Load Approved Reports ─────────────────────────────────────────────────
+   
     private void loadApprovedReports(Databases db) {
         try {
             List<? extends Document<?>> docs =
@@ -266,7 +261,7 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    // ── Load My Reports ───────────────────────────────────────────────────────
+   
     private void loadMyReports(Databases db) {
         try {
             List<? extends Document<?>> myReportDocs =
@@ -326,7 +321,7 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    // ── Load Sighting Notifications ───────────────────────────────────────────
+   
     private void loadSightingNotifications(Databases db) {
         try {
             List<? extends Document<?>> notifDocs =
@@ -383,7 +378,7 @@ public class NotificationActivity extends AppCompatActivity {
         }
     }
 
-    // ── Dialogs ───────────────────────────────────────────────────────────────
+   
     private void showSightingActionsDialog(String watcherUserId, String watcherPhone,
                                            String reportId, String title) {
         new AlertDialog.Builder(this)
@@ -420,7 +415,7 @@ public class NotificationActivity extends AppCompatActivity {
                 .show();
     }
 
-    // ── Resolve ───────────────────────────────────────────────────────────────
+   
     private void markCaseResolvedByWatcher(String sightingId, String watcherUserId,
                                            String reportId) {
         new Thread(() -> {
@@ -498,7 +493,7 @@ public class NotificationActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Tab ───────────────────────────────────────────────────────────────────
+   
     private void applyTab() {
         displayed.clear();
         switch (currentTab) {
@@ -527,7 +522,7 @@ public class NotificationActivity extends AppCompatActivity {
             tvUnreadCount.setText(unread == 0 ? "All caught up ✓" : unread + " unread");
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private String extractPhoto(Map<String, Object> data) {
         Object pf = data.get("photoUrls");
         if (pf instanceof List && !((List<?>) pf).isEmpty()) {

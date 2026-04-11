@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<String[]> permissionLauncher;
 
-    // UI
+   
     private MaterialButton btnAllCases, btnMissing, btnFound,
             btnChildren, btnAdults, btnElderly;
     private MaterialButton selectedFilterButton;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnNotification;
     private ProgressBar homeProgressBar;
 
-    // Case cards RecyclerView
+   
     private RecyclerView casesRecyclerView;
     private ReportAdapter caseAdapter;
     private final List<ReportModel> caseList = new ArrayList<>();
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private String storagePermission;
     private long backPressedTime = 0;
 
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         loadUserProfile();
     }
 
-    // ── Init ──────────────────────────────────────────────────────────────────
+   
 
     private void proceedToInitUI() {
         setContentView(R.layout.activity_main);
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, NotificationActivity.class)));
     }
 
-    // ── RecyclerView setup ────────────────────────────────────────────────────
+   
 
     private void setupCasesRecyclerView() {
         if (casesRecyclerView == null) return;
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    // ── Double-back to exit ───────────────────────────────────────────────────
+   
 
     private void setupBackPress() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ── Permissions ───────────────────────────────────────────────────────────
+   
 
     private void registerPermissionLauncher() {
         permissionLauncher = registerForActivityResult(
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 result -> Log.d(TAG, "permissions: " + result));
     }
 
-    // ── User profile ──────────────────────────────────────────────────────────
+   
 
     private void loadUserProfile() {
         SharedPreferences prefs = getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
@@ -272,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Load cases ────────────────────────────────────────────────────────────
+   
 
     private void loadRecentCases(String filterType, String filterValue) {
         if (homeProgressBar != null) homeProgressBar.setVisibility(View.VISIBLE);
@@ -340,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Search ────────────────────────────────────────────────────────────────
+   
 
     private void setupSearchBar() {
         if (searchBar == null) return;
@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Filter buttons ────────────────────────────────────────────────────────
+   
 
     private void setupFilterButtons() {
         List<MaterialButton> all = new ArrayList<>();
@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
         selectedFilterButton = selected;
     }
 
-    // ── Bottom Nav ────────────────────────────────────────────────────────────
+   
 
     private void setupBottomNavigation() {
         bottomNav.setSelectedItemId(R.id.nav_home);

@@ -16,18 +16,7 @@ import com.ritesh.hoppeconnect.admin.AdminApproveReportsFragment;
 import com.ritesh.hoppeconnect.admin.AdminSpammedReportsFragment;
 import com.ritesh.hoppeconnect.admin.AdminProfileFragment;
 
-/**
- * AdminDashboardActivity
- * ─────────────────────────────────────────────────────────────────────────────
- * Only opened when the logged-in role == "admin".
- * Contains a BottomNavigationView with 4 tabs:
- *   1. Overview           – stats, quick summary
- *   2. Approve Reports    – pending reports awaiting admin approval
- *   3. Spammed Reports    – reports flagged / spammed by users
- *   4. Admin Profile      – admin account info, logout
- *
- * Layout file: activity_admin_dashboard.xml  (create this file)
- */
+
 public class AdminDashboardActivity extends AppCompatActivity
         implements NavigationBarView.OnItemSelectedListener {
 
@@ -38,7 +27,7 @@ public class AdminDashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_dashboard);
 
-        // Guard: if somehow a non-admin opens this, kick them out
+       
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         if (!"admin".equals(prefs.getString("logged_in_role", ""))) {
             startActivity(new Intent(this, MainActivity.class));
@@ -49,7 +38,7 @@ public class AdminDashboardActivity extends AppCompatActivity
         BottomNavigationView bottomNav = findViewById(R.id.adminBottomNav);
         bottomNav.setOnItemSelectedListener(this);
 
-        // Default tab
+       
         if (savedInstanceState == null) {
             loadFragment(new AdminOverviewFragment());
         }

@@ -60,7 +60,7 @@ public class NewReportActivity extends AppCompatActivity {
     private static final String COLLECTION_ID = "reports";
     private static final int    MAX_REPORTS   = 5;
 
-    // ── Form fields ───────────────────────────────────────────────────────────
+   
     private TextInputEditText etName, etAge, etMissingSince, etContact,
             etEmergencyContact1, etEmergencyContact2, etEmergencyContact3, etDescription;
     private AutoCompleteTextView etGender;
@@ -68,7 +68,7 @@ public class NewReportActivity extends AppCompatActivity {
     private ImageButton btnBack;
     private TextView tvLocationStatus, tvDocumentName;
 
-    // ── Photo slots ───────────────────────────────────────────────────────────
+   
     private final List<ImageView>    photoImageViews    = new ArrayList<>();
     private final List<LinearLayout> photoPlaceholders  = new ArrayList<>();
     private final List<ImageButton>  photoRemoveButtons = new ArrayList<>();
@@ -77,21 +77,21 @@ public class NewReportActivity extends AppCompatActivity {
             new ArrayList<>(Arrays.asList(null, null, null, null, null));
     private int currentPhotoIndex = 0;
 
-    // ── Document ──────────────────────────────────────────────────────────────
+   
     private Uri documentUri = null;
 
-    // ── GPS ───────────────────────────────────────────────────────────────────
+   
     private String locationLat = "";
     private String locationLng = "";
     private FusedLocationProviderClient fusedLocation;
 
-    // ── Launchers ─────────────────────────────────────────────────────────────
+   
     private ActivityResultLauncher<String>   pickImageLauncher;
     private ActivityResultLauncher<String>   requestPermLauncher;
     private ActivityResultLauncher<String>   pickDocLauncher;
     private ActivityResultLauncher<String[]> locationPermLauncher;
 
-    // ── Appwrite ──────────────────────────────────────────────────────────────
+   
     private Storage   storage;
     private Databases databases;
     private Account   account;
@@ -99,7 +99,7 @@ public class NewReportActivity extends AppCompatActivity {
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +133,7 @@ public class NewReportActivity extends AppCompatActivity {
         setupSubmitButton();
     }
 
-    // ── Init views ────────────────────────────────────────────────────────────
+   
 
     private void initViews() {
         etName              = findViewById(R.id.etName);
@@ -168,7 +168,7 @@ public class NewReportActivity extends AppCompatActivity {
         return getResources().getIdentifier(name, "id", getPackageName());
     }
 
-    // ── Gender dropdown ───────────────────────────────────────────────────────
+   
 
     private void setupGenderDropdown() {
         etGender.setAdapter(new ArrayAdapter<>(this,
@@ -176,7 +176,7 @@ public class NewReportActivity extends AppCompatActivity {
                 new String[]{"Male", "Female", "Other"}));
     }
 
-    // ── Date picker ───────────────────────────────────────────────────────────
+   
 
     private void setupDatePicker() {
         etMissingSince.setOnClickListener(v -> {
@@ -193,7 +193,7 @@ public class NewReportActivity extends AppCompatActivity {
         });
     }
 
-    // ── Photo upload ──────────────────────────────────────────────────────────
+   
 
     private void setupPhotoUpload() {
         pickImageLauncher = registerForActivityResult(
@@ -256,7 +256,7 @@ public class NewReportActivity extends AppCompatActivity {
         if (rem != null) rem.setVisibility(View.GONE);
     }
 
-    // ── Document upload ───────────────────────────────────────────────────────
+   
 
     private void setupDocumentUpload() {
         pickDocLauncher = registerForActivityResult(
@@ -277,7 +277,7 @@ public class NewReportActivity extends AppCompatActivity {
                 pickDocLauncher.launch("application/pdf"));
     }
 
-    // ── GPS location ──────────────────────────────────────────────────────────
+   
 
     private void setupLocationButton() {
         locationPermLauncher = registerForActivityResult(
@@ -325,13 +325,13 @@ public class NewReportActivity extends AppCompatActivity {
         });
     }
 
-    // ── Back button ───────────────────────────────────────────────────────────
+   
 
     private void setupBackButton() {
         if (btnBack != null) btnBack.setOnClickListener(v -> finish());
     }
 
-    // ── Submit ────────────────────────────────────────────────────────────────
+   
 
     private void setupSubmitButton() {
         btnSubmit.setOnClickListener(v -> {
@@ -381,7 +381,7 @@ public class NewReportActivity extends AppCompatActivity {
         return ok;
     }
 
-    // ── Limit check ───────────────────────────────────────────────────────────
+   
 
     private void checkLimitThenUpload(String userId) {
         if (databases == null) { uploadAndSave(userId); return; }
@@ -415,7 +415,7 @@ public class NewReportActivity extends AppCompatActivity {
         }
     }
 
-    // ── Upload photos ─────────────────────────────────────────────────────────
+   
 
     private void uploadAndSave(String userId) {
         List<Uri> toUpload = new ArrayList<>();
@@ -487,7 +487,7 @@ public class NewReportActivity extends AppCompatActivity {
         }
     }
 
-    // ── Upload document then save ─────────────────────────────────────────────
+   
 
     private void uploadDocThenSave(String userId, List<String> photoUrls) {
         if (documentUri == null || storage == null) {
@@ -524,9 +524,9 @@ public class NewReportActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Save to Appwrite DB ───────────────────────────────────────────────────
-    // FIX: Use Role.user(userId) without empty string scope to avoid malformed
-    //      permission strings like "user:abc123:" that Appwrite rejects.
+   
+   
+   
 
     private void saveToDb(String userId, List<String> photoUrls, String documentUrl) {
 
@@ -555,12 +555,12 @@ public class NewReportActivity extends AppCompatActivity {
             data.put("documentUrl", documentUrl);
         }
 
-        // ── FIXED PERMISSIONS ─────────────────────────────────────────────────
-        // Old (broken): Role.Companion.user(userId, "")  →  produces "user:abc123:"
-        // New (correct): Role.Companion.user(userId)     →  produces "user:abc123"
-        // ─────────────────────────────────────────────────────────────────────
-        // Use empty permissions list — rely on collection-level permissions in Appwrite console.
-        // Document-level permission strings vary by SDK version and cause rejection errors.
+       
+       
+       
+       
+       
+       
         List<String> permissions = new ArrayList<>();
 
         if (databases == null) {
@@ -603,7 +603,7 @@ public class NewReportActivity extends AppCompatActivity {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
 
     private String safeText(android.widget.TextView t) {
         if (t == null) return "";

@@ -1,37 +1,34 @@
-// PATH: app/src/main/java/com/ritesh/hoppeconnect/models/Report.java
+
 package com.ritesh.hoppeconnect.models;
 
 import java.util.List;
 
-/**
- * Schema for the "reports" Appwrite collection.
- * Original fields kept as-is. Admin fields added at the bottom.
- */
+
 public class Report {
 
-    // ── Original fields (unchanged) ───────────────────────────────────────────
+   
     public String id;
     public String name;
-    public String age;          // kept as String for backward compat
-    public String location;     // maps to "lastSeenLocation" in Appwrite
-    public String missingSince; // maps to "$createdAt"
-    public String imageUrl;     // single image URL (legacy)
+    public String age;         
+    public String location;    
+    public String missingSince;
+    public String imageUrl;    
 
-    // ── New fields required by admin module ───────────────────────────────────
-    public String status;           // "pending" | "active" | "found" | "rejected"
+   
+    public String status;          
     public String gender;
-    public String ageGroup;         // "Children" | "Adults" | "Elderly"
+    public String ageGroup;        
     public String description;
     public String contactPhone;
     public double latitude;
     public double longitude;
-    public String reportedBy;       // userId who filed the report
-    public String approvedBy;       // adminId who approved
+    public String reportedBy;      
+    public String approvedBy;      
     public String rejectedReason;
-    public List<String> photoIds;   // Storage file IDs (replaces single imageUrl)
-    public String createdAt;        // ISO-8601 from $createdAt
+    public List<String> photoIds;  
+    public String createdAt;       
 
-    // ── Original constructor (kept for all existing code) ─────────────────────
+   
     public Report(String id, String name, String age, String location,
                   String missingSince, String imageUrl) {
         this.id          = id;
@@ -40,15 +37,15 @@ public class Report {
         this.location    = location;
         this.missingSince= missingSince;
         this.imageUrl    = imageUrl;
-        this.status      = "pending"; // default
+        this.status      = "pending";
     }
 
-    // ── No-arg constructor for admin parsing ─────────────────────────────────
+   
     public Report() {
         this.status = "pending";
     }
 
-    // ── Getters used by admin adapters & bottom sheet ─────────────────────────
+   
 
     public String getId()            { return id != null ? id : ""; }
     public String getName()          { return name != null ? name : ""; }
@@ -65,13 +62,13 @@ public class Report {
     public double getLatitude()      { return latitude; }
     public double getLongitude()     { return longitude; }
 
-    /** Returns age as int — parses the String field safely. */
+    
     public int getAgeInt() {
         if (age == null || age.isEmpty()) return 0;
         try { return Integer.parseInt(age.trim()); } catch (Exception e) { return 0; }
     }
 
-    /** lastSeenLocation alias — admin code uses this name. */
+    
     public String getLastSeenLocation() {
         return location != null ? location : "";
     }

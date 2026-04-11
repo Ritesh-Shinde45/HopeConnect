@@ -26,7 +26,7 @@ public class ActivityLogAdapter extends RecyclerView.Adapter<ActivityLogAdapter.
         ActivityLogItem item = items.get(pos);
         h.logText.setText(item.text);
         h.logTime.setText(item.time);
-        // Tint the dot by type
+       
         int color;
         switch (item.type) {
             case "success": color = Color.parseColor("#4CAF50"); break;

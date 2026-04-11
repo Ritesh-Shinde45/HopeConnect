@@ -89,7 +89,7 @@ public class ChatsActivity extends AppCompatActivity {
         loadChats();
     }
 
-    // ── Back → MainActivity ───────────────────────────────────────────────────
+   
     @Override
     public void onBackPressed() {
         goHome();
@@ -116,7 +116,7 @@ public class ChatsActivity extends AppCompatActivity {
         refreshHandler.removeCallbacks(refreshRunnable);
     }
 
-    // ── RecyclerView ──────────────────────────────────────────────────────────
+   
     private void setupRecycler() {
         adapter = new ChatListAdapter(filteredChats,
                 chat -> openChatRoom(chat.chatId, chat.otherUserId, chat.otherName));
@@ -124,7 +124,7 @@ public class ChatsActivity extends AppCompatActivity {
         binding.rvChatList.setAdapter(adapter);
     }
 
-    // ── Search ────────────────────────────────────────────────────────────────
+   
     private void setupSearch() {
         binding.etSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         binding.etSearch.setSingleLine(true);
@@ -167,7 +167,7 @@ public class ChatsActivity extends AppCompatActivity {
         binding.tvEmptyChats.setVisibility(filteredChats.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
-    // ── Bottom nav ────────────────────────────────────────────────────────────
+   
     private void setupBottomNav() {
         if (binding.bottomNav == null) return;
         binding.bottomNav.setOnItemSelectedListener(item -> {
@@ -180,7 +180,7 @@ public class ChatsActivity extends AppCompatActivity {
         });
     }
 
-    // ── Load chats — sorted by most recent message ────────────────────────────
+   
     private void loadChats() {
         new Thread(() -> {
             try {
@@ -204,7 +204,7 @@ public class ChatsActivity extends AppCompatActivity {
                     int unread = data.get("unread_" + myUserId) != null
                             ? parseInt(data.get("unread_" + myUserId).toString()) : 0;
 
-                    // Use $updatedAt from Appwrite as the sort key (most accurate)
+                   
                     String updatedAt = doc.getUpdatedAt() != null
                             ? doc.getUpdatedAt() : doc.getCreatedAt();
 
@@ -213,7 +213,7 @@ public class ChatsActivity extends AppCompatActivity {
                             lastMsg, lastTime, unread, updatedAt));
                 }
 
-                // ── Sort: most recently updated chat first ────────────────────
+               
                 Collections.sort(items, (a, b) ->
                         b.updatedAt.compareTo(a.updatedAt));
 
@@ -229,7 +229,7 @@ public class ChatsActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── New Chat Dialog ───────────────────────────────────────────────────────
+   
     private void showNewChatDialog() {
         android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
@@ -458,7 +458,7 @@ public class ChatsActivity extends AppCompatActivity {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
-    // ── Models & Adapter ──────────────────────────────────────────────────────
+   
     public static class ChatItem {
         public final String chatId, otherUserId, otherName, lastMessage, lastTime, updatedAt;
         public final int unreadCount;

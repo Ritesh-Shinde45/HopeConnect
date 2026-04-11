@@ -8,7 +8,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-// ✅ FIX: XML is activity_change_password.xml → ActivityChangePasswordBinding
 import com.ritesh.hoppeconnect.databinding.ActivityChangePasswordBinding;
 
 import java.security.MessageDigest;
@@ -75,7 +74,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             try {
                 Databases db = AppwriteService.getDatabases();
 
-                // ✅ FIX: Document<?> wildcard avoids incompatible type error
+               
                 Document<?> doc = AppwriteHelper.getDocument(
                         db,
                         AppwriteService.DB_ID,

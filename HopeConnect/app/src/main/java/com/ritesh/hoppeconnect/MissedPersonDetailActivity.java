@@ -44,7 +44,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
     private static final String TAG = "MissedPersonDetail";
     public static final String EXTRA_REPORT_ID = "report_id";
 
-    // ── Views ─────────────────────────────────────────────────────────────────
+   
     private ViewPager2 imageViewPager;
     private LinearLayout dotsContainer;
     private CollapsingToolbarLayout collapsingToolbar;
@@ -55,11 +55,11 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
     private LinearLayout btnDownloadPdf, btnSendMail, btnCallEmergency,
             btnChatDetail, btnReportFalse;
 
-    // ── Data ──────────────────────────────────────────────────────────────────
+   
     private String reportId;
     private String uploaderUserId = "";
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }
     }
 
-    // ── Init ──────────────────────────────────────────────────────────────────
+   
 
     private void initViews() {
         imageViewPager    = findViewById(R.id.imageViewPager);
@@ -119,7 +119,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(v -> finish());
     }
 
-    // ── Bind ──────────────────────────────────────────────────────────────────
+   
 
     private void bindData(ReportModel model) {
         uploaderUserId = nz(model.userId, "");
@@ -156,7 +156,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 ? model.status.substring(0, 1).toUpperCase() + model.status.substring(1)
                 : "Missing");
 
-        // GPS — append to Missing Since row if coordinates exist (no extra XML needed)
+       
         if (model.locationLat != null && !model.locationLat.isEmpty()) {
             String gpsText = "Missing since: " + nz(model.missingSince, "Unknown")
                     + "\n📍 " + model.locationLat + ", " + model.locationLng;
@@ -172,7 +172,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
             });
         }
 
-        // Document URL — show in description card if available (no extra XML needed)
+       
         if (model.documentUrl != null && !model.documentUrl.isEmpty()) {
             tvDescription.append("\n\n📄 Supporting document attached. Tap to view.");
             tvDescription.setOnClickListener(v -> {
@@ -185,7 +185,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         setupActionButtons(model);
     }
 
-    // ── Image Slider ──────────────────────────────────────────────────────────
+   
 
     private void setupImageSlider(List<String> photoUrls) {
         if (photoUrls.isEmpty()) {
@@ -252,7 +252,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }
     }
 
-    // ── Action Buttons ────────────────────────────────────────────────────────
+   
 
     private void setupActionButtons(ReportModel model) {
         btnDownloadPdf.setOnClickListener(v -> generateAndSharePdf(model));
@@ -304,7 +304,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         btnReportFalse.setOnClickListener(v -> showFlagDialog(model));
     }
 
-    // ── Chat ──────────────────────────────────────────────────────────────────
+   
 
     private void startChatWithUploader(String myUserId, String otherUserId, String reportName) {
         Toast.makeText(this, "Opening chat…", Toast.LENGTH_SHORT).show();
@@ -358,7 +358,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Flag dialog ───────────────────────────────────────────────────────────
+   
 
     private void showFlagDialog(ReportModel model) {
         String[] options = {
@@ -377,7 +377,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 .show();
     }
 
-    // ── PDF ───────────────────────────────────────────────────────────────────
+   
 
     private void generateAndSharePdf(ReportModel model) {
         Toast.makeText(this, "Generating PDF…", Toast.LENGTH_SHORT).show();
@@ -391,11 +391,11 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 Paint p = new Paint();
                 p.setAntiAlias(true);
 
-                // White bg
+               
                 p.setColor(Color.WHITE);
                 canvas.drawRect(0, 0, 595, 842, p);
 
-                // Blue header
+               
                 p.setColor(Color.parseColor("#3F51B5"));
                 canvas.drawRect(0, 0, 595, 80, p);
                 p.setColor(Color.WHITE);
@@ -405,12 +405,12 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 canvas.drawText("Generated: " + new SimpleDateFormat("MMM dd, yyyy HH:mm",
                         Locale.getDefault()).format(new Date()), 16, 54, p);
 
-                // Name
+               
                 p.setColor(Color.parseColor("#1A1A2E"));
                 p.setTextSize(17f); p.setFakeBoldText(true);
                 canvas.drawText(nz(model.name, "Unknown"), 16, 104, p);
 
-                // Fields
+               
                 p.setTextSize(12f); p.setFakeBoldText(false);
                 p.setColor(Color.parseColor("#555555"));
                 int y = 130; int lh = 22;
@@ -425,7 +425,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 }
                 y += 10;
 
-                // Description section
+               
                 p.setColor(Color.parseColor("#3F51B5")); p.setFakeBoldText(true);
                 canvas.drawText("DESCRIPTION", 16, y, p); y += lh;
                 p.setColor(Color.parseColor("#444444")); p.setFakeBoldText(false);
@@ -444,7 +444,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 if (lineB.length() > 0) { canvas.drawText(lineB.toString(), 16, y, p); y += lh; }
                 y += 10;
 
-                // Contacts section
+               
                 p.setColor(Color.parseColor("#3F51B5")); p.setFakeBoldText(true);
                 canvas.drawText("CONTACTS", 16, y, p); y += lh;
                 p.setColor(Color.parseColor("#444444")); p.setFakeBoldText(false);
@@ -453,13 +453,13 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 canvas.drawText("Emergency 2: " + nz(model.emergencyContact2, "—"), 16, y, p); y += lh;
                 canvas.drawText("Emergency 3: " + nz(model.emergencyContact3, "—"), 16, y, p);
 
-                // Footer
+               
                 p.setColor(Color.parseColor("#AAAAAA")); p.setTextSize(9f);
                 canvas.drawText("HoppeConnect. Verify all information before acting.", 16, 828, p);
 
                 pdf.finishPage(page);
 
-                // Save to cache dir — always works without storage permission
+               
                 File outFile = new File(getCacheDir(), "report_"
                         + (model.id != null
                         ? model.id.substring(0, Math.min(6, model.id.length()))
@@ -473,7 +473,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     try {
-                        // Authority MUST match the single provider in AndroidManifest
+                       
                         Uri uri = FileProvider.getUriForFile(
                                 this,
                                 getPackageName() + ".fileprovider",
@@ -498,7 +498,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── DB fetch ──────────────────────────────────────────────────────────────
+   
 
     private void fetchReportFromDb(String id) {
         AppwriteService.init(getApplicationContext());
@@ -519,7 +519,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
 
     private String nz(String s, String fallback) {
         return (s != null && !s.isEmpty()) ? s : fallback;

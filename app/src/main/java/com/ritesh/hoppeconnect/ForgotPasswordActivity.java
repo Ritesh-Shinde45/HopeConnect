@@ -60,7 +60,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         });
     }
 
-    // ── Step 1: find user → trigger Appwrite password recovery email ──────────
+   
     private void findUserAndSendReset() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         if (identifier.isEmpty()) {
@@ -94,7 +94,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         AppwriteHelper.findUserByField(db, collectionId, field, identifier)
                                 .getDocuments();
 
-                // Fallback: username might be in admins collection
+               
                 if (docs.isEmpty() && !isEmail) {
                     Log.d(TAG, "Not found in users — trying admins collection");
                     docs = AppwriteHelper.findUserByField(
@@ -124,16 +124,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 Log.d(TAG, "User found — docId=" + foundDocumentId
                         + "  email=" + foundEmail + "  collection=" + foundCollectionId);
 
-                // ── Send Appwrite password recovery email ─────────────────────
-                // Uses Appwrite's default mailer (no SMTP needed on Free plan).
-                // The redirect URL below is intentional — Appwrite sends the email
-                // regardless of whether the redirect is a real deep-link.
+               
+               
+               
+               
                 if (foundEmail != null) {
                     Account account = AppwriteService.getAccount();
                     Log.d(TAG, "Calling account.createRecovery for email=" + foundEmail);
                     account.createRecovery(
                             foundEmail,
-                            "https://cloud.appwrite.io",   // ← fixed redirect URL
+                            "https://cloud.appwrite.io",  
                             new CoroutineCallback<>((result, error) -> {
                                 if (error != null) {
                                     Log.e(TAG, "createRecovery FAILED ["
@@ -176,7 +176,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Step 2: update hashed password in Appwrite DB document ───────────────
+   
     private void resetPassword() {
         String newPass  = binding.etNewPassword.getText().toString();
         String confPass = binding.etConfirmPassword.getText().toString();
@@ -238,7 +238,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private int getPasswordScore(String pwd) {
         int s = 0;
         if (pwd.length() >= 8)                                           s++;

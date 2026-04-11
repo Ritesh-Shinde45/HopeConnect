@@ -28,7 +28,6 @@ import java.util.Map;
 import io.appwrite.models.Document;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.ritesh.hoppeconnect.AppwriteService;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -62,11 +61,6 @@ public class ExploreActivity extends AppCompatActivity {
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             );
         }
-//        try {
-//            AppwriteService.init(getApplicationContext());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         AppwriteService.init(this);
         initViews();
         loadUserProfile();

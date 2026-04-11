@@ -18,8 +18,8 @@ public class ReportModel {
     public long   createdAt;
     public List<String> photoUrls;
 
-    // New fields
-    public String locationLat;   // GPS latitude stored as string
-    public String locationLng;   // GPS longitude stored as string
-    public String documentUrl;   // URL of uploaded PDF document
+   
+    public String locationLat;  
+    public String locationLng;  
+    public String documentUrl;  
 }

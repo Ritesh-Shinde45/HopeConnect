@@ -44,9 +44,9 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String KEY_NAME = "logged_in_name";
     private static final String KEY_ROLE = "logged_in_role";
 
-    // ── Admin-designated mobile numbers ───────────────────────────────────────
-    // Any registration using one of these numbers will be stored in COL_ADMINS
-    // and routed to AdminDashboardActivity after registration / login.
+   
+   
+   
     private static final List<String> ADMIN_MOBILES = Arrays.asList(
             "8080769308",
             "9096548683"
@@ -59,9 +59,9 @@ public class RegisterActivity extends AppCompatActivity {
     private boolean otpVerified     = false;
     private boolean isAdminRegister = false;
 
-    // ── SMS permission launcher ───────────────────────────────────────────────
-    // If permission is denied first time, shows rationale toast.
-    // Once granted it immediately retries the OTP send.
+   
+   
+   
     private final ActivityResultLauncher<String> smsPermissionLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.RequestPermission(),
@@ -78,7 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-    // ── Google Sign-In launcher ───────────────────────────────────────────────
+   
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     });
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
         setupPasswordStrengthWatcher();
         setupClickListeners();
 
-        // Pre-fill when arriving from Google login redirect
+       
         String googleEmail = getIntent().getStringExtra("google_email");
         String googleName  = getIntent().getStringExtra("google_name");
         if (googleEmail != null) binding.etEmail.setText(googleEmail);
@@ -129,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // ── Google ────────────────────────────────────────────────────────────────
+   
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -152,7 +152,7 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.LENGTH_LONG).show();
     }
 
-    // ── Password strength ─────────────────────────────────────────────────────
+   
     private void setupPasswordStrengthWatcher() {
         binding.etPass.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -192,7 +192,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isPasswordStrong(String pwd) { return getPasswordScore(pwd) >= 5; }
 
-    // ── Click listeners ───────────────────────────────────────────────────────
+   
     private void setupClickListeners() {
 
         binding.btnGoogleAuth.setOnClickListener(v ->
@@ -218,16 +218,12 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // ── OTP ───────────────────────────────────────────────────────────────────
+   
 
-    /**
-     * Called by "Send OTP" button.
-     * • Detects admin number and sets the flag.
-     * • Checks/requests SMS permission before sending.
-     */
+    
     private void sendOtp(String mobile) {
 
-        // Detect admin number immediately and show a hint
+       
         isAdminRegister = ADMIN_MOBILES.contains(mobile);
         if (isAdminRegister) {
             Toast.makeText(this,
@@ -235,26 +231,26 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
 
-        // Disable button while we handle permission / sending
+       
         binding.btnSendOtp.setEnabled(false);
         binding.btnSendOtp.setText("Sending…");
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.SEND_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
-            // Not granted — request it; callback will call sendOtpInternal()
+           
             smsPermissionLauncher.launch(android.Manifest.permission.SEND_SMS);
         } else {
             sendOtpInternal(mobile);
         }
     }
 
-    /** Generates OTP and fires the SMS — only reached after permission is confirmed. */
+    
     private void sendOtpInternal(String mobile) {
         generatedOtp = SmsManagerHelper.generateOtp();
         otpVerified  = false;
 
         Log.d(TAG, "OTP for " + mobile + " [" + (isAdminRegister ? "ADMIN" : "USER") + "]: "
-                + generatedOtp);  // remove in production
+                + generatedOtp); 
 
         SmsManagerHelper.sendOtp(this, mobile, generatedOtp);
 
@@ -274,7 +270,7 @@ public class RegisterActivity extends AppCompatActivity {
         return false;
     }
 
-    // ── Registration ──────────────────────────────────────────────────────────
+   
     private void attemptRegistration() {
         String name     = binding.etName.getText().toString().trim();
         String username = binding.etUsername.getText().toString().trim();
@@ -283,7 +279,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = binding.etPass.getText().toString();
         String address  = binding.etAddress.getText().toString().trim();
 
-        // All fields are required for both admin and normal user
+       
         if (name.isEmpty())        { binding.etName.setError("Required");          return; }
         if (username.isEmpty())    { binding.etUsername.setError("Required");      return; }
         if (mobile.length() != 10) { binding.etMobile.setError("Invalid number"); return; }
@@ -297,7 +293,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         if (address.isEmpty()) { binding.etAddress.setError("Required"); return; }
 
-        // Re-evaluate the admin flag at submit time (safety check)
+       
         isAdminRegister = ADMIN_MOBILES.contains(mobile);
 
         setLoading(true);
@@ -306,7 +302,7 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 Databases db = AppwriteService.getDatabases();
 
-                // ── Guard: if admin number, check if already registered ───────
+               
                 if (isAdminRegister) {
                     List<? extends Document<?>> existing =
                             AppwriteHelper.findUserByField(
@@ -328,7 +324,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-                // ── Guard: normal user — check duplicate email/username ───────
+               
                 if (!isAdminRegister) {
                     List<? extends Document<?>> byEmail =
                             AppwriteHelper.findUserByField(db, "email", email).getDocuments();
@@ -350,15 +346,15 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
 
-                // 1) Create Appwrite auth account
+               
                 AppwriteService.createAccountAndSignIn(email, password, name);
 
-                // 2) Hash password for DB
+               
                 String hashedPassword = hashPassword(password);
                 String userId = java.util.UUID.randomUUID().toString()
                         .replace("-", "").substring(0, 20);
 
-                // 3) Build document data
+               
                 Map<String, Object> data = new HashMap<>();
                 data.put("name",     name);
                 data.put("username", username);
@@ -368,7 +364,7 @@ public class RegisterActivity extends AppCompatActivity {
                 data.put("address",  address);
                 data.put("role",     isAdminRegister ? "admin" : "user");
 
-                // 4) Save to correct collection
+               
                 AppwriteHelper.createDocument(
                         db,
                         AppwriteService.DB_ID,
@@ -377,7 +373,7 @@ public class RegisterActivity extends AppCompatActivity {
                         data
                 );
 
-                // 5) Save session locally
+               
                 String role = isAdminRegister ? "admin" : "user";
                 getSharedPreferences(PREFS, MODE_PRIVATE).edit()
                         .putString(KEY_UID,  userId)
@@ -385,7 +381,7 @@ public class RegisterActivity extends AppCompatActivity {
                         .putString(KEY_ROLE, role)
                         .apply();
 
-                // 6) Navigate to correct dashboard
+               
                 runOnUiThread(() -> {
                     setLoading(false);
                     Toast.makeText(this,
@@ -413,7 +409,7 @@ public class RegisterActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Password hashing (SHA-256 + random salt) ──────────────────────────────
+   
     private String hashPassword(String plainText) throws Exception {
         byte[] saltBytes = new byte[16];
         new SecureRandom().nextBytes(saltBytes);

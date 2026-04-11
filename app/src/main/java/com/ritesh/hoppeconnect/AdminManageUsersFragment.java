@@ -100,12 +100,12 @@ public class AdminManageUsersFragment extends Fragment {
                         AppwriteHelper.listAllDocuments(db, AppwriteService.DB_ID, AppwriteService.COL_USERS)
                                 .getDocuments();
 
-                // Also count each user's reports
+               
                 List<? extends Document<?>> reportDocs =
                         AppwriteHelper.listAllDocuments(db, AppwriteService.DB_ID, AppwriteService.COL_REPORTS)
                                 .getDocuments();
 
-                // Build a count map: userId -> count
+               
                 Map<String, Integer> reportCount = new HashMap<>();
                 for (Document<?> rdoc : reportDocs) {
                     @SuppressWarnings("unchecked")
@@ -162,7 +162,7 @@ public class AdminManageUsersFragment extends Fragment {
                 AppwriteHelper.updateDocument(
                         db, AppwriteService.DB_ID, AppwriteService.COL_USERS, u.id, update
                 );
-                u.status = newStatus; // update in-memory
+                u.status = newStatus;
                 if (getActivity() == null) return;
                 getActivity().runOnUiThread(() -> {
                     applyFilter();

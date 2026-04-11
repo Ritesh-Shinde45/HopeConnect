@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MissingPerson {
 
-    // Appwrite Document ID
+   
     private String id;
 
     private String name;
@@ -20,10 +20,10 @@ public class MissingPerson {
     private List<String> imageUrls;
     private String reporterId;
 
-    // Appwrite auto field (you will map this manually)
+   
     private Date createdAt;
 
-    // Required empty constructor
+   
     public MissingPerson() {}
 
     public MissingPerson(String name, String age, String gender, String missingSince,
@@ -45,7 +45,7 @@ public class MissingPerson {
         this.reporterId = reporterId;
     }
 
-    // Getters
+   
     public String getId() { return id; }
     public String getName() { return name; }
     public String getAge() { return age; }
@@ -60,7 +60,7 @@ public class MissingPerson {
     public String getReporterId() { return reporterId; }
     public Date getCreatedAt() { return createdAt; }
 
-    // Setters (important for Appwrite mapping)
+   
     public void setId(String id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setAge(String age) { this.age = age; }

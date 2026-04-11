@@ -61,10 +61,7 @@ public class NotificationActivity extends AppCompatActivity {
         loadRecentReports();
     }
 
-    /**
-     * Show recent reports as notification – gives the user awareness of
-     * newly submitted missing-person reports.
-     */
+    
     private void loadRecentReports() {
         progressBar.setVisibility(View.VISIBLE);
 
@@ -123,7 +120,7 @@ public class NotificationActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Data model ────────────────────────────────────────────────────────────
+   
 
     static class NotifItem {
         String reportId;
@@ -133,7 +130,7 @@ public class NotificationActivity extends AppCompatActivity {
         long   timestamp;
     }
 
-    // ── Adapter ───────────────────────────────────────────────────────────────
+   
 
     class NotifAdapter extends RecyclerView.Adapter<NotifAdapter.VH> {
 

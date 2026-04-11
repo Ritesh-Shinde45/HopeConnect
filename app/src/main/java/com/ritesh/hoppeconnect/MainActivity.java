@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityResultLauncher<String[]> permissionLauncher;
 
-    // UI — filter buttons
+   
     private MaterialButton btnAllCases, btnMissing, btnFound,
             btnChildren, btnAdults, btnElderly;
     private MaterialButton selectedFilterButton;
 
-    // UI — other
+   
     private BottomNavigationView bottomNav;
     private EditText   searchBar;
     private Button     btnReadMore;
@@ -65,16 +65,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton btnNotification;
     private ImageView homeProgressBar;
 
-    // Stats tiles
+   
     private TextView tvStatActive, tvStatFound, tvStatHelps;
 
-    // Achievement banner
+   
     private TextView tvTotalHelps, tvAchievementSubtitle;
 
-    // Share button
+   
     private Button btnShareApp;
 
-    // RecyclerView
+   
     private RecyclerView casesRecyclerView;
     private ReportAdapter caseAdapter;
     private final List<ReportModel> caseList = new ArrayList<>();
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private String storagePermission;
     private long backPressedTime = 0;
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         loadUserProfile();
     }
 
-    // ── Init ──────────────────────────────────────────────────────────────────
+   
     private void proceedToInitUI() {
         checkIfUserIsBlocked();
         setContentView(R.layout.activity_main);
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         setupShareButton();
         loadUserProfile();
         loadApprovedCases("all", null);
-        loadHomeStats();           // ← new: fill stats tiles + achievement banner
+        loadHomeStats();          
         cleanupOldFoundReports();
     }
 
@@ -166,16 +166,16 @@ public class MainActivity extends AppCompatActivity {
         homeProgressBar   = findViewById(R.id.homeProgressBar);
         casesRecyclerView = findViewById(R.id.casesRecyclerView);
 
-        // Stats row
+       
         tvStatActive = findViewById(R.id.tvStatActive);
         tvStatFound  = findViewById(R.id.tvStatFound);
         tvStatHelps  = findViewById(R.id.tvStatHelps);
 
-        // Achievement banner
+       
         tvTotalHelps          = findViewById(R.id.tvTotalHelps);
         tvAchievementSubtitle = findViewById(R.id.tvAchievementSubtitle);
 
-        // Share button
+       
         btnShareApp = findViewById(R.id.btnShareApp);
 
         selectedFilterButton = btnAllCases;
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, NotificationActivity.class)));
     }
 
-    // ── Share button ──────────────────────────────────────────────────────────
+   
     private void setupShareButton() {
         if (btnShareApp == null) return;
         btnShareApp.setOnClickListener(v -> {
@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void loadHomeStats() {
-        // Active reports count
+       
         new Thread(() -> {
             try {
                 io.appwrite.services.Databases db = AppwriteService.getDatabases();
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        // Found reports count
+       
         new Thread(() -> {
             try {
                 io.appwrite.services.Databases db = AppwriteService.getDatabases();
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-        // Help records count — shown in both the stats tile and the achievement banner
+       
         new Thread(() -> {
             try {
                 io.appwrite.services.Databases db = AppwriteService.getDatabases();
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── RecyclerView ──────────────────────────────────────────────────────────
+   
     private void setupCasesRecyclerView() {
         if (casesRecyclerView == null) return;
         casesRecyclerView.setLayoutManager(
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    // ── Back press ────────────────────────────────────────────────────────────
+   
     private void setupBackPress() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -314,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 result -> Log.d(TAG, "permissions: " + result));
     }
 
-    // ── Profile ───────────────────────────────────────────────────────────────
+   
     private void loadUserProfile() {
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         String userId = prefs.getString(KEY_UID, null);
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Cases loader ──────────────────────────────────────────────────────────
+   
     private void cleanupOldFoundReports() {
         new Thread(() -> {
             try {
@@ -421,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
         if (homeProgressBar != null) {
             Glide.with(this)
                     .asGif()
-                    .load(R.raw.loading)   // your gif filename without extension
+                    .load(R.raw.loading)  
                     .into(homeProgressBar);
         }
         new Thread(() -> {
@@ -540,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // ── Search ────────────────────────────────────────────────────────────────
+   
     private void setupSearchBar() {
         if (searchBar == null) return;
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Filter buttons ────────────────────────────────────────────────────────
+   
     private void setupFilterButtons() {
         List<MaterialButton> all = new ArrayList<>();
         all.add(btnAllCases); all.add(btnMissing); all.add(btnFound);
@@ -653,7 +653,7 @@ public class MainActivity extends AppCompatActivity {
         selectedFilterButton = selected;
     }
 
-    // ── Bottom navigation ─────────────────────────────────────────────────────
+   
     private void setupBottomNavigation() {
         if (bottomNav == null) return;
         bottomNav.setSelectedItemId(R.id.nav_home);
@@ -678,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ── Blocked user ──────────────────────────────────────────────────────────
+   
     private void checkIfUserIsBlocked() {
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         String userId = prefs.getString(KEY_UID, null);
@@ -730,7 +730,7 @@ public class MainActivity extends AppCompatActivity {
                 .show();
     }
 
-    // ── Promo card ────────────────────────────────────────────────────────────
+   
     private void setupPromoCard() {
         if (btnReadMore != null)
             btnReadMore.setOnClickListener(v ->

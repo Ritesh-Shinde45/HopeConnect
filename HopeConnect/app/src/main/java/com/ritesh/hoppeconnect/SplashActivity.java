@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         View ripple1     = findViewById(R.id.ripple1);
         View ripple2     = findViewById(R.id.ripple2);
 
-        // Logo: scale + fade
+       
         ScaleAnimation scale = new ScaleAnimation(0.2f, 1f, 0.2f, 1f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scale.setDuration(750);
@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
         logoAnim.setFillAfter(true);
         if (logo != null) logo.startAnimation(logoAnim);
 
-        // App name: slide up + fade
+       
         TranslateAnimation slide = new TranslateAnimation(0, 0, 70f, 0f);
         slide.setDuration(600); slide.setStartOffset(600);
         AlphaAnimation fade2 = new AlphaAnimation(0f, 1f);
@@ -48,17 +48,17 @@ public class SplashActivity extends AppCompatActivity {
         nameAnim.setFillAfter(true);
         if (appName != null) appName.startAnimation(nameAnim);
 
-        // Tagline fade
+       
         AlphaAnimation tagFade = new AlphaAnimation(0f, 1f);
         tagFade.setDuration(700); tagFade.setStartOffset(1000);
         tagFade.setFillAfter(true);
         if (tagline != null) tagline.startAnimation(tagFade);
 
-        // Ripple rings
+       
         if (ripple1 != null) startRipple(ripple1, 100);
         if (ripple2 != null) startRipple(ripple2, 600);
 
-        // use main looper explicitly
+       
         new Handler(Looper.getMainLooper()).postDelayed(this::goNext, 2800);
     }
 

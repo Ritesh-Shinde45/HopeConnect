@@ -52,7 +52,7 @@ public class HelpFragment extends Fragment implements SearchableFragment {
     }
 
     private void subscribeHelpReports() {
-        // TODO: Implement Appwrite database listing logic
+       
         applySearchFilter(currentSearchQuery);
     }
 

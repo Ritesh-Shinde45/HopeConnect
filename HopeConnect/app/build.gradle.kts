@@ -53,8 +53,8 @@ configurations.all {
     }
 }
 dependencies {
-    // Appwrite SDK
-    implementation("io.appwrite:sdk-for-android:5.1.0")    // AndroidX & Material (Using Version Catalog)
+   
+    implementation("io.appwrite:sdk-for-android:5.1.0")   
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
@@ -64,31 +64,31 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.lifecycle.runtime)
 
-    // UI Components
+   
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Image loading (Glide)
+   
     implementation("com.github.bumptech.glide:glide:4.16.0")
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
-    // ZXing (QR Code)
+   
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation("com.google.zxing:core:3.5.3")
 
-    // Testing
+   
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 
-    //Facematch
+   
     implementation("com.google.mlkit:face-detection:16.1.5")
     implementation("org.tensorflow:tensorflow-lite:2.14.0")
 
     implementation("com.google.android.gms:play-services-auth:21.0.0")
 
-    // Kotlin coroutines (REQUIRED for EmptyCoroutineContext)
+   
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("com.github.bumptech.glide:glide:4.16.0")

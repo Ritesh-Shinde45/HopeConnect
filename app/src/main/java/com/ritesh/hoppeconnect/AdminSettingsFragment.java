@@ -60,17 +60,17 @@ public class AdminSettingsFragment extends Fragment {
         btnChangePassword  = v.findViewById(R.id.btnChangePassword);
         btnLogout          = v.findViewById(R.id.btnLogout);
 
-        // App version
+       
         try {
             String ver = requireContext().getPackageManager()
                     .getPackageInfo(requireContext().getPackageName(), 0).versionName;
             txtVersion.setText("v" + ver);
         } catch (Exception e) { txtVersion.setText("v1.0"); }
 
-        // Load admin profile
+       
         loadAdminProfile();
 
-        // Persist switch states via SharedPreferences
+       
         SharedPreferences prefs = requireContext().getSharedPreferences("admin_settings", MODE_PRIVATE);
         swApproval.setChecked(prefs.getBoolean("approval_required",  true));
         swFace.setChecked(prefs.getBoolean("face_recognition",       true));
@@ -103,14 +103,14 @@ public class AdminSettingsFragment extends Fragment {
     }
 
     private void loadAdminProfile() {
-        // Pull from prefs first for instant display
+       
         SharedPreferences prefs = requireContext().getSharedPreferences(PREFS, MODE_PRIVATE);
         String cachedName = prefs.getString("logged_in_name", "Admin");
         txtName.setText(cachedName);
         txtEmail.setText(AppwriteService.ADMIN_EMAIL);
         txtRole.setText("Administrator");
 
-        // Then refresh from DB
+       
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
@@ -144,10 +144,10 @@ public class AdminSettingsFragment extends Fragment {
     }
 
     private void performLogout() {
-        // Clear local session
+       
         requireContext().getSharedPreferences(PREFS, MODE_PRIVATE).edit().clear().apply();
 
-        // Sign out of Appwrite session via helper (handles coroutine from Java)
+       
         new Thread(() -> {
             try {
                 AppwriteHelper.deleteCurrentSession(AppwriteService.getAccount());

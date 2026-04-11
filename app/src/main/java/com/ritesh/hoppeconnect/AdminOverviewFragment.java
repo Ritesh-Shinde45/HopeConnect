@@ -64,7 +64,7 @@ public class AdminOverviewFragment extends Fragment {
         super.onViewCreated(v, savedInstanceState);
 
         try {
-            // Stat cards
+           
             tvTotalUsers        = v.findViewById(R.id.tv_total_users);
             tvAnnouncementCount = v.findViewById(R.id.tv_announcement_count);
             tvBlockedUsers      = v.findViewById(R.id.tv_blocked_users);
@@ -83,7 +83,7 @@ public class AdminOverviewFragment extends Fragment {
             tvLogEmpty          = v.findViewById(R.id.tv_log_empty);
             swipeRefresh        = v.findViewById(R.id.swipe_refresh_dashboard);
 
-            // Cards
+           
             totalUsersCard      = v.findViewById(R.id.totalUsersCard);
             announcementsCard   = v.findViewById(R.id.announcementsCard);
             blockedUsersCard    = v.findViewById(R.id.blockedUsersCard);
@@ -93,7 +93,7 @@ public class AdminOverviewFragment extends Fragment {
             exportAsCard        = v.findViewById(R.id.exportAsCard);
             filterByDatesCard   = v.findViewById(R.id.filterByDatesCard);
 
-            // Null checks for critical views
+           
             if (swipeRefresh == null) {
                 Log.e(TAG, "swipeRefresh is null — admin_dashboard.xml may be wrong version");
                 return;
@@ -107,7 +107,7 @@ public class AdminOverviewFragment extends Fragment {
             logAdapter = new ActivityLogAdapter(logItems);
             rvLog.setAdapter(logAdapter);
 
-            // Card click listeners — null-safe
+           
             if (totalUsersCard != null)
                 totalUsersCard.setOnClickListener(x ->
                         startActivity(new Intent(getContext(), AdminUsersListActivity.class)
@@ -165,7 +165,7 @@ public class AdminOverviewFragment extends Fragment {
             try {
                 Databases db = AppwriteService.getDatabases();
 
-                // Users
+               
                 List<? extends Document<?>> userDocs =
                         AppwriteHelper.listAllDocuments(
                                         db, AppwriteService.DB_ID, AppwriteService.COL_USERS)
@@ -178,7 +178,7 @@ public class AdminOverviewFragment extends Fragment {
                     if ("suspended".equals(data.get("status"))) blocked++;
                 }
 
-                // Reports
+               
                 List<? extends Document<?>> reportDocs =
                         AppwriteHelper.listAllDocuments(
                                         db, AppwriteService.DB_ID, AppwriteService.COL_REPORTS)
@@ -201,7 +201,7 @@ public class AdminOverviewFragment extends Fragment {
                     }
                 }
 
-                // Activity log
+               
                 List<ActivityLogItem> logs = new ArrayList<>();
                 int start = Math.max(0, reportDocs.size() - 5);
                 for (int i = reportDocs.size() - 1; i >= start; i--) {
@@ -238,7 +238,7 @@ public class AdminOverviewFragment extends Fragment {
                     if (swipeRefresh == null) return;
                     swipeRefresh.setRefreshing(false);
 
-                    // Set text safely
+                   
                     setText(tvTotalUsers,        String.valueOf(fuTotal));
                     setText(tvBlockedUsers,       String.valueOf(fuBlocked));
                     setText(tvTotalReports,       String.valueOf(ftTotal));

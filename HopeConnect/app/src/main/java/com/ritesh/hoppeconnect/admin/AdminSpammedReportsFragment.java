@@ -72,7 +72,7 @@ public class AdminSpammedReportsFragment extends Fragment {
         }).start();
     }
 
-    /** Long-press to restore a spammed report back to pending review */
+    
     private void removeSpamFlag(String docId, int position) {
         new Thread(() -> {
             try {

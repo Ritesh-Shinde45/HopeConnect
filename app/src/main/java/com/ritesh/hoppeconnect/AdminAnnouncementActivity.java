@@ -48,7 +48,7 @@ public class AdminAnnouncementActivity extends AppCompatActivity {
         setContentView(R.layout.admin_announcement);
         AppwriteService.init(this);
 
-        // Views
+       
         etTitle            = findViewById(R.id.et_announcement_title);
         etMessage          = findViewById(R.id.et_announcement_message);
         spinnerAudience    = findViewById(R.id.spinner_audience);
@@ -58,11 +58,11 @@ public class AdminAnnouncementActivity extends AppCompatActivity {
         tvNoAnnouncements  = findViewById(R.id.tv_no_announcements);
         rvAnnouncements    = findViewById(R.id.rv_sent_announcements);
 
-        // Back button
+       
         View btnBack = findViewById(R.id.btn_back_announcement);
         if (btnBack != null) btnBack.setOnClickListener(v -> finish());
 
-        // Spinner setup
+       
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 new String[]{"All Users", "Active Users", "New Users"});
@@ -70,7 +70,7 @@ public class AdminAnnouncementActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item);
         spinnerAudience.setAdapter(spinnerAdapter);
 
-        // RecyclerView setup
+       
         rvAnnouncements.setLayoutManager(new LinearLayoutManager(this));
         announcementAdapter = new AnnouncementAdapter(sentList);
         rvAnnouncements.setAdapter(announcementAdapter);
@@ -162,7 +162,7 @@ public class AdminAnnouncementActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 Log.e(TAG, "load announcements error", e);
-                // Collection may not exist yet — that's fine, just show empty state
+               
                 runOnUiThread(() ->
                         tvNoAnnouncements.setVisibility(View.VISIBLE));
             }

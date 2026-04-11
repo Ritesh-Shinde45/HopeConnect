@@ -75,7 +75,7 @@ public class ExploreActivity extends AppCompatActivity {
         replaceFragmentSafely(MissedFragment.newInstance());
     }
 
-    // ── Back press → go to MainActivity ──────────────────────────────────────
+   
     private void setupBackPress() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override

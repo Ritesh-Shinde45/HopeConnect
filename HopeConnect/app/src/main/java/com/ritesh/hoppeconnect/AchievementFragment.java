@@ -52,7 +52,7 @@ public class AchievementFragment extends Fragment implements SearchableFragment 
     }
 
     private void subscribeAchievementReports() {
-        // TODO: Implement Appwrite database listing
+       
         applySearchFilter(currentSearchQuery);
     }
 

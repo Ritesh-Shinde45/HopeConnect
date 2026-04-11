@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginPageBinding   binding;
     private GoogleSignInClient googleSignInClient;
 
-    // ── Google Sign-In launcher ───────────────────────────────────────────────
+   
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     });
 
-    // ─────────────────────────────────────────────────────────────────────────
+   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
 
         AppwriteService.init(this);
 
-        // Auto-navigate only when NOT opened explicitly AND a session cookie exists
+       
         boolean explicitOpen = getIntent().getBooleanExtra("explicit_login", false);
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
 
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         setupClickListeners();
     }
 
-    // ── Setup ─────────────────────────────────────────────────────────────────
+   
     private void setupGoogleSignIn() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // ── Manual email / username login ─────────────────────────────────────────
+   
     private void attemptLogin() {
         String identifier = binding.etLoginUsername.getText().toString().trim();
         String password   = binding.etLoginPassword.getText().toString();
@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                         AppwriteHelper.findUserByField(db, collectionId, field, identifier)
                                 .getDocuments();
 
-                // Fallback: username might exist in admins collection
+               
                 if (docs.isEmpty() && !isEmail && !isAdmin) {
                     Log.d(TAG, "Not found in users — trying admins collection");
                     docs = AppwriteHelper.findUserByField(
@@ -181,7 +181,7 @@ public class LoginActivity extends AppCompatActivity {
                 String role = AppwriteService.isAdminEmail(emailInDoc) ? "admin" : "user";
                 Log.d(TAG, "Password OK — email=" + emailInDoc + "  role=" + role);
 
-                // ── Email verification gate (skipped for admin) ───────────────
+               
                 if (!"admin".equals(role)) {
                     try {
                         Log.d(TAG, "Creating session to check email verification");
@@ -191,8 +191,8 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d(TAG, "Email verified=" + verified);
 
                         if (!verified) {
-                            // Automatically resend the verification email so the
-                            // user gets a fresh link without extra steps.
+                           
+                           
                             Log.d(TAG, "Email not verified — resending verification email");
                             new Thread(AppwriteService::resendVerificationEmail).start();
 
@@ -208,9 +208,9 @@ public class LoginActivity extends AppCompatActivity {
                             return;
                         }
                     } catch (Exception sessionEx) {
-                        // Session creation failed (e.g. wrong password in Appwrite auth,
-                        // or Appwrite auth account doesn't exist yet).
-                        // Log it but don't block login — DB password already matched.
+                       
+                       
+                       
                         Log.w(TAG, "Session create for verification check failed: "
                                 + sessionEx.getMessage());
                     }
@@ -243,7 +243,7 @@ public class LoginActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── Google Sign-In ────────────────────────────────────────────────────────
+   
     private void handleGoogleLogin(GoogleSignInAccount account) {
         if (account.getEmail() == null) return;
         setLoading(true);
@@ -361,7 +361,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+   
     private void navigateTo(String role) {
         Intent i = "admin".equals(role)
                 ? new Intent(this, AdminDashboardActivity.class)

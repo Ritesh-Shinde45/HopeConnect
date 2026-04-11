@@ -39,7 +39,7 @@ public class HelpSupportActivity extends AppCompatActivity {
     private void setupClickListeners() {
         ivBack.setOnClickListener(v -> onBackPressed());
 
-        // Email Support
+       
         layoutEmailSupport.setOnClickListener(v -> {
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
             emailIntent.setData(Uri.parse("mailto:riteshshinde472@gmail.com"));
@@ -52,7 +52,7 @@ public class HelpSupportActivity extends AppCompatActivity {
             }
         });
 
-        // Phone Support
+       
         layoutPhoneSupport.setOnClickListener(v -> {
             Intent dialIntent = new Intent(Intent.ACTION_DIAL);
             dialIntent.setData(Uri.parse("tel:+918080769308"));
@@ -64,9 +64,9 @@ public class HelpSupportActivity extends AppCompatActivity {
             }
         });
 
-        // Report Problem
+       
         layoutReportProblem.setOnClickListener(v -> {
-            // Open report problem form or send email
+           
             Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
             emailIntent.setData(Uri.parse("mailto:riteshshinde472@gmail.com"));
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Problem Report - HopeConnect");
@@ -79,10 +79,10 @@ public class HelpSupportActivity extends AppCompatActivity {
             }
         });
 
-        // FAQ items are just for display - they can be expanded/collapsed if needed
-        // For now, they just show the information
+       
+       
         layoutFaq1.setOnClickListener(v -> {
-            // Could expand/collapse or show more details
+           
             Toast.makeText(this, "FAQ item clicked", Toast.LENGTH_SHORT).show();
         });
 

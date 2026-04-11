@@ -99,7 +99,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         return v;
     }
 
-    // ── Chip listeners ────────────────────────────────────────────────────────
+   
     private void setupChipListeners() {
         if (chipAll      != null) chipAll.setOnClickListener(x      -> loadByFilter("all"));
         if (chipMissing  != null) chipMissing.setOnClickListener(x  -> loadByFilter("missing"));
@@ -111,7 +111,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         if (chipFemale   != null) chipFemale.setOnClickListener(x   -> loadByFilter("female"));
     }
 
-    // ── Load by filter ────────────────────────────────────────────────────────
+   
     private void loadByFilter(String filter) {
         activeFilter = filter;
         allReports.clear();
@@ -216,7 +216,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    // ── Load ALL = active + found merged ──────────────────────────────────────
+   
     private void loadAllApproved() {
         if (databases == null) return;
         if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
@@ -257,7 +257,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    // ── Load found reports and merge ──────────────────────────────────────────
+   
     private void loadFoundReports() {
         try {
             List<String> foundQ = new ArrayList<>();
@@ -277,7 +277,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
                                     addDocsToList(foundResult, allReports);
                                 }
 
-                                // Sort merged list newest first
+                               
                                 allReports.sort((a, b) ->
                                         Long.compare(b.createdAt, a.createdAt));
 
@@ -300,7 +300,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    // ── Fallback ──────────────────────────────────────────────────────────────
+   
     private void loadAllAndFilterInMemory() {
         try {
             List<String> queries = new ArrayList<>();
@@ -333,7 +333,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
 
                                 allReports.clear();
 
-                                // Use raw list to avoid nested generic parse error
+                               
                                 @SuppressWarnings("unchecked")
                                 List<Document<Map<String, Object>>> docs =
                                         (List<Document<Map<String, Object>>>)
@@ -360,11 +360,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    /**
-     * Helper — extracts documents from a result and adds parsed ReportModels
-     * to a target list. Uses unchecked cast to avoid nested generic parse errors
-     * inside lambda callbacks.
-     */
+    
     @SuppressWarnings("unchecked")
     private void addDocsToList(
             DocumentList<Map<String, Object>> result,
@@ -380,7 +376,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         }
     }
 
-    // ── Apply search ──────────────────────────────────────────────────────────
+   
     private void applySearch() {
         visibleReports.clear();
         String q = searchQuery.trim().toLowerCase();
@@ -419,13 +415,13 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         applySearch();
     }
 
-    // ── parseDocument 2-arg ───────────────────────────────────────────────────
+   
     public static ReportModel parseDocument(String docId,
                                             Map<String, Object> data) {
         return parseDocument(docId, data, null);
     }
 
-    // ── parseDocument 3-arg ───────────────────────────────────────────────────
+   
     public static ReportModel parseDocument(String docId,
                                             Map<String, Object> data,
                                             String createdAtIso) {
@@ -446,7 +442,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         rm.locationLng       = str(data, "locationLng",       "");
         rm.documentUrl       = str(data, "documentUrl",       "");
 
-        // Age
+       
         Object ageObj = data.get("age");
         if (ageObj instanceof Number) {
             rm.age = ((Number) ageObj).intValue();
@@ -455,13 +451,13 @@ public class MissedFragment extends Fragment implements SearchableFragment {
             catch (Exception ignored) {}
         }
 
-        // createdAt — custom field first
+       
         Object timeObj = data.get("createdAt");
         if (timeObj instanceof Number) {
             rm.createdAt = ((Number) timeObj).longValue();
         }
 
-        // Fallback to $createdAt ISO string
+       
         if (rm.createdAt == 0 && createdAtIso != null
                 && createdAtIso.length() >= 10) {
             try {
@@ -484,7 +480,7 @@ public class MissedFragment extends Fragment implements SearchableFragment {
             }
         }
 
-        // Photo URLs
+       
         Object pf = data.get("photoUrls");
         if (pf instanceof List) {
             List<?> pL = (List<?>) pf;

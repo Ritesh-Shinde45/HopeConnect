@@ -59,20 +59,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class MatchFragment extends Fragment {
 
-    // ── TFLite ────────────────────────────────────────────────────────────────
+   
     private Interpreter tflite;
     private static final float MATCH_THRESHOLD = 0.50f;
 
-    // ── State ─────────────────────────────────────────────────────────────────
+   
     private float[] queryEmbedding = null;
     private Bitmap  selectedBitmap = null;
-    private int     searchScope    = 3; // 0=city, 1=state, 2=country, 3=all
+    private int     searchScope    = 3;
     private String  filterAge      = "Any";
     private String  filterGender   = "Any";
     private String  locationInput  = "";
     private boolean isMatching     = false;
 
-    // ── UI references (from XML layout — second file style) ───────────────────
+   
     private ImageView        ivSelectedPhoto;
     private MaterialCardView cardPhoto;
     private Button           btnSelectPhoto, btnStartMatch, btnOptions;
@@ -81,26 +81,26 @@ public class MatchFragment extends Fragment {
     private RecyclerView     rvResults;
     private LinearLayout     layoutEmpty, layoutResult;
 
-    // ── Adapter & results ─────────────────────────────────────────────────────
+   
     private final List<FaceMatchResult> resultList = new ArrayList<>();
     private FaceMatchResultAdapter resultAdapter;
 
-    // ── Face detector ─────────────────────────────────────────────────────────
+   
     private FaceDetector faceDetector;
 
-    // ── Photo picker ──────────────────────────────────────────────────────────
+   
     private ActivityResultLauncher<Intent> photoPickerLauncher;
 
-    // ── Executor ──────────────────────────────────────────────────────────────
+   
     private ExecutorService executor    = Executors.newFixedThreadPool(3);
     private final Handler   mainHandler = new Handler(Looper.getMainLooper());
 
     public MatchFragment() {}
     public static MatchFragment newInstance() { return new MatchFragment(); }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Fragment lifecycle
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -163,9 +163,9 @@ public class MatchFragment extends Fragment {
         layoutResult    = null;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  View binding (XML layout)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void bindViews(View root) {
         ivSelectedPhoto = root.findViewById(R.id.ivSelectedPhoto);
@@ -197,9 +197,9 @@ public class MatchFragment extends Fragment {
         rvResults.setAdapter(resultAdapter);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Options Bottom Sheet
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void showOptionsDialog() {
         if (!isAdded()) return;
@@ -210,7 +210,7 @@ public class MatchFragment extends Fragment {
         sheet.setContentView(dv);
         sheet.getBehavior().setPeekHeight(900);
 
-        // ── Photo preview ──────────────────────────────────────────────────
+       
         ImageView dialogPhoto       = dv.findViewById(R.id.dialogPhoto);
         Button    dialogSelectPhoto = dv.findViewById(R.id.dialogSelectPhoto);
         TextView  tvFaceDetected    = dv.findViewById(R.id.tvFaceDetected);
@@ -219,7 +219,7 @@ public class MatchFragment extends Fragment {
         tvFaceDetected.setVisibility(queryEmbedding != null ? View.VISIBLE : View.GONE);
         dialogSelectPhoto.setOnClickListener(v -> { sheet.dismiss(); openPhotoPicker(); });
 
-        // ── Age chips ─────────────────────────────────────────────────────
+       
         ChipGroup chipAge     = dv.findViewById(R.id.chipGroupAge);
         Chip chipAgeAny       = dv.findViewById(R.id.chipAgeAny);
         Chip chipAgeChild     = dv.findViewById(R.id.chipAgeChild);
@@ -230,7 +230,7 @@ public class MatchFragment extends Fragment {
         chipAgeAdult.setChecked("Adult".equals(filterAge));
         chipAgeElderly.setChecked("Elderly".equals(filterAge));
 
-        // ── Gender chips ──────────────────────────────────────────────────
+       
         ChipGroup chipGenderGroup = dv.findViewById(R.id.chipGroupGender);
         Chip chipGenderAny        = dv.findViewById(R.id.chipGenderAny);
         Chip chipGenderMale       = dv.findViewById(R.id.chipGenderMale);
@@ -239,7 +239,7 @@ public class MatchFragment extends Fragment {
         chipGenderMale.setChecked("Male".equals(filterGender));
         chipGenderFemale.setChecked("Female".equals(filterGender));
 
-        // ── Scope radio ───────────────────────────────────────────────────
+       
         RadioGroup   radioScope     = dv.findViewById(R.id.radioScope);
         LinearLayout layoutLocation = dv.findViewById(R.id.layoutLocationInput);
         EditText     etLocation     = dv.findViewById(R.id.etLocation);
@@ -290,9 +290,9 @@ public class MatchFragment extends Fragment {
         return labels[0];
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Main matching pipeline  ← from first file (working)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void startFaceMatching() {
         if (isMatching) return;
@@ -382,9 +382,9 @@ public class MatchFragment extends Fragment {
         });
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Fetch all reports  ← from first file (working, with resolveUrl fix)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private List<ReportModel> fetchAllReports(
             io.appwrite.services.Databases db) throws Exception {
@@ -419,12 +419,12 @@ public class MatchFragment extends Fragment {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) doc.getData();
 
-                // ── Client-side filters ───────────────────────────────────
-                // City filter
+               
+               
                 if (cityF != null &&
                         !str(data, "city").toLowerCase().contains(cityF)) continue;
 
-                // Age filter
+               
                 if ("Child".equals(filterAge)   && intVal(data, "age") >= 18) continue;
                 if ("Adult".equals(filterAge))  {
                     int a = intVal(data, "age");
@@ -432,11 +432,11 @@ public class MatchFragment extends Fragment {
                 }
                 if ("Elderly".equals(filterAge) && intVal(data, "age") <= 60) continue;
 
-                // Gender filter
+               
                 if (!"Any".equals(filterGender) &&
                         !str(data, "gender").equalsIgnoreCase(filterGender)) continue;
 
-                // ── Parse document ────────────────────────────────────────
+               
                 ReportModel m = new ReportModel();
                 m.id                = doc.getId();
                 m.name              = str(data, "name");
@@ -448,7 +448,7 @@ public class MatchFragment extends Fragment {
                 m.emergencyContact1 = str(data, "emergencyContact1");
                 m.missingSince      = str(data, "missingSince");
 
-                // ── Resolve photo URLs  ← first file fix ──────────────────
+               
                 Object rawUrls = data.get("photoUrls");
                 List<String> urls = new ArrayList<>();
                 if (rawUrls instanceof List) {
@@ -466,7 +466,7 @@ public class MatchFragment extends Fragment {
                 }
                 m.photoUrls = urls;
 
-                // Location lat/lng
+               
                 Object latObj = data.get("locationLat");
                 Object lngObj = data.get("locationLng");
                 if (latObj instanceof String) m.locationLat = (String) latObj;
@@ -485,9 +485,9 @@ public class MatchFragment extends Fragment {
         return all;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  URL helpers  ← from first file (resolveUrl + buildViewUrl)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private String resolveUrl(String val) {
         if (!val.startsWith("http")) return buildViewUrl(val);
@@ -504,9 +504,9 @@ public class MatchFragment extends Fragment {
                 + "/view?project=" + AppwriteService.PROJECT_ID;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Face matching  ← from first file (Glide-based download)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private float matchFaceFromUrl(String url) {
         try {
@@ -524,9 +524,9 @@ public class MatchFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  ML Kit + TFLite embedding  ← from first file (lock/wait pattern)
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private float[] extractFaceEmbedding(Bitmap bitmap) {
         if (tflite == null) return null;
@@ -637,9 +637,9 @@ public class MatchFragment extends Fragment {
         return Math.max(0f, dot);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Photo picker
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void openPhotoPicker() {
         Intent i = new Intent(Intent.ACTION_PICK);
@@ -665,9 +665,9 @@ public class MatchFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Init helpers
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void initFaceDetector() {
         faceDetector = FaceDetection.getClient(
@@ -694,9 +694,9 @@ public class MatchFragment extends Fragment {
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  Utility
-    // ─────────────────────────────────────────────────────────────────────────
+   
+   
+   
 
     private void setText(TextView tv, String t)   { if (tv != null) tv.setText(t); }
     private void setVisible(View v, boolean show) {
@@ -715,9 +715,9 @@ public class MatchFragment extends Fragment {
         catch (Exception e) { return 0; }
     }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  FaceMatchResult
-    // ═════════════════════════════════════════════════════════════════════════
+   
+   
+   
 
     public static class FaceMatchResult {
         public final ReportModel report;
@@ -732,9 +732,9 @@ public class MatchFragment extends Fragment {
         }
     }
 
-    // ═════════════════════════════════════════════════════════════════════════
-    //  RecyclerView Adapter
-    // ═════════════════════════════════════════════════════════════════════════
+   
+   
+   
 
     static class FaceMatchResultAdapter
             extends RecyclerView.Adapter<FaceMatchResultAdapter.VH> {
