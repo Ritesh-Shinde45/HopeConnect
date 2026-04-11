@@ -180,6 +180,7 @@ public class AdminAllReportsFragment extends Fragment {
     private void changeStatus(AdminReportModel r, String newStatus, int pos) {
         new Thread(() -> {
             try {
+
                 Databases db = AppwriteService.getDatabases();
                 Map<String, Object> update = new HashMap<>();
                 update.put("status", newStatus);

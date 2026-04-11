@@ -25,7 +25,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ritesh.hoppeconnect.databinding.ActivityChatsBinding;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -78,12 +83,23 @@ public class ChatsActivity extends AppCompatActivity {
         binding.newChat.setOnClickListener(v -> showNewChatDialog());
 
         if (binding.ivBack != null)
-            binding.ivBack.setOnClickListener(v -> finish());
+            binding.ivBack.setOnClickListener(v -> goHome());
 
-        // Handle direct open from case card chat button
         handleDirectOpen();
-
         loadChats();
+    }
+
+    // ── Back → MainActivity ───────────────────────────────────────────────────
+    @Override
+    public void onBackPressed() {
+        goHome();
+    }
+
+    private void goHome() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -108,7 +124,7 @@ public class ChatsActivity extends AppCompatActivity {
         binding.rvChatList.setAdapter(adapter);
     }
 
-    // ── Search bar — filters chat list, shows search action on keyboard ───────
+    // ── Search ────────────────────────────────────────────────────────────────
     private void setupSearch() {
         binding.etSearch.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         binding.etSearch.setSingleLine(true);
@@ -121,11 +137,9 @@ public class ChatsActivity extends AppCompatActivity {
             @Override public void afterTextChanged(Editable s) {}
         });
 
-        // Handle keyboard search button
         binding.etSearch.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 filterChats(binding.etSearch.getText().toString());
-                // Hide keyboard
                 android.view.inputmethod.InputMethodManager imm =
                         (android.view.inputmethod.InputMethodManager)
                                 getSystemService(INPUT_METHOD_SERVICE);
@@ -158,7 +172,7 @@ public class ChatsActivity extends AppCompatActivity {
         if (binding.bottomNav == null) return;
         binding.bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if      (id == R.id.nav_home)    { startActivity(new Intent(this, MainActivity.class));   return true; }
+            if      (id == R.id.nav_home)    { goHome(); return true; }
             else if (id == R.id.nav_explore) { startActivity(new Intent(this, ExploreActivity.class)); return true; }
             else if (id == R.id.nav_chat)    { return true; }
             else if (id == R.id.nav_profile) { startActivity(new Intent(this, ProfileActivity.class)); return true; }
@@ -166,7 +180,7 @@ public class ChatsActivity extends AppCompatActivity {
         });
     }
 
-    // ── Load chats ────────────────────────────────────────────────────────────
+    // ── Load chats — sorted by most recent message ────────────────────────────
     private void loadChats() {
         new Thread(() -> {
             try {
@@ -190,9 +204,18 @@ public class ChatsActivity extends AppCompatActivity {
                     int unread = data.get("unread_" + myUserId) != null
                             ? parseInt(data.get("unread_" + myUserId).toString()) : 0;
 
+                    // Use $updatedAt from Appwrite as the sort key (most accurate)
+                    String updatedAt = doc.getUpdatedAt() != null
+                            ? doc.getUpdatedAt() : doc.getCreatedAt();
+
                     items.add(new ChatItem(
-                            doc.getId(), otherId, otherName, lastMsg, lastTime, unread));
+                            doc.getId(), otherId, otherName,
+                            lastMsg, lastTime, unread, updatedAt));
                 }
+
+                // ── Sort: most recently updated chat first ────────────────────
+                Collections.sort(items, (a, b) ->
+                        b.updatedAt.compareTo(a.updatedAt));
 
                 runOnUiThread(() -> {
                     allChats.clear();
@@ -206,9 +229,8 @@ public class ChatsActivity extends AppCompatActivity {
         }).start();
     }
 
-    // ── New Chat Dialog with AutoComplete user suggestions ────────────────────
+    // ── New Chat Dialog ───────────────────────────────────────────────────────
     private void showNewChatDialog() {
-        // Build dialog layout programmatically
         android.widget.LinearLayout layout = new android.widget.LinearLayout(this);
         layout.setOrientation(android.widget.LinearLayout.VERTICAL);
         layout.setPadding(48, 32, 48, 16);
@@ -219,10 +241,9 @@ public class ChatsActivity extends AppCompatActivity {
         hint.setTextColor(0xFF888888);
         hint.setPadding(0, 0, 0, 8);
 
-        // AutoCompleteTextView for suggestions
         AutoCompleteTextView autoComplete = new AutoCompleteTextView(this);
         autoComplete.setHint("Type a name or username...");
-        autoComplete.setThreshold(2); // start suggesting after 2 chars
+        autoComplete.setThreshold(2);
         autoComplete.setSingleLine(true);
         autoComplete.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         autoComplete.setPadding(24, 24, 24, 24);
@@ -234,69 +255,56 @@ public class ChatsActivity extends AppCompatActivity {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("New Chat")
                 .setView(layout)
-                .setPositiveButton("Start Chat", null) // set later to avoid auto-dismiss
+                .setPositiveButton("Start Chat", null)
                 .setNegativeButton("Cancel", null)
                 .create();
 
-        // Adapter for suggestions — populated as user types
         ArrayAdapter<String> suggestAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, new ArrayList<>());
         autoComplete.setAdapter(suggestAdapter);
 
-        // Map to store name → userId for selected suggestion
         Map<String, String> nameToId   = new HashMap<>();
-        Map<String, String> nameToFull = new HashMap<>(); // display name
+        Map<String, String> nameToFull = new HashMap<>();
 
-        // Load user list for suggestions as user types
         autoComplete.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void afterTextChanged(Editable s) {}
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String query = s.toString().trim();
                 if (query.length() < 2) return;
-
                 new Thread(() -> {
                     try {
                         Databases db = AppwriteService.getDatabases();
                         List<? extends Document<?>> docs =
                                 AppwriteHelper.listAllDocuments(
-                                                db,
-                                                AppwriteService.DB_ID,
-                                                AppwriteService.COL_USERS)
-                                        .getDocuments();
+                                        db, AppwriteService.DB_ID,
+                                        AppwriteService.COL_USERS).getDocuments();
 
                         List<String> suggestions = new ArrayList<>();
-                        nameToId.clear();
-                        nameToFull.clear();
+                        nameToId.clear(); nameToFull.clear();
 
                         for (Document<?> doc : docs) {
-                            if (doc.getId().equals(myUserId)) continue; // skip self
-
+                            if (doc.getId().equals(myUserId)) continue;
                             @SuppressWarnings("unchecked")
                             Map<String, Object> data = (Map<String, Object>) doc.getData();
                             String name     = strVal(data, "name");
                             String username = strVal(data, "username");
                             String display  = name.isEmpty() ? username : name;
                             String lq       = query.toLowerCase(Locale.ROOT);
-
                             if (name.toLowerCase().contains(lq) ||
                                     username.toLowerCase().contains(lq)) {
-                                String label = display
-                                        + (username.isEmpty() ? "" : "  @" + username);
+                                String label = display + (username.isEmpty() ? "" : "  @" + username);
                                 suggestions.add(label);
                                 nameToId.put(label, doc.getId());
                                 nameToFull.put(label, display);
                             }
                         }
-
                         runOnUiThread(() -> {
                             suggestAdapter.clear();
                             suggestAdapter.addAll(suggestions);
                             suggestAdapter.notifyDataSetChanged();
                             if (!suggestions.isEmpty()) autoComplete.showDropDown();
                         });
-
                     } catch (Exception e) {
                         Log.w(TAG, "suggestion error: " + e.getMessage());
                     }
@@ -304,47 +312,30 @@ public class ChatsActivity extends AppCompatActivity {
             }
         });
 
-        // Handle keyboard search action inside dialog
         autoComplete.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 String input = autoComplete.getText().toString().trim();
-                if (!input.isEmpty()) {
-                    dialog.dismiss();
-                    startChatFromInput(input, nameToId, nameToFull);
-                }
+                if (!input.isEmpty()) { dialog.dismiss(); startChatFromInput(input, nameToId, nameToFull); }
                 return true;
             }
             return false;
         });
 
         dialog.show();
-
-        // Override positive button to not auto-dismiss on empty input
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             String input = autoComplete.getText().toString().trim();
-            if (input.isEmpty()) {
-                autoComplete.setError("Enter a name or username");
-                return;
-            }
+            if (input.isEmpty()) { autoComplete.setError("Enter a name or username"); return; }
             dialog.dismiss();
             startChatFromInput(input, nameToId, nameToFull);
         });
     }
 
-    /**
-     * Starts chat from either a suggestion label (name + @username)
-     * or a raw username/name string.
-     */
     private void startChatFromInput(String input,
                                     Map<String, String> nameToId,
                                     Map<String, String> nameToFull) {
-        // Check if input matches a suggestion exactly
         if (nameToId.containsKey(input)) {
-            String targetId   = nameToId.get(input);
-            String targetName = nameToFull.get(input);
-            findUserByIdAndStartChat(targetId, targetName);
+            findUserByIdAndStartChat(nameToId.get(input), nameToFull.get(input));
         } else {
-            // Fall back to searching by username
             findUserAndStartChat(input);
         }
     }
@@ -360,16 +351,13 @@ public class ChatsActivity extends AppCompatActivity {
     private void handleDirectOpen() {
         String directId   = getIntent().getStringExtra("direct_user_id");
         String directName = getIntent().getStringExtra("direct_user_name");
-        if (directId != null && !directId.isEmpty()) {
-            findUserByIdAndStartChat(directId,
-                    directName != null ? directName : "User");
-        }
+        if (directId != null && !directId.isEmpty())
+            findUserByIdAndStartChat(directId, directName != null ? directName : "User");
     }
 
     private void findUserByIdAndStartChat(String targetId, String targetName) {
         if (targetId.equals(myUserId)) {
-            Toast.makeText(this, "Cannot chat with yourself",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Cannot chat with yourself", Toast.LENGTH_SHORT).show();
             return;
         }
         new Thread(() -> {
@@ -388,27 +376,20 @@ public class ChatsActivity extends AppCompatActivity {
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
-
-                // Try username first
                 List<? extends Document<?>> docs =
                         AppwriteHelper.findUserByField(
                                 db, AppwriteService.COL_USERS, "username", usernameOrName
                         ).getDocuments();
-
-                // If not found by username, try name
-                if (docs.isEmpty()) {
+                if (docs.isEmpty())
                     docs = AppwriteHelper.findUserByField(
                             db, AppwriteService.COL_USERS, "name", usernameOrName
                     ).getDocuments();
-                }
 
                 if (docs.isEmpty()) {
                     runOnUiThread(() -> Toast.makeText(this,
-                            "User \"" + usernameOrName + "\" not found",
-                            Toast.LENGTH_SHORT).show());
+                            "User \"" + usernameOrName + "\" not found", Toast.LENGTH_SHORT).show());
                     return;
                 }
-
                 Document<?> userDoc = docs.get(0);
                 String otherId = userDoc.getId();
                 @SuppressWarnings("unchecked")
@@ -421,11 +402,10 @@ public class ChatsActivity extends AppCompatActivity {
                             "Cannot chat with yourself", Toast.LENGTH_SHORT).show());
                     return;
                 }
-
-                String chatId = findOrCreateChat(db, otherId, otherName);
-                final String fChatId = chatId;
-                final String fName   = otherName;
-                final String fId     = otherId;
+                String chatId    = findOrCreateChat(db, otherId, otherName);
+                String fChatId   = chatId;
+                String fName     = otherName;
+                String fId       = otherId;
                 runOnUiThread(() -> openChatRoom(fChatId, fId, fName));
 
             } catch (Exception e) {
@@ -440,20 +420,16 @@ public class ChatsActivity extends AppCompatActivity {
             throws Exception {
         List<? extends Document<?>> existingChats =
                 AppwriteHelper.getUserChats(db, myUserId).getDocuments();
-
         for (Document<?> c : existingChats) {
             @SuppressWarnings("unchecked")
             Map<String, Object> cd = (Map<String, Object>) c.getData();
             String p1 = strVal(cd, "participant1");
             String p2 = strVal(cd, "participant2");
             if ((p1.equals(myUserId) && p2.equals(otherId)) ||
-                    (p1.equals(otherId)  && p2.equals(myUserId))) {
+                    (p1.equals(otherId)  && p2.equals(myUserId)))
                 return c.getId();
-            }
         }
-
-        String chatId = UUID.randomUUID().toString()
-                .replace("-", "").substring(0, 20);
+        String chatId = UUID.randomUUID().toString().replace("-", "").substring(0, 20);
         Map<String, Object> chatData = new HashMap<>();
         chatData.put("participant1",     myUserId);
         chatData.put("participant2",     otherId);
@@ -462,8 +438,8 @@ public class ChatsActivity extends AppCompatActivity {
         chatData.put("participants",     myUserId + "," + otherId);
         chatData.put("lastMessage",      "");
         chatData.put("lastMessageTime",  "");
-        AppwriteHelper.createDocument(
-                db, AppwriteService.DB_ID, AppwriteService.COL_CHATS, chatId, chatData);
+        AppwriteHelper.createDocument(db, AppwriteService.DB_ID,
+                AppwriteService.COL_CHATS, chatId, chatData);
         return chatId;
     }
 
@@ -478,32 +454,30 @@ public class ChatsActivity extends AppCompatActivity {
     private static String strVal(Map<String, Object> m, String k) {
         Object v = m.get(k); return v != null ? v.toString() : "";
     }
-
     private static int parseInt(String s) {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
     // ── Models & Adapter ──────────────────────────────────────────────────────
-
     public static class ChatItem {
-        public final String chatId, otherUserId, otherName, lastMessage, lastTime;
+        public final String chatId, otherUserId, otherName, lastMessage, lastTime, updatedAt;
         public final int unreadCount;
 
         ChatItem(String chatId, String otherUserId, String otherName,
-                 String lastMessage, String lastTime, int unreadCount) {
+                 String lastMessage, String lastTime, int unreadCount, String updatedAt) {
             this.chatId      = chatId;
             this.otherUserId = otherUserId;
             this.otherName   = otherName;
             this.lastMessage = lastMessage;
             this.lastTime    = lastTime;
             this.unreadCount = unreadCount;
+            this.updatedAt   = updatedAt != null ? updatedAt : "";
         }
     }
 
     interface OnChatClickListener { void onChatClick(ChatItem chat); }
 
-    static class ChatListAdapter
-            extends RecyclerView.Adapter<ChatListAdapter.VH> {
+    static class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.VH> {
 
         private final List<ChatItem>      list;
         private final OnChatClickListener listener;
@@ -513,8 +487,7 @@ public class ChatsActivity extends AppCompatActivity {
             this.listener = listener;
         }
 
-        @NonNull
-        @Override
+        @NonNull @Override
         public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View v = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_chat_preview, parent, false);
@@ -524,7 +497,6 @@ public class ChatsActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull VH h, int pos) {
             ChatItem c = list.get(pos);
-
             String initial = c.otherName.isEmpty() ? "?"
                     : String.valueOf(c.otherName.charAt(0)).toUpperCase(Locale.ROOT);
             h.tvAvatar.setText(initial);
@@ -535,12 +507,10 @@ public class ChatsActivity extends AppCompatActivity {
 
             if (c.unreadCount > 0) {
                 h.tvUnread.setVisibility(View.VISIBLE);
-                h.tvUnread.setText(c.unreadCount > 99
-                        ? "99+" : String.valueOf(c.unreadCount));
+                h.tvUnread.setText(c.unreadCount > 99 ? "99+" : String.valueOf(c.unreadCount));
             } else {
                 h.tvUnread.setVisibility(View.GONE);
             }
-
             h.itemView.setOnClickListener(v -> listener.onChatClick(c));
         }
 
@@ -548,7 +518,6 @@ public class ChatsActivity extends AppCompatActivity {
 
         static class VH extends RecyclerView.ViewHolder {
             TextView tvAvatar, tvName, tvLastMsg, tvTime, tvUnread;
-
             VH(@NonNull View v) {
                 super(v);
                 tvAvatar  = v.findViewById(R.id.tvAvatar);

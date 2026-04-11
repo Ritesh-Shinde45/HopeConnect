@@ -26,11 +26,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:id="@+id/statusBarSpacer"
-                android:layout_width="match_parent"
-                android:layout_height="24dp"
-                android:background="#F8F9FB" />
+
 
             <!-- ====================== TOP WHITE AREA ====================== -->
             <LinearLayout
@@ -290,38 +286,6 @@
                 </LinearLayout>
 
                 <!-- Best Destination Title + Filter Button -->
-                <LinearLayout
-                    android:id="@+id/bestDestinationTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="12dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/tvBestDestination"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Best Destination"
-                        android:textColor="#222222"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
-
-                    <ImageButton
-                        android:id="@+id/filterButton"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="@drawable/filter_button_background"
-                        android:src="@drawable/ic_filter"
-                        android:contentDescription="Filter"
-                        android:tint="#222222"
-                        android:padding="8dp"
-                        tools:ignore="UseAppTint"/>
-                </LinearLayout>
 
                 <!-- ====================== BOTTOM COLORED AREA (fragment container) ====================== -->
                 <LinearLayout

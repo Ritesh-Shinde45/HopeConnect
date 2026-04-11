@@ -8,6 +8,7 @@ import java.util.Map;
  * without serialization, avoiding the need for Parcelable/JSON.
  */
 public class ReportModelCache {
+
     private static final Map<String, ReportModel> cache = new HashMap<>();
 
     public static void put(ReportModel model) {

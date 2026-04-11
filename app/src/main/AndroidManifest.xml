@@ -102,12 +102,14 @@
 
         <!-- Other screens -->
         <activity android:name=".NewReportActivity" />
-        <activity android:name=".ChatRoomActivity" />
         <activity android:name=".ChatDetailActivity" />
         <activity android:name=".BuyTeaActivity" />
         <activity android:name=".TechnologyWithHumanityActivity" />
         <activity android:name=".NotificationActivity"/>
-
+        <activity android:name=".BucketDebugActivity" />
+        <activity
+            android:name=".ChatRoomActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -28,7 +29,6 @@ import java.util.Map;
 import io.appwrite.models.Document;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-//import com.ritesh.hoppeconnect.AppwriteService;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -42,7 +42,6 @@ public class ExploreActivity extends AppCompatActivity {
     private ImageView iconMissed, iconMatch, iconHelp, iconAchieve;
     private TextView labelMissed, labelMatch, labelHelp, labelAchieve;
 
-    private ImageButton filterButton;
     private BottomNavigationView bottomNav;
 
     private static final int CAT_MISSED = 0;
@@ -62,21 +61,30 @@ public class ExploreActivity extends AppCompatActivity {
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
             );
         }
-//        try {
-//            AppwriteService.init(getApplicationContext());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+
         AppwriteService.init(this);
         initViews();
         loadUserProfile();
         setupSearchForwarding();
         setupCategoryListeners();
         setupBottomNavigation();
+        setupBackPress();
 
         selectedCategory = CAT_MISSED;
         updateCategoryVisualState();
         replaceFragmentSafely(MissedFragment.newInstance());
+    }
+
+    // ── Back press → go to MainActivity ──────────────────────────────────────
+    private void setupBackPress() {
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent i = new Intent(ExploreActivity.this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
+            }
+        });
     }
 
     private void initViews() {
@@ -107,36 +115,84 @@ public class ExploreActivity extends AppCompatActivity {
         labelHelp = safeFindViewById(R.id.labelHelp);
         labelAchieve = safeFindViewById(R.id.labelAchieve);
 
-        filterButton = safeFindViewById(R.id.filterButton);
         bottomNav = safeFindViewById(R.id.bottomNav);
     }
 
-    private void loadUserProfile() {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (bottomNav != null) bottomNav.setSelectedItemId(R.id.nav_explore);
+        checkIfUserIsBlocked();
+    }
 
-        SharedPreferences prefs = getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
+    private void checkIfUserIsBlocked() {
+        SharedPreferences prefs =
+                getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
         String userId = prefs.getString("logged_in_user_id", null);
-
         if (userId == null) return;
 
         new Thread(() -> {
-
             try {
+                io.appwrite.models.Document<?> doc =
+                        AppwriteHelper.getDocument(
+                                AppwriteService.getDatabases(),
+                                AppwriteService.DB_ID,
+                                AppwriteService.COL_USERS, userId);
+                @SuppressWarnings("unchecked")
+                Map<String, Object> data =
+                        (Map<String, Object>) doc.getData();
+                String status = data.get("status") != null
+                        ? data.get("status").toString() : "active";
 
+                if ("suspended".equals(status)) {
+                    runOnUiThread(() -> {
+                        prefs.edit().clear().apply();
+                        new Thread(() -> {
+                            try {
+                                AppwriteHelper.deleteCurrentSession(
+                                        AppwriteService.getAccount());
+                            } catch (Exception ignored) {}
+                        }).start();
+                        new androidx.appcompat.app.AlertDialog.Builder(this)
+                                .setTitle("Account Suspended")
+                                .setMessage("Your account has been suspended.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK", (d, w) -> {
+                                    Intent i = new Intent(this, LoginActivity.class);
+                                    i.putExtra("explicit_login", true);
+                                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                            | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(i);
+                                    finish();
+                                })
+                                .show();
+                    });
+                }
+            } catch (Exception e) {
+                Log.w("ExploreActivity", "checkBlocked: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void loadUserProfile() {
+        SharedPreferences prefs = getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
+        String userId = prefs.getString("logged_in_user_id", null);
+        if (userId == null) return;
+
+        new Thread(() -> {
+            try {
                 Document<?> doc = AppwriteHelper.getDocument(
                         AppwriteService.getDatabases(),
                         AppwriteService.DB_ID,
                         AppwriteService.COL_USERS,
-                        userId
-                );
+                        userId);
 
+                @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) doc.getData();
-
                 Object photoId = data.get("photoId");
 
                 runOnUiThread(() -> {
-
                     if (photoId != null && profileImage != null) {
-
                         String url = AppwriteService.ENDPOINT
                                 + "/storage/buckets/"
                                 + AppwriteService.USERS_BUCKET_ID
@@ -152,15 +208,11 @@ public class ExploreActivity extends AppCompatActivity {
                                 .circleCrop()
                                 .into(profileImage);
                     }
-
                 });
 
             } catch (Exception e) {
-
                 Log.e("ExploreActivity", "Profile load error", e);
-
             }
-
         }).start();
     }
 
@@ -232,11 +284,6 @@ public class ExploreActivity extends AppCompatActivity {
                 updateCategoryVisualState();
             });
         }
-
-        if (filterButton != null) {
-            filterButton.setOnClickListener(v ->
-                    Toast.makeText(ExploreActivity.this, "Filter Clicked", Toast.LENGTH_SHORT).show());
-        }
     }
 
     private void setupBottomNavigation() {
@@ -261,7 +308,9 @@ public class ExploreActivity extends AppCompatActivity {
                 safeStartActivity(ChatsActivity.class);
                 return true;
             } else if (itemId == R.id.nav_home) {
-                safeStartActivity(MainActivity.class);
+                Intent i = new Intent(this, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
                 return true;
             }
 
@@ -279,48 +328,48 @@ public class ExploreActivity extends AppCompatActivity {
     }
 
     private void updateCategoryVisualState() {
-        int inactiveBg = Color.parseColor("#F1F3F6");
-        int inactiveIconTint = Color.parseColor("#AAAAAA");
-        int inactiveLabel = Color.parseColor("#444444");
+        int inactiveBg        = Color.parseColor("#F1F3F6");
+        int inactiveIconTint  = Color.parseColor("#AAAAAA");
+        int inactiveLabel     = Color.parseColor("#444444");
 
-        int activeBg = Color.parseColor("#FFA726");
-        int activeIconTint = Color.WHITE;
-        int activeLabel = Color.parseColor("#222222");
+        int activeBg          = Color.parseColor("#FFA726");
+        int activeIconTint    = Color.WHITE;
+        int activeLabel       = Color.parseColor("#222222");
 
-        if (cardMissed != null) cardMissed.setCardBackgroundColor(inactiveBg);
-        if (cardMatch != null) cardMatch.setCardBackgroundColor(inactiveBg);
-        if (cardHelp != null) cardHelp.setCardBackgroundColor(inactiveBg);
+        if (cardMissed  != null) cardMissed.setCardBackgroundColor(inactiveBg);
+        if (cardMatch   != null) cardMatch.setCardBackgroundColor(inactiveBg);
+        if (cardHelp    != null) cardHelp.setCardBackgroundColor(inactiveBg);
         if (cardAchieve != null) cardAchieve.setCardBackgroundColor(inactiveBg);
 
-        if (iconMissed != null) iconMissed.setColorFilter(inactiveIconTint);
-        if (iconMatch != null) iconMatch.setColorFilter(inactiveIconTint);
-        if (iconHelp != null) iconHelp.setColorFilter(inactiveIconTint);
+        if (iconMissed  != null) iconMissed.setColorFilter(inactiveIconTint);
+        if (iconMatch   != null) iconMatch.setColorFilter(inactiveIconTint);
+        if (iconHelp    != null) iconHelp.setColorFilter(inactiveIconTint);
         if (iconAchieve != null) iconAchieve.setColorFilter(inactiveIconTint);
 
-        if (labelMissed != null) labelMissed.setTextColor(inactiveLabel);
-        if (labelMatch != null) labelMatch.setTextColor(inactiveLabel);
-        if (labelHelp != null) labelHelp.setTextColor(inactiveLabel);
+        if (labelMissed  != null) labelMissed.setTextColor(inactiveLabel);
+        if (labelMatch   != null) labelMatch.setTextColor(inactiveLabel);
+        if (labelHelp    != null) labelHelp.setTextColor(inactiveLabel);
         if (labelAchieve != null) labelAchieve.setTextColor(inactiveLabel);
 
         switch (selectedCategory) {
             case CAT_MISSED:
-                if (cardMissed != null) cardMissed.setCardBackgroundColor(activeBg);
-                if (iconMissed != null) iconMissed.setColorFilter(activeIconTint);
+                if (cardMissed  != null) cardMissed.setCardBackgroundColor(activeBg);
+                if (iconMissed  != null) iconMissed.setColorFilter(activeIconTint);
                 if (labelMissed != null) labelMissed.setTextColor(activeLabel);
                 break;
             case CAT_MATCH:
-                if (cardMatch != null) cardMatch.setCardBackgroundColor(activeBg);
-                if (iconMatch != null) iconMatch.setColorFilter(activeIconTint);
+                if (cardMatch  != null) cardMatch.setCardBackgroundColor(activeBg);
+                if (iconMatch  != null) iconMatch.setColorFilter(activeIconTint);
                 if (labelMatch != null) labelMatch.setTextColor(activeLabel);
                 break;
             case CAT_HELP:
-                if (cardHelp != null) cardHelp.setCardBackgroundColor(activeBg);
-                if (iconHelp != null) iconHelp.setColorFilter(activeIconTint);
+                if (cardHelp  != null) cardHelp.setCardBackgroundColor(activeBg);
+                if (iconHelp  != null) iconHelp.setColorFilter(activeIconTint);
                 if (labelHelp != null) labelHelp.setTextColor(activeLabel);
                 break;
             case CAT_ACHIEVE:
-                if (cardAchieve != null) cardAchieve.setCardBackgroundColor(activeBg);
-                if (iconAchieve != null) iconAchieve.setColorFilter(activeIconTint);
+                if (cardAchieve  != null) cardAchieve.setCardBackgroundColor(activeBg);
+                if (iconAchieve  != null) iconAchieve.setColorFilter(activeIconTint);
                 if (labelAchieve != null) labelAchieve.setTextColor(activeLabel);
                 break;
         }

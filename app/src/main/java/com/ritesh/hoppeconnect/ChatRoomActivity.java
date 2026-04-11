@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsetsController;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -108,6 +109,7 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -148,6 +150,12 @@ public class ChatRoomActivity extends AppCompatActivity {
         setupRecycler();
         setupInput();
         setupAttachmentPanel();
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            getWindow().getInsetsController().setSystemBarsAppearance(
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+            );
+        }
     }
 
     @Override protected void onResume() { super.onResume(); pollHandler.post(pollRunnable); }
@@ -538,6 +546,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             ? R.layout.item_message_sent
                             : R.layout.item_message_received,
                     parent, false));
+
         }
 
         @Override

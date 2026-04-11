@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFA726">
-
+    android:background="#F5F5F5">
 
     <!-- Top Header -->
     <LinearLayout
@@ -13,36 +12,40 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
         android:background="#4A4E9D"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
         <View
-            android:id="@+id/statusBarSpacer"
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#4A4E9D"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Technology with Humanity"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold"/>
+            android:background="#4A4E9D" />
 
-        <TextView
-            android:id="@+id/tvSubtitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Hope Connect - Reuniting Families"
-            android:textColor="#E3F2FD"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"/>
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Technology with Humanity"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HopeConnect — Reuniting Families"
+                android:textColor="#C5CAE9"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Content Card -->
@@ -52,7 +55,7 @@
         android:layout_height="0dp"
         android:layout_margin="16dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
+        app:cardElevation="6dp"
         app:layout_constraintTop_toBottomOf="@id/headerLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,38 +64,139 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="16dp"
-            >
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tvContent"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textColor="#333333"
-                android:lineSpacingExtra="6dp"
-                android:text="     Technology with humanity becomes truly meaningful when innovation is driven by compassion and responsibility. In the context of the Hope Connect app, technology is not just a digital framework of code and servers; it is an emotional support system designed to reduce the suffering of families searching for missing loved ones. Every feature of the app reflects sensitivity toward human emotions — from the easy reporting interface to instant alerts that mobilize communities. By combining mobile technology, cloud databases, and user-friendly design, Hope Connect transforms ordinary smartphones into instruments of hope, enabling faster action during moments of crisis.
+                android:orientation="vertical"
+                android:padding="20dp">
 
-The emotional trauma of losing a family member is overwhelming. Families often feel isolated, confused, and powerless. Hope Connect addresses this emotional gap by providing a centralized and structured platform where information can be shared quickly and accurately. Instead of relying only on physical posters, police station visits, or social media posts that may get lost in timelines, the app creates a focused digital network dedicated specifically to missing persons. This organized system increases visibility, improves response time, and gives families a sense of direction and support.
+                <!-- Intro -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The Problem We Couldn't Ignore"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-One of the strongest examples of technology serving humanity in Hope Connect is the use of image recognition and location-based notifications. When a missing person’s photo is uploaded, the app can help circulate it widely within nearby regions. Real-time updates ensure that information reaches volunteers, authorities, and community members instantly. This immediate communication can significantly reduce the time taken to locate someone. Technology here acts as a multiplier of human effort — empowering individuals to collectively participate in search efforts.
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="Over 1,00,000 people go missing in India every year. Nearly 20% of those cases go unresolved. Families spend days running between police stations, printing posters, and posting on social media — often with little coordination and no central system to bring it all together.\n\nThe first 72 hours after a disappearance are the most critical. And most of that time gets lost to fragmented communication.\n\nHopeConnect was built to change that." />
 
-Additionally, Hope Connect promotes community engagement. It encourages users not only to report cases but also to actively assist in finding missing individuals. Citizens can provide tips, confirm sightings, or share verified information. This collaborative approach builds trust and strengthens social bonds. The app demonstrates that technology is most powerful when it connects people rather than isolating them. It transforms strangers into supporters united by a common purpose — helping families reunite.
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
 
-Ethics and responsibility are also central to the concept of technology with humanity. Handling sensitive information about missing persons requires strict privacy measures and data protection policies. Hope Connect emphasizes secure storage, controlled access, and verification processes to prevent misinformation or misuse. By prioritizing security and dignity, the app ensures that technology does not exploit vulnerability but instead safeguards it.
+                <!-- Technology serving humanity -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Technology That Serves, Not Replaces"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-Furthermore, Hope Connect represents how digital innovation can complement law enforcement and social organizations. By creating a structured database and clear reporting system, it can assist authorities in organizing search operations more efficiently. It reduces duplication of efforts and ensures that crucial information is easily accessible. This partnership between citizens, technology, and authorities highlights how humanity-centered innovation can strengthen institutional systems.
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="HopeConnect doesn't replace human instinct or community trust — it amplifies it. Any citizen with a smartphone becomes a potential helper. No training needed. No bureaucracy. Just a report, a notification, and a conversation that could bring someone home.\n\nEvery feature was designed with one question in mind: does this reduce the time between disappearance and reunion? The GPS-tagged reports, real-time alerts, and in-app chat all exist for that single purpose." />
 
-The app also plays a psychological role. For families waiting for news, having a digital platform actively working toward finding their loved one provides reassurance. It replaces helplessness with action and uncertainty with structured effort. Even small updates can provide emotional strength. In this way, Hope Connect is not just solving a logistical problem but also supporting mental well-being during distress.
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
 
-In a broader sense, Hope Connect symbolizes a shift in how technology should be developed. Instead of focusing only on commercial profit or entertainment value, it demonstrates that innovation can address humanitarian challenges. It shows that students, developers, and entrepreneurs can build platforms that create measurable social impact. Technology becomes meaningful when it uplifts lives, protects dignity, and restores hope.
+                <!-- Real engineering challenges -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Real Problems, Real Solutions"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
-In conclusion, technology with humanity is about aligning digital advancement with compassion, ethics, and social responsibility. Hope Connect stands as a powerful example of how modern tools — when guided by empathy — can reunite families, mobilize communities, and turn despair into possibility. It proves that the greatest achievement of technology is not speed or automation, but its ability to serve humanity with care and purpose.
-" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="Building HopeConnect wasn't just a technical exercise — it was a series of real problems that demanded practical solutions.\n\nAppwrite's latest SDK had breaking compatibility issues with Java. Rather than abandoning the modern backend or rewriting the entire app, we built dedicated helper and service files in Kotlin that act as a seamless bridge — keeping the core Java codebase intact while fully leveraging Appwrite's real-time capabilities. Technology with humanity also means being resourceful.\n\nFalse reports are one of the biggest threats to a platform like this. If bad actors flood the system with fake cases, real families lose trust and the platform becomes useless. We responded by building a full admin moderation panel where every report is reviewed before it reaches the public feed. The next evolution is AI-powered false report detection that flags suspicious entries automatically — keeping the platform honest.\n\nFace matching is one of the most powerful tools for identifying found individuals. Using MobileFaceNet with TensorFlow Lite, the model runs entirely on-device — no photos are sent to external servers. Privacy is not an afterthought; it is built into the architecture." />
 
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Community and gamification -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Community Is the Feature"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="The most powerful part of HopeConnect is not any single feature — it is the network of people using it together. When someone flags a sighting, a notification reaches the family instantly. They connect through in-app chat without exposing personal contact details. That privacy-first design is what makes strangers willing to help.\n\nWe are taking this further with a reward system — families will be able to post a monetary reward on a case, and when a helper's tip leads to a reunion, they can claim it directly through the app. A tangible reason to look twice at a face you've seen before.\n\nGameification features — points, achievements, and badges for active helpers — will build a culture where community participation feels meaningful and recognized." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- What's next -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="What Comes Next"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="HopeConnect is version 1.0 — the foundation is built. The road ahead includes AI-powered location prediction based on sighting patterns, NCRB database integration so law enforcement and the community share the same information, multilingual support in Hindi and Marathi to reach rural communities, and SMS and WhatsApp alerts for people who may not have the app installed.\n\nEvery one of these features exists for the same reason the app was built in the first place — to get people home faster." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Closing -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Technology is most powerful when it is guided by compassion. HopeConnect is proof that a student with a laptop, a clear problem, and the will to solve it can build something that matters."
+                    android:textColor="#4A4E9D"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:lineSpacingExtra="6dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="— Ritesh Shinde, Developer · April 2026"
+                    android:textColor="#9E9E9E"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
         </ScrollView>
-
     </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

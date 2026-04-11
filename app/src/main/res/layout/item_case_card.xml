@@ -20,7 +20,7 @@
             android:layout_height="140dp"
             android:scaleType="centerCrop"
             android:src="@drawable/person_placeholder"
-            app:shapeAppearanceOverlay="@style/TopRoundedImage" />
+            app:shapeAppearanceOverlay="@style/TopRoundedImage"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +43,7 @@
                     android:text="Missing"
                     android:textColor="#FFFFFF"
                     android:textSize="10sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/personAge"
@@ -53,7 +53,7 @@
                     android:text="8 yrs"
                     android:textColor="#666666"
                     android:textSize="11sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </RelativeLayout>
 
             <TextView
@@ -66,7 +66,7 @@
                 android:textSize="14sp"
                 android:layout_marginBottom="2dp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/personLocation"
@@ -79,17 +79,16 @@
                 android:drawablePadding="4dp"
                 android:layout_marginBottom="4dp"
                 android:maxLines="1"
-                android:ellipsize="end" />
+                android:ellipsize="end"/>
 
             <TextView
                 android:id="@+id/missingDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Missing since: Ja+
-                n 15, 2026"
+                android:text="Missing since: Jan 15, 2026"
                 android:textSize="10sp"
                 android:textColor="#999999"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="8dp"/>
 
             <Button
                 android:id="@+id/btnViewDetails"
@@ -99,7 +98,7 @@
                 android:textSize="14sp"
                 android:textAllCaps="false"
                 android:backgroundTint="#3F51B5"
-                app:cornerRadius="8dp" />
+                app:cornerRadius="8dp"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -113,7 +112,7 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_chat"
                     android:padding="10dp"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"/>
 
                 <ImageButton
                     android:id="@+id/callBtn"
@@ -122,10 +121,9 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:src="@drawable/ic_phone"
                     android:padding="10dp"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentEnd="true"/>
 
             </RelativeLayout>
-
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

@@ -14,23 +14,35 @@ object AppwriteService {
 
     private const val TAG = "AppwriteService"
 
-    const val USERS_BUCKET_ID  = "gvjgvjgvjgvjvg"
     const val ENDPOINT         = "https://cloud.appwrite.io/v1"
     const val PROJECT_ID       = "hoppeconnect"
     const val DB_ID            = "69a559b30025d6fa1396"
-    const val COL_USERS        = "users"
-    const val COL_REPORTS      = "reports"
-    const val COL_CHATS        = "chats"
-    const val COL_ADMINS       = "admins"
-    const val COL_MSGS         = "messages"
-    const val CHAT_BUCKET_ID   = "chat_media"
 
-    // Admin email — always treated as admin, skips email verification
+    // ── Collections ───────────────────────────────────────────────────────────
+    const val COL_USERS         = "users"
+    const val COL_REPORTS       = "reports"
+    const val COL_NOTIFICATIONS = "notifications"
+    const val COL_CHATS         = "chats"
+    const val COL_SIGHTINGS     = "sightings"
+    const val COL_HELPS         = "helps"
+    const val COL_ADMINS        = "admins"
+    const val COL_MSGS          = "messages"
+
+    // ── Storage Buckets ───────────────────────────────────────────────────────
+    // Single bucket for ALL files — profile photos, report photos, documents, chat media
+    // Bucket ID: gvjgvjgvjgvjvg  Name: photos
+    const val USERS_BUCKET_ID   = "gvjgvjgvjgvjvg"
+    const val REPORT_BUCKET_ID  = "gvjgvjgvjgvjvg"   // same bucket — all files stored here
+    const val CHAT_BUCKET_ID    = "gvjgvjgvjgvjvg"   // same bucket
+
+    // ── Admin ─────────────────────────────────────────────────────────────────
     const val ADMIN_EMAIL = "riteshshinde472@gmail.com"
 
+    // ── Java interop aliases ──────────────────────────────────────────────────
     @JvmField val APPWRITE_ENDPOINT   = ENDPOINT
     @JvmField val APPWRITE_PROJECT_ID = PROJECT_ID
 
+    // ── Client ────────────────────────────────────────────────────────────────
     private var client    : Client?    = null
     private var _account  : Account?   = null
     private var _databases: Databases? = null
@@ -71,30 +83,16 @@ object AppwriteService {
         return try { runBlocking { _account?.get() } } catch (e: Exception) { null }
     }
 
-    /**
-     * Creates Appwrite auth account + session, then sends verification email.
-     *
-     * One-time Appwrite Console setup:
-     *   1. Console → your project → Auth → Settings
-     *   2. Enable "Email / Password" login
-     *   3. Enable "Email Verification" toggle
-     *   No custom SMTP needed — Appwrite Cloud has a built-in mailer.
-     *
-     * Admin email always skips verification.
-     */
     @JvmStatic
     @Throws(Exception::class)
     fun createAccountAndSignIn(email: String, password: String, name: String) {
         runBlocking {
             val account = _account ?: throw IllegalStateException("Call init() first")
-
             Log.d(TAG, "Creating auth account for email=$email")
             account.create(ID.unique(), email, password, name)
             Log.d(TAG, "Auth account created — opening session")
-
             account.createEmailPasswordSession(email, password)
             Log.d(TAG, "Session opened")
-
             if (!isAdminEmail(email)) {
                 sendVerificationEmail(account)
             } else {
@@ -103,7 +101,6 @@ object AppwriteService {
         }
     }
 
-    /** Creates only the auth account record (no session, no verification email). */
     @JvmStatic
     @Throws(Exception::class)
     fun createAccountSync(email: String, password: String, name: String) {
@@ -115,7 +112,6 @@ object AppwriteService {
         }
     }
 
-    /** Opens a session for an existing account. */
     @JvmStatic
     @Throws(Exception::class)
     fun createSessionSync(email: String, password: String) {
@@ -127,49 +123,30 @@ object AppwriteService {
         }
     }
 
-    /**
-     * Re-sends a verification email to the currently signed-in user.
-     * Requires an active session. Safe to call from any thread.
-     */
     @JvmStatic
     fun resendVerificationEmail() {
         try {
             val account = _account ?: run {
-                Log.e(TAG, "resendVerificationEmail — client not initialised, call init() first")
+                Log.e(TAG, "resendVerificationEmail — client not initialised")
                 return
             }
             runBlocking { sendVerificationEmail(account) }
         } catch (e: Exception) {
-            Log.e(TAG, "resendVerificationEmail — unexpected error: ${e.message}", e)
+            Log.e(TAG, "resendVerificationEmail error: ${e.message}", e)
         }
     }
 
-    /**
-     * Internal helper — dispatches createVerification and logs every outcome in detail.
-     * Must be called inside a runBlocking / coroutine scope.
-     *
-     * Redirect URL: "https://cloud.appwrite.io" is intentional for the Free plan.
-     * Appwrite sends the email through its own default mailer; no SMTP config needed.
-     * The user just clicks the link in their inbox to verify — no deep-link required.
-     */
     private suspend fun sendVerificationEmail(account: Account) {
         val redirectUrl = "https://cloud.appwrite.io"
         try {
             Log.d(TAG, "Calling account.createVerification(redirectUrl=$redirectUrl)")
             account.createVerification(redirectUrl)
-            Log.d(TAG, "createVerification SUCCESS — email dispatched by Appwrite mailer")
+            Log.d(TAG, "createVerification SUCCESS")
         } catch (e: Exception) {
-            // Full stack trace printed so Logcat shows exactly why it failed.
-            // Common reasons: Auth → Email Verification not enabled in Console,
-            // free-plan daily email quota exhausted, or no active session.
             Log.e(TAG, "createVerification FAILED [${e.javaClass.simpleName}]: ${e.message}", e)
         }
     }
 
-    /**
-     * Returns true if the currently signed-in user has verified their email.
-     * Admin email always returns true regardless.
-     */
     @JvmStatic
     fun isEmailVerified(): Boolean {
         return try {
@@ -184,5 +161,24 @@ object AppwriteService {
             Log.e(TAG, "isEmailVerified error: ${e.message}", e)
             false
         }
+    }
+
+    /**
+     * Builds a download URL for a file in the REPORT bucket.
+     * Use this anywhere you need to display or download a report photo.
+     *
+     * @param fileId  The file ID stored in the report's photoUrls field
+     */
+    @JvmStatic
+    fun buildReportPhotoUrl(fileId: String): String {
+        return "$ENDPOINT/storage/buckets/$REPORT_BUCKET_ID/files/$fileId/download?project=$PROJECT_ID"
+    }
+
+    /**
+     * Builds a download URL for a file in the USER PROFILE bucket.
+     */
+    @JvmStatic
+    fun buildUserPhotoUrl(fileId: String): String {
+        return "$ENDPOINT/storage/buckets/$USERS_BUCKET_ID/files/$fileId/view?project=$PROJECT_ID"
     }
 }

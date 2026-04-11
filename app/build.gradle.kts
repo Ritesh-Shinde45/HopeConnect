@@ -89,6 +89,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+
+    implementation("org.tensorflow:tensorflow-lite:2.12.0")
+    implementation("com.google.mlkit:face-detection:16.1.5")
     // ── Testing ───────────────────────────────────────────────────────────────
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFA726">
+
+
+    <!-- Top Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="#4A4E9D"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <View
+            android:id="@+id/statusBarSpacer"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="#4A4E9D"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Technology with Humanity"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hope Connect - Reuniting Families"
+            android:textColor="#E3F2FD"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
+    </LinearLayout>
+
+    <!-- Content Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contentCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/white">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            >
+
+            <TextView
+                android:id="@+id/tvContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#333333"
+                android:lineSpacingExtra="6dp"
+                android:text="     Technology with humanity becomes truly meaningful when innovation is driven by compassion and responsibility. In the context of the Hope Connect app, technology is not just a digital framework of code and servers; it is an emotional support system designed to reduce the suffering of families searching for missing loved ones. Every feature of the app reflects sensitivity toward human emotions — from the easy reporting interface to instant alerts that mobilize communities. By combining mobile technology, cloud databases, and user-friendly design, Hope Connect transforms ordinary smartphones into instruments of hope, enabling faster action during moments of crisis.
+
+The emotional trauma of losing a family member is overwhelming. Families often feel isolated, confused, and powerless. Hope Connect addresses this emotional gap by providing a centralized and structured platform where information can be shared quickly and accurately. Instead of relying only on physical posters, police station visits, or social media posts that may get lost in timelines, the app creates a focused digital network dedicated specifically to missing persons. This organized system increases visibility, improves response time, and gives families a sense of direction and support.
+
+One of the strongest examples of technology serving humanity in Hope Connect is the use of image recognition and location-based notifications. When a missing person’s photo is uploaded, the app can help circulate it widely within nearby regions. Real-time updates ensure that information reaches volunteers, authorities, and community members instantly. This immediate communication can significantly reduce the time taken to locate someone. Technology here acts as a multiplier of human effort — empowering individuals to collectively participate in search efforts.
+
+Additionally, Hope Connect promotes community engagement. It encourages users not only to report cases but also to actively assist in finding missing individuals. Citizens can provide tips, confirm sightings, or share verified information. This collaborative approach builds trust and strengthens social bonds. The app demonstrates that technology is most powerful when it connects people rather than isolating them. It transforms strangers into supporters united by a common purpose — helping families reunite.
+
+Ethics and responsibility are also central to the concept of technology with humanity. Handling sensitive information about missing persons requires strict privacy measures and data protection policies. Hope Connect emphasizes secure storage, controlled access, and verification processes to prevent misinformation or misuse. By prioritizing security and dignity, the app ensures that technology does not exploit vulnerability but instead safeguards it.
+
+Furthermore, Hope Connect represents how digital innovation can complement law enforcement and social organizations. By creating a structured database and clear reporting system, it can assist authorities in organizing search operations more efficiently. It reduces duplication of efforts and ensures that crucial information is easily accessible. This partnership between citizens, technology, and authorities highlights how humanity-centered innovation can strengthen institutional systems.
+
+The app also plays a psychological role. For families waiting for news, having a digital platform actively working toward finding their loved one provides reassurance. It replaces helplessness with action and uncertainty with structured effort. Even small updates can provide emotional strength. In this way, Hope Connect is not just solving a logistical problem but also supporting mental well-being during distress.
+
+In a broader sense, Hope Connect symbolizes a shift in how technology should be developed. Instead of focusing only on commercial profit or entertainment value, it demonstrates that innovation can address humanitarian challenges. It shows that students, developers, and entrepreneurs can build platforms that create measurable social impact. Technology becomes meaningful when it uplifts lives, protects dignity, and restores hope.
+
+In conclusion, technology with humanity is about aligning digital advancement with compassion, ethics, and social responsibility. Hope Connect stands as a powerful example of how modern tools — when guided by empathy — can reunite families, mobilize communities, and turn despair into possibility. It proves that the greatest achievement of technology is not speed or automation, but its ability to serve humanity with care and purpose.
+" />
+
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

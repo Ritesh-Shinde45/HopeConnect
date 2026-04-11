@@ -1,0 +1,36 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="280dp" android:layout_height="320dp" android:layout_marginEnd="16dp" app:cardCornerRadius="20dp" app:cardElevation="4dp">
+    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <!--  Background Image  -->
+        <ImageView android:id="@+id/caseImage" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/placeholder_case"/>
+        <!--  Gradient Overlay  -->
+        <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/case_card_overlay"/>
+        <!--  Content Container  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="16dp">
+            <!--  Top Section - Profile and Share  -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <!--  Profile Circle  -->
+                <androidx.cardview.widget.CardView android:layout_width="56dp" android:layout_height="56dp" app:cardCornerRadius="28dp" app:cardElevation="2dp" android:layout_marginEnd="12dp">
+                    <ImageView android:id="@+id/caseProfileImage" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/profile_placeholder"/>
+                </androidx.cardview.widget.CardView>
+                <View android:layout_width="0dp" android:layout_height="1dp" android:layout_weight="1"/>
+                <!--  Share Button Circle  -->
+                <androidx.cardview.widget.CardView android:id="@+id/btnShare" android:layout_width="40dp" android:layout_height="40dp" app:cardCornerRadius="20dp" app:cardElevation="2dp" app:cardBackgroundColor="#FFFFFF">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:src="@drawable/ic_share" android:tint="#3F51B5"/>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <!--  Spacer  -->
+            <View android:layout_width="1dp" android:layout_height="0dp" android:layout_weight="1"/>
+            <!--  Bottom Section - Case Details Card  -->
+            <androidx.cardview.widget.CardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardCornerRadius="16dp" app:cardElevation="2dp" android:background="@drawable/header_gradient">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp" android:background="@drawable/header_gradient">
+                    <!--  Name  -->
+                    <TextView android:id="@+id/caseName" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rajesh Kumar" android:textColor="#FFFFFF" android:textSize="18sp" android:textStyle="bold" android:maxLines="1" android:ellipsize="end"/>
+                    <!--  Age  -->
+                    <TextView android:id="@+id/caseAge" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Age: 45" android:textColor="#E3F2FD" android:textSize="14sp" android:layout_marginTop="4dp"/>
+                    <!--  Gender  -->
+                    <TextView android:id="@+id/caseGender" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Gender: Male" android:textColor="#E3F2FD" android:textSize="14sp" android:layout_marginTop="2dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>

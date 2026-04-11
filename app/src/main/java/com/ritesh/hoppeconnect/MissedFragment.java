@@ -1,5 +1,6 @@
 package com.ritesh.hoppeconnect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import com.google.android.material.chip.Chip;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import io.appwrite.Query;
 import io.appwrite.coroutines.CoroutineCallback;
-import io.appwrite.exceptions.AppwriteException;
+import io.appwrite.models.Document;
 import io.appwrite.models.DocumentList;
 import io.appwrite.services.Databases;
 
@@ -31,11 +34,19 @@ public class MissedFragment extends Fragment implements SearchableFragment {
 
     private androidx.recyclerview.widget.RecyclerView recyclerView;
     private ProgressBar progressBar;
-    private TextView tvEmpty;
+    private TextView    tvEmpty, tvResultCount;
     private ReportAdapter adapter;
+
     private final List<ReportModel> allReports     = new ArrayList<>();
     private final List<ReportModel> visibleReports = new ArrayList<>();
+
     private Databases databases;
+    private String searchQuery  = "";
+    private String activeFilter = "all";
+
+    private Chip chipAll, chipMissing, chipFound,
+            chipChildren, chipAdults, chipElderly,
+            chipMale, chipFemale;
 
     public MissedFragment() {}
 
@@ -50,19 +61,31 @@ public class MissedFragment extends Fragment implements SearchableFragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_missed, container, false);
 
-        recyclerView = v.findViewById(R.id.missedRecyclerView);
-        progressBar  = v.findViewById(R.id.progressBar);
-        tvEmpty      = v.findViewById(R.id.emptyText);
+        recyclerView  = v.findViewById(R.id.missedRecyclerView);
+        progressBar   = v.findViewById(R.id.progressBar);
+        tvEmpty       = v.findViewById(R.id.emptyText);
+        tvResultCount = v.findViewById(R.id.tvResultCount);
+
+        chipAll      = v.findViewById(R.id.chipAll);
+        chipMissing  = v.findViewById(R.id.chipMissing);
+        chipFound    = v.findViewById(R.id.chipFound);
+        chipChildren = v.findViewById(R.id.chipChildren);
+        chipAdults   = v.findViewById(R.id.chipAdults);
+        chipElderly  = v.findViewById(R.id.chipElderly);
+        chipMale     = v.findViewById(R.id.chipMale);
+        chipFemale   = v.findViewById(R.id.chipFemale);
 
         StaggeredGridLayoutManager staggered =
-                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+                new StaggeredGridLayoutManager(2,
+                        StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggered);
 
         adapter = new ReportAdapter(requireContext(), visibleReports, model -> {
             ReportModelCache.put(model);
-            android.content.Intent intent =
-                    new android.content.Intent(requireContext(), MissedPersonDetailActivity.class);
-            intent.putExtra(MissedPersonDetailActivity.EXTRA_REPORT_ID, model.id);
+            Intent intent = new Intent(requireContext(),
+                    MissedPersonDetailActivity.class);
+            intent.putExtra(MissedPersonDetailActivity.EXTRA_REPORT_ID,
+                    model.id);
             requireContext().startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
@@ -70,119 +93,214 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         AppwriteService.init(requireContext());
         databases = AppwriteService.getDatabases();
 
-        loadApprovedReports();
+        setupChipListeners();
+        loadByFilter("all");
+
         return v;
     }
 
-    /**
-     * Loads ONLY approved reports (status = "active" or "found").
-     * Pending, fake, and rejected reports are never shown to regular users.
-     */
-    private void loadApprovedReports() {
+    // ── Chip listeners ────────────────────────────────────────────────────────
+    private void setupChipListeners() {
+        if (chipAll      != null) chipAll.setOnClickListener(x      -> loadByFilter("all"));
+        if (chipMissing  != null) chipMissing.setOnClickListener(x  -> loadByFilter("missing"));
+        if (chipFound    != null) chipFound.setOnClickListener(x    -> loadByFilter("found"));
+        if (chipChildren != null) chipChildren.setOnClickListener(x -> loadByFilter("children"));
+        if (chipAdults   != null) chipAdults.setOnClickListener(x   -> loadByFilter("adults"));
+        if (chipElderly  != null) chipElderly.setOnClickListener(x  -> loadByFilter("elderly"));
+        if (chipMale     != null) chipMale.setOnClickListener(x     -> loadByFilter("male"));
+        if (chipFemale   != null) chipFemale.setOnClickListener(x   -> loadByFilter("female"));
+    }
+
+    // ── Load by filter ────────────────────────────────────────────────────────
+    private void loadByFilter(String filter) {
+        activeFilter = filter;
+        allReports.clear();
+        visibleReports.clear();
+
+        if (progressBar   != null) progressBar.setVisibility(View.VISIBLE);
+        if (tvEmpty       != null) tvEmpty.setVisibility(View.GONE);
+        if (tvResultCount != null) tvResultCount.setText("Loading...");
+        if (adapter       != null) adapter.notifyDataSetChanged();
+
         if (databases == null) {
             Log.e(TAG, "Databases service is null");
             return;
         }
-        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+
+        if ("all".equals(filter)) {
+            loadAllApproved();
+            return;
+        }
 
         try {
-            // ── Query 1: active (approved missing) reports ────────────────
-            List<String> activeQueries = new ArrayList<>();
-            activeQueries.add(Query.Companion.equal("status", "active"));
-            activeQueries.add(Query.Companion.orderDesc("$createdAt"));
-            activeQueries.add(Query.Companion.limit(50));
+            List<String> queries = new ArrayList<>();
+            queries.add(Query.Companion.orderDesc("$createdAt"));
+            queries.add(Query.Companion.limit(100));
+
+            switch (filter) {
+                case "missing":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    break;
+                case "found":
+                    queries.add(Query.Companion.equal("status", "found"));
+                    break;
+                case "children":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    queries.add(Query.Companion.lessThanEqual("age", 17));
+                    break;
+                case "adults":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    queries.add(Query.Companion.between("age", 18, 59));
+                    break;
+                case "elderly":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    queries.add(Query.Companion.greaterThanEqual("age", 60));
+                    break;
+                case "male":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    queries.add(Query.Companion.equal("gender", "Male"));
+                    break;
+                case "female":
+                    queries.add(Query.Companion.equal("status", "active"));
+                    queries.add(Query.Companion.equal("gender", "Female"));
+                    break;
+            }
 
             databases.listDocuments(
                     DATABASE_ID,
                     COLLECTION_ID,
-                    activeQueries,
+                    queries,
+                    new CoroutineCallback<DocumentList<Map<String, Object>>>(
+                            (result, error) -> {
+                                if (getActivity() == null) return;
+
+                                getActivity().runOnUiThread(() -> {
+                                    if (progressBar != null)
+                                        progressBar.setVisibility(View.GONE);
+                                });
+
+                                if (error != null) {
+                                    Log.e(TAG, "filter error: "
+                                            + error.getMessage());
+                                    if (getActivity() != null)
+                                        getActivity().runOnUiThread(() -> {
+                                            if (tvEmpty != null) {
+                                                tvEmpty.setText(
+                                                        "Error loading reports");
+                                                tvEmpty.setVisibility(
+                                                        View.VISIBLE);
+                                            }
+                                            if (tvResultCount != null)
+                                                tvResultCount.setText(
+                                                        "0 report(s) found");
+                                        });
+                                    return;
+                                }
+
+                                allReports.clear();
+                                addDocsToList(result, allReports);
+
+                                if (getActivity() != null)
+                                    getActivity().runOnUiThread(
+                                            MissedFragment.this::applySearch);
+                            })
+            );
+
+        } catch (Exception e) {
+            Log.e(TAG, "loadByFilter exception: " + e.getMessage(), e);
+            if (getActivity() != null)
+                getActivity().runOnUiThread(() -> {
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+                });
+        }
+    }
+
+    // ── Load ALL = active + found merged ──────────────────────────────────────
+    private void loadAllApproved() {
+        if (databases == null) return;
+        if (progressBar != null) progressBar.setVisibility(View.VISIBLE);
+
+        try {
+            List<String> activeQ = new ArrayList<>();
+            activeQ.add(Query.Companion.equal("status", "active"));
+            activeQ.add(Query.Companion.orderDesc("$createdAt"));
+            activeQ.add(Query.Companion.limit(50));
+
+            databases.listDocuments(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    activeQ,
                     new CoroutineCallback<DocumentList<Map<String, Object>>>(
                             (activeResult, activeError) -> {
                                 if (getActivity() == null) return;
 
                                 if (activeError != null) {
-                                    Log.e(TAG, "active query error: "
-                                            + activeError.getMessage(), activeError);
-                                    // Fall back to unfiltered if status field missing
+                                    Log.e(TAG, "active error: "
+                                            + activeError.getMessage());
                                     loadAllAndFilterInMemory();
                                     return;
                                 }
 
-                                // ── Query 2: found reports ────────────────
-                                List<String> foundQueries = new ArrayList<>();
-                                foundQueries.add(Query.Companion.equal("status", "found"));
-                                foundQueries.add(Query.Companion.orderDesc("$createdAt"));
-                                foundQueries.add(Query.Companion.limit(50));
-
-                                try {
-                                    databases.listDocuments(
-                                            DATABASE_ID,
-                                            COLLECTION_ID,
-                                            foundQueries,
-                                            new CoroutineCallback<DocumentList<Map<String, Object>>>(
-                                                    (foundResult, foundError) -> {
-                                                        if (getActivity() == null) return;
-
-                                                        getActivity().runOnUiThread(() -> {
-                                                            if (progressBar != null)
-                                                                progressBar.setVisibility(View.GONE);
-
-                                                            allReports.clear();
-
-                                                            // Add active reports
-                                                            for (io.appwrite.models.Document<Map<String, Object>> doc
-                                                                    : activeResult.getDocuments()) {
-                                                                allReports.add(parseDocument(
-                                                                        doc.getId(), doc.getData()));
-                                                            }
-
-                                                            // Add found reports
-                                                            if (foundError == null && foundResult != null) {
-                                                                for (io.appwrite.models.Document<Map<String, Object>> doc
-                                                                        : foundResult.getDocuments()) {
-                                                                    allReports.add(parseDocument(
-                                                                            doc.getId(), doc.getData()));
-                                                                }
-                                                            }
-
-                                                            visibleReports.clear();
-                                                            visibleReports.addAll(allReports);
-                                                            adapter.notifyDataSetChanged();
-
-                                                            if (tvEmpty != null) {
-                                                                tvEmpty.setVisibility(
-                                                                        visibleReports.isEmpty()
-                                                                                ? View.VISIBLE
-                                                                                : View.GONE);
-                                                            }
-
-                                                            Log.d(TAG, "Loaded "
-                                                                    + allReports.size()
-                                                                    + " approved reports");
-                                                        });
-                                                    })
-                                    );
-                                } catch (AppwriteException e) {
-                                    throw new RuntimeException(e);
-                                }
+                                addDocsToList(activeResult, allReports);
+                                loadFoundReports();
                             })
             );
 
         } catch (Exception e) {
-            Log.e(TAG, "Exception when listing: " + e.getMessage(), e);
-            if (getActivity() != null) {
+            Log.e(TAG, "loadAllApproved exception: " + e.getMessage(), e);
+            if (getActivity() != null)
                 getActivity().runOnUiThread(() -> {
-                    if (progressBar != null) progressBar.setVisibility(View.GONE);
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
                 });
-            }
         }
     }
 
-    /**
-     * Fallback: if status field doesn't exist in Appwrite yet,
-     * fetch all and filter in memory.
-     * Remove this method once status column is confirmed added.
-     */
+    // ── Load found reports and merge ──────────────────────────────────────────
+    private void loadFoundReports() {
+        try {
+            List<String> foundQ = new ArrayList<>();
+            foundQ.add(Query.Companion.equal("status", "found"));
+            foundQ.add(Query.Companion.orderDesc("$createdAt"));
+            foundQ.add(Query.Companion.limit(50));
+
+            databases.listDocuments(
+                    DATABASE_ID,
+                    COLLECTION_ID,
+                    foundQ,
+                    new CoroutineCallback<DocumentList<Map<String, Object>>>(
+                            (foundResult, foundError) -> {
+                                if (getActivity() == null) return;
+
+                                if (foundError == null && foundResult != null) {
+                                    addDocsToList(foundResult, allReports);
+                                }
+
+                                // Sort merged list newest first
+                                allReports.sort((a, b) ->
+                                        Long.compare(b.createdAt, a.createdAt));
+
+                                if (getActivity() != null)
+                                    getActivity().runOnUiThread(() -> {
+                                        if (progressBar != null)
+                                            progressBar.setVisibility(View.GONE);
+                                        applySearch();
+                                    });
+                            })
+            );
+        } catch (Exception e) {
+            Log.w(TAG, "loadFoundReports: " + e.getMessage());
+            if (getActivity() != null)
+                getActivity().runOnUiThread(() -> {
+                    if (progressBar != null)
+                        progressBar.setVisibility(View.GONE);
+                    applySearch();
+                });
+        }
+    }
+
+    // ── Fallback ──────────────────────────────────────────────────────────────
     private void loadAllAndFilterInMemory() {
         try {
             List<String> queries = new ArrayList<>();
@@ -203,37 +321,38 @@ public class MissedFragment extends Fragment implements SearchableFragment {
                                 });
 
                                 if (error != null) {
-                                    Log.e(TAG, "fallback error: " + error.getMessage());
-                                    getActivity().runOnUiThread(() -> {
-                                        if (tvEmpty != null) tvEmpty.setVisibility(View.VISIBLE);
-                                    });
+                                    Log.e(TAG, "fallback error: "
+                                            + error.getMessage());
+                                    if (getActivity() != null)
+                                        getActivity().runOnUiThread(() -> {
+                                            if (tvEmpty != null)
+                                                tvEmpty.setVisibility(View.VISIBLE);
+                                        });
                                     return;
                                 }
 
                                 allReports.clear();
-                                for (io.appwrite.models.Document<Map<String, Object>> doc
-                                        : result.getDocuments()) {
-                                    ReportModel rm = parseDocument(doc.getId(), doc.getData());
-                                    // In-memory filter: only active or found
-                                    // If status is missing treat as pending — don't show
+
+                                // Use raw list to avoid nested generic parse error
+                                @SuppressWarnings("unchecked")
+                                List<Document<Map<String, Object>>> docs =
+                                        (List<Document<Map<String, Object>>>)
+                                                (List<?>) result.getDocuments();
+
+                                for (Document<Map<String, Object>> doc : docs) {
+                                    ReportModel rm = parseDocument(
+                                            doc.getId(),
+                                            doc.getData(),
+                                            doc.getCreatedAt());
                                     if ("active".equals(rm.status)
                                             || "found".equals(rm.status)) {
                                         allReports.add(rm);
                                     }
                                 }
 
-                                getActivity().runOnUiThread(() -> {
-                                    visibleReports.clear();
-                                    visibleReports.addAll(allReports);
-                                    adapter.notifyDataSetChanged();
-                                    if (tvEmpty != null) {
-                                        tvEmpty.setVisibility(
-                                                visibleReports.isEmpty()
-                                                        ? View.VISIBLE : View.GONE);
-                                    }
-                                    Log.d(TAG, "Fallback loaded "
-                                            + allReports.size() + " approved reports");
-                                });
+                                if (getActivity() != null)
+                                    getActivity().runOnUiThread(
+                                            MissedFragment.this::applySearch);
                             })
             );
         } catch (Exception e) {
@@ -242,25 +361,90 @@ public class MissedFragment extends Fragment implements SearchableFragment {
     }
 
     /**
-     * Central parser — reads every field saved by NewReportActivity.
+     * Helper — extracts documents from a result and adds parsed ReportModels
+     * to a target list. Uses unchecked cast to avoid nested generic parse errors
+     * inside lambda callbacks.
      */
-    public static ReportModel parseDocument(String docId, Map<String, Object> data) {
+    @SuppressWarnings("unchecked")
+    private void addDocsToList(
+            DocumentList<Map<String, Object>> result,
+            List<ReportModel> target) {
+        List<Document<Map<String, Object>>> docs =
+                (List<Document<Map<String, Object>>>)
+                        (List<?>) result.getDocuments();
+        for (Document<Map<String, Object>> doc : docs) {
+            target.add(parseDocument(
+                    doc.getId(),
+                    doc.getData(),
+                    doc.getCreatedAt()));
+        }
+    }
+
+    // ── Apply search ──────────────────────────────────────────────────────────
+    private void applySearch() {
+        visibleReports.clear();
+        String q = searchQuery.trim().toLowerCase();
+
+        for (ReportModel r : allReports) {
+            if (q.isEmpty()) {
+                visibleReports.add(r);
+            } else {
+                boolean match =
+                        (r.name != null
+                                && r.name.toLowerCase().contains(q)) ||
+                                (r.description != null
+                                        && r.description.toLowerCase().contains(q)) ||
+                                (r.missingSince != null
+                                        && r.missingSince.toLowerCase().contains(q));
+                if (match) visibleReports.add(r);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+
+        boolean empty = visibleReports.isEmpty();
+        if (tvEmpty != null) {
+            tvEmpty.setVisibility(empty ? View.VISIBLE : View.GONE);
+            if (empty) tvEmpty.setText("No reports found");
+        }
+        if (recyclerView != null)
+            recyclerView.setVisibility(empty ? View.GONE : View.VISIBLE);
+        if (tvResultCount != null)
+            tvResultCount.setText(visibleReports.size() + " report(s) found");
+    }
+
+    @Override
+    public void onSearch(String query) {
+        searchQuery = query == null ? "" : query.trim();
+        applySearch();
+    }
+
+    // ── parseDocument 2-arg ───────────────────────────────────────────────────
+    public static ReportModel parseDocument(String docId,
+                                            Map<String, Object> data) {
+        return parseDocument(docId, data, null);
+    }
+
+    // ── parseDocument 3-arg ───────────────────────────────────────────────────
+    public static ReportModel parseDocument(String docId,
+                                            Map<String, Object> data,
+                                            String createdAtIso) {
         ReportModel rm = new ReportModel();
         rm.id = docId;
 
-        rm.name             = str(data, "name",             "Unknown");
-        rm.gender           = str(data, "gender",           "");
-        rm.missingSince     = str(data, "missingSince",     "");
-        rm.contact          = str(data, "contact",          "");
+        rm.name              = str(data, "name",              "Unknown");
+        rm.gender            = str(data, "gender",            "");
+        rm.missingSince      = str(data, "missingSince",      "");
+        rm.contact           = str(data, "contact",           "");
         rm.emergencyContact1 = str(data, "emergencyContact1", "");
         rm.emergencyContact2 = str(data, "emergencyContact2", "");
         rm.emergencyContact3 = str(data, "emergencyContact3", "");
-        rm.description      = str(data, "description",      "");
-        rm.status           = str(data, "status",           "pending");
-        rm.userId           = str(data, "userId",           "");
-        rm.locationLat      = str(data, "locationLat",      "");
-        rm.locationLng      = str(data, "locationLng",      "");
-        rm.documentUrl      = str(data, "documentUrl",      "");
+        rm.description       = str(data, "description",       "");
+        rm.status            = str(data, "status",            "pending");
+        rm.userId            = str(data, "userId",            "");
+        rm.locationLat       = str(data, "locationLat",       "");
+        rm.locationLng       = str(data, "locationLng",       "");
+        rm.documentUrl       = str(data, "documentUrl",       "");
 
         // Age
         Object ageObj = data.get("age");
@@ -271,18 +455,42 @@ public class MissedFragment extends Fragment implements SearchableFragment {
             catch (Exception ignored) {}
         }
 
-        // createdAt timestamp
+        // createdAt — custom field first
         Object timeObj = data.get("createdAt");
         if (timeObj instanceof Number) {
             rm.createdAt = ((Number) timeObj).longValue();
         }
 
-        // Photo URLs — append project ID so Appwrite serves them publicly
+        // Fallback to $createdAt ISO string
+        if (rm.createdAt == 0 && createdAtIso != null
+                && createdAtIso.length() >= 10) {
+            try {
+                java.text.SimpleDateFormat sdf =
+                        new java.text.SimpleDateFormat(
+                                "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+                                java.util.Locale.getDefault());
+                java.util.Date d = sdf.parse(createdAtIso);
+                if (d != null) rm.createdAt = d.getTime();
+            } catch (Exception e1) {
+                try {
+                    java.text.SimpleDateFormat sdf2 =
+                            new java.text.SimpleDateFormat(
+                                    "yyyy-MM-dd",
+                                    java.util.Locale.getDefault());
+                    java.util.Date d = sdf2.parse(
+                            createdAtIso.substring(0, 10));
+                    if (d != null) rm.createdAt = d.getTime();
+                } catch (Exception ignored) {}
+            }
+        }
+
+        // Photo URLs
         Object pf = data.get("photoUrls");
         if (pf instanceof List) {
             List<?> pL = (List<?>) pf;
             List<String> urls = new ArrayList<>();
-            for (Object u : pL) {
+            for (int i = 0; i < pL.size(); i++) {
+                Object u = pL.get(i);
                 if (u != null) {
                     String url = u.toString();
                     if (!url.contains("project=")) {
@@ -297,35 +505,10 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         return rm;
     }
 
-    private static String str(Map<String, Object> data, String key, String fallback) {
+    private static String str(Map<String, Object> data,
+                              String key, String fallback) {
         Object v = data.get(key);
-        return (v != null && !v.toString().isEmpty()) ? v.toString() : fallback;
-    }
-
-    @Override
-    public void onSearch(String query) {
-        String q = query == null ? "" : query.trim().toLowerCase();
-        visibleReports.clear();
-        if (q.isEmpty()) {
-            visibleReports.addAll(allReports);
-        } else {
-            for (ReportModel r : allReports) {
-                // allReports already contains only approved — just search within them
-                if ((r.name != null && r.name.toLowerCase().contains(q)) ||
-                        (r.description != null && r.description.toLowerCase().contains(q)) ||
-                        (r.missingSince != null && r.missingSince.toLowerCase().contains(q))) {
-                    visibleReports.add(r);
-                }
-            }
-        }
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                adapter.notifyDataSetChanged();
-                if (tvEmpty != null) {
-                    tvEmpty.setVisibility(
-                            visibleReports.isEmpty() ? View.VISIBLE : View.GONE);
-                }
-            });
-        }
+        return (v != null && !v.toString().isEmpty())
+                ? v.toString() : fallback;
     }
 }

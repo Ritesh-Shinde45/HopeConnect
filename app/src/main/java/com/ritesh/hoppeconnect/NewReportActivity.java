@@ -55,7 +55,7 @@ import io.appwrite.services.Storage;
 public class NewReportActivity extends AppCompatActivity {
 
     private static final String TAG           = "NewReportActivity";
-    private static final String BUCKET_ID     = "gvjgvjgvjgvjvg"; // ← your bucket ID
+    private static final String BUCKET_ID     = "gvjgvjgvjgvjvg";
     private static final String DATABASE_ID   = AppwriteService.DB_ID;
     private static final String COLLECTION_ID = "reports";
     private static final int    MAX_REPORTS   = 5;

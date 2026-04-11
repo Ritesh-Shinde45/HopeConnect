@@ -55,7 +55,7 @@
             android:id="@+id/etLoginUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="yogesh_jadhav or example@email.com"
+            android:hint="your_name or example@email.com"
             android:backgroundTint="#B3E5FC"/>
 
         <TextView

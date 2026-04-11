@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -41,26 +43,38 @@ import io.appwrite.models.DocumentList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG  = "MainActivity";
-    private static final String PREFS    = "hoppe_prefs";
+    private static final String TAG   = "MainActivity";
+    private static final String PREFS = "hoppe_prefs";
     private static final String KEY_UID  = "logged_in_user_id";
     private static final String KEY_ROLE = "logged_in_role";
 
     private ActivityResultLauncher<String[]> permissionLauncher;
 
-    // UI
+    // UI — filter buttons
     private MaterialButton btnAllCases, btnMissing, btnFound,
             btnChildren, btnAdults, btnElderly;
     private MaterialButton selectedFilterButton;
-    private BottomNavigationView bottomNav;
-    private EditText searchBar;
-    private Button btnReadMore;
-    private TextView txtMissingCases;
-    private ShapeableImageView profileImage;
-    private TextView userName;
-    private ImageButton btnNotification;
-    private ProgressBar homeProgressBar;
 
+    // UI — other
+    private BottomNavigationView bottomNav;
+    private EditText   searchBar;
+    private Button     btnReadMore;
+    private TextView   txtMissingCases;
+    private ShapeableImageView profileImage;
+    private TextView   userName;
+    private ImageButton btnNotification;
+    private ImageView homeProgressBar;
+
+    // Stats tiles
+    private TextView tvStatActive, tvStatFound, tvStatHelps;
+
+    // Achievement banner
+    private TextView tvTotalHelps, tvAchievementSubtitle;
+
+    // Share button
+    private Button btnShareApp;
+
+    // RecyclerView
     private RecyclerView casesRecyclerView;
     private ReportAdapter caseAdapter;
     private final List<ReportModel> caseList = new ArrayList<>();
@@ -68,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private String storagePermission;
     private long backPressedTime = 0;
 
+    // ─────────────────────────────────────────────────────────────────────────
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +129,9 @@ public class MainActivity extends AppCompatActivity {
         loadUserProfile();
     }
 
+    // ── Init ──────────────────────────────────────────────────────────────────
     private void proceedToInitUI() {
+        checkIfUserIsBlocked();
         setContentView(R.layout.activity_main);
         registerPermissionLauncher();
         initializeViews();
@@ -124,9 +141,11 @@ public class MainActivity extends AppCompatActivity {
         setupSearchBar();
         setupPromoCard();
         setupBackPress();
+        setupShareButton();
         loadUserProfile();
-        // ── Only load APPROVED (active) reports on home screen ──
         loadApprovedCases("all", null);
+        loadHomeStats();           // ← new: fill stats tiles + achievement banner
+        cleanupOldFoundReports();
     }
 
     private void initializeViews() {
@@ -137,30 +156,122 @@ public class MainActivity extends AppCompatActivity {
         btnAdults   = findViewById(R.id.btnAdults);
         btnElderly  = findViewById(R.id.btnElderly);
 
-        bottomNav       = findViewById(R.id.bottomNav);
-        searchBar       = findViewById(R.id.searchBar);
-        btnReadMore     = findViewById(R.id.btnReadMore);
-        txtMissingCases = findViewById(R.id.txtMissingCases);
-        profileImage    = findViewById(R.id.profileImage);
-        userName        = findViewById(R.id.userName);
-        btnNotification = findViewById(R.id.btnNotification);
-        homeProgressBar = findViewById(R.id.homeProgressBar);
+        bottomNav         = findViewById(R.id.bottomNav);
+        searchBar         = findViewById(R.id.searchBar);
+        btnReadMore       = findViewById(R.id.btnReadMore);
+        txtMissingCases   = findViewById(R.id.txtMissingCases);
+        profileImage      = findViewById(R.id.profileImage);
+        userName          = findViewById(R.id.userName);
+        btnNotification   = findViewById(R.id.btnNotification);
+        homeProgressBar   = findViewById(R.id.homeProgressBar);
         casesRecyclerView = findViewById(R.id.casesRecyclerView);
+
+        // Stats row
+        tvStatActive = findViewById(R.id.tvStatActive);
+        tvStatFound  = findViewById(R.id.tvStatFound);
+        tvStatHelps  = findViewById(R.id.tvStatHelps);
+
+        // Achievement banner
+        tvTotalHelps          = findViewById(R.id.tvTotalHelps);
+        tvAchievementSubtitle = findViewById(R.id.tvAchievementSubtitle);
+
+        // Share button
+        btnShareApp = findViewById(R.id.btnShareApp);
 
         selectedFilterButton = btnAllCases;
 
         TextView txtSeeAll      = findViewById(R.id.txtSeeAll);
         TextView txtSeeAllCases = findViewById(R.id.txtSeeAllCases);
-        if (txtSeeAll != null)
-            txtSeeAll.setOnClickListener(v -> openExplore());
-        if (txtSeeAllCases != null)
-            txtSeeAllCases.setOnClickListener(v -> openExplore());
+        if (txtSeeAll      != null) txtSeeAll.setOnClickListener(v -> openExplore());
+        if (txtSeeAllCases != null) txtSeeAllCases.setOnClickListener(v -> openExplore());
 
         if (btnNotification != null)
             btnNotification.setOnClickListener(v ->
                     startActivity(new Intent(this, NotificationActivity.class)));
     }
 
+    // ── Share button ──────────────────────────────────────────────────────────
+    private void setupShareButton() {
+        if (btnShareApp == null) return;
+        btnShareApp.setOnClickListener(v -> {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/plain");
+            share.putExtra(Intent.EXTRA_SUBJECT, "HopeConnect – Help find missing people");
+            share.putExtra(Intent.EXTRA_TEXT,
+                    "I'm using HopeConnect to help reunite missing persons with their families. "
+                            + "Join me and make a difference!\n\n"
+                            + "https://play.google.com/store/apps/details?id=com.ritesh.hoppeconnect");
+            startActivity(Intent.createChooser(share, "Share HopeConnect via"));
+        });
+    }
+
+
+    private void loadHomeStats() {
+        // Active reports count
+        new Thread(() -> {
+            try {
+                io.appwrite.services.Databases db = AppwriteService.getDatabases();
+                long  count = AppwriteHelper.listDocuments(
+                        db,
+                        AppwriteService.DB_ID,
+                        AppwriteService.COL_REPORTS,
+                        Arrays.asList(
+                                io.appwrite.Query.Companion.equal("status", "active"),
+                                io.appwrite.Query.Companion.limit(1)
+                        )).getTotal();
+
+                runOnUiThread(() -> {
+                    if (tvStatActive != null) tvStatActive.setText(String.valueOf(count));
+                });
+            } catch (Exception e) {
+                Log.w(TAG, "stats active: " + e.getMessage());
+            }
+        }).start();
+
+        // Found reports count
+        new Thread(() -> {
+            try {
+                io.appwrite.services.Databases db = AppwriteService.getDatabases();
+                long  count = AppwriteHelper.listDocuments(
+                        db,
+                        AppwriteService.DB_ID,
+                        AppwriteService.COL_REPORTS,
+                        Arrays.asList(
+                                io.appwrite.Query.Companion.equal("status", "found"),
+                                io.appwrite.Query.Companion.limit(1)
+                        )).getTotal();
+
+                runOnUiThread(() -> {
+                    if (tvStatFound != null) tvStatFound.setText(String.valueOf(count));
+                });
+            } catch (Exception e) {
+                Log.w(TAG, "stats found: " + e.getMessage());
+            }
+        }).start();
+
+        // Help records count — shown in both the stats tile and the achievement banner
+        new Thread(() -> {
+            try {
+                io.appwrite.services.Databases db = AppwriteService.getDatabases();
+                long  count = AppwriteHelper.listAllDocuments(
+                        db,
+                        AppwriteService.DB_ID,
+                        AppwriteService.COL_HELPS
+                ).getTotal();
+
+                runOnUiThread(() -> {
+                    if (tvStatHelps  != null) tvStatHelps.setText(String.valueOf(count));
+                    if (tvTotalHelps != null) tvTotalHelps.setText(String.valueOf(count));
+                    if (tvAchievementSubtitle != null)
+                        tvAchievementSubtitle.setText(" missing persons helped");
+                });
+            } catch (Exception e) {
+                Log.w(TAG, "stats helps: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    // ── RecyclerView ──────────────────────────────────────────────────────────
     private void setupCasesRecyclerView() {
         if (casesRecyclerView == null) return;
         casesRecyclerView.setLayoutManager(
@@ -180,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    // ── Back press ────────────────────────────────────────────────────────────
     private void setupBackPress() {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -202,6 +314,7 @@ public class MainActivity extends AppCompatActivity {
                 result -> Log.d(TAG, "permissions: " + result));
     }
 
+    // ── Profile ───────────────────────────────────────────────────────────────
     private void loadUserProfile() {
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
         String userId = prefs.getString(KEY_UID, null);
@@ -219,14 +332,12 @@ public class MainActivity extends AppCompatActivity {
                     doc = AppwriteHelper.getDocument(
                             AppwriteService.getDatabases(),
                             AppwriteService.DB_ID,
-                            AppwriteService.COL_USERS,
-                            userId);
+                            AppwriteService.COL_USERS, userId);
                 } catch (Exception e) {
                     doc = AppwriteHelper.getDocument(
                             AppwriteService.getDatabases(),
                             AppwriteService.DB_ID,
-                            AppwriteService.COL_ADMINS,
-                            userId);
+                            AppwriteService.COL_ADMINS, userId);
                 }
 
                 @SuppressWarnings("unchecked")
@@ -252,38 +363,78 @@ public class MainActivity extends AppCompatActivity {
                                 .into(profileImage);
                     }
                 });
-
             } catch (Exception e) {
                 Log.e(TAG, "loadUserProfile: " + e.getMessage(), e);
             }
         }).start();
     }
 
-    /**
-     * Loads ONLY approved (status = "active") or found reports.
-     * filterType: "all"      → active + found (all approved)
-     *             "missing"  → active only
-     *             "found"    → found only
-     *             "ageGroup" → approved + age filter
-     */
-    private void loadApprovedCases(String filterType, String filterValue) {
-        if (homeProgressBar != null) homeProgressBar.setVisibility(View.VISIBLE);
+    // ── Cases loader ──────────────────────────────────────────────────────────
+    private void cleanupOldFoundReports() {
+        new Thread(() -> {
+            try {
+                AppwriteService.init(getApplicationContext());
+                io.appwrite.services.Databases db = AppwriteService.getDatabases();
 
+                java.util.List<? extends io.appwrite.models.Document<?>> docs =
+                        AppwriteHelper.listDocuments(
+                                db,
+                                AppwriteService.DB_ID,
+                                AppwriteService.COL_REPORTS,
+                                java.util.Arrays.asList(
+                                        io.appwrite.Query.Companion.equal("status", "found"),
+                                        io.appwrite.Query.Companion.limit(100)
+                                )).getDocuments();
+
+                long sevenDaysMs = 7L * 24 * 60 * 60 * 1000;
+                long now         = System.currentTimeMillis();
+
+                for (io.appwrite.models.Document<?> doc : docs) {
+                    try {
+                        String iso = doc.getCreatedAt();
+                        if (iso == null || iso.length() < 10) continue;
+
+                        java.text.SimpleDateFormat sdf =
+                                new java.text.SimpleDateFormat(
+                                        "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+                                        java.util.Locale.getDefault());
+                        java.util.Date created = sdf.parse(iso);
+                        if (created == null) continue;
+
+                        if (now - created.getTime() >= sevenDaysMs) {
+                            AppwriteHelper.deleteDocument(
+                                    db, AppwriteService.DB_ID,
+                                    AppwriteService.COL_REPORTS, doc.getId());
+                            Log.d("Cleanup", "Deleted found report: " + doc.getId());
+                        }
+                    } catch (Exception docEx) {
+                        Log.w("Cleanup", "Skip doc " + doc.getId() + ": " + docEx.getMessage());
+                    }
+                }
+            } catch (Exception e) {
+                Log.w("Cleanup", "cleanupOldFoundReports: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void loadApprovedCases(String filterType, String filterValue) {
+        if (homeProgressBar != null) {
+            Glide.with(this)
+                    .asGif()
+                    .load(R.raw.loading)   // your gif filename without extension
+                    .into(homeProgressBar);
+        }
         new Thread(() -> {
             try {
                 List<String> queries = new ArrayList<>();
                 queries.add(io.appwrite.Query.Companion.orderDesc("$createdAt"));
                 queries.add(io.appwrite.Query.Companion.limit(20));
 
-                // ── Status filter — always restrict to approved reports ──
                 if ("missing".equals(filterType)) {
-                    // Active (approved missing) only
                     queries.add(io.appwrite.Query.Companion.equal("status", "active"));
                 } else if ("found".equals(filterType)) {
-                    // Found only
                     queries.add(io.appwrite.Query.Companion.equal("status", "found"));
                 } else if ("ageGroup".equals(filterType) && filterValue != null) {
-                    // Approved reports in this age group
                     queries.add(io.appwrite.Query.Companion.equal("status", "active"));
                     switch (filterValue) {
                         case "Children":
@@ -297,9 +448,6 @@ public class MainActivity extends AppCompatActivity {
                             break;
                     }
                 } else {
-                    // "all" — show both active and found (approved reports only)
-                    // Appwrite free plan doesn't support OR queries easily,
-                    // so we fetch active reports — found reports show in "Found" tab
                     queries.add(io.appwrite.Query.Companion.equal("status", "active"));
                 }
 
@@ -313,44 +461,86 @@ public class MainActivity extends AppCompatActivity {
                                         if (homeProgressBar != null)
                                             homeProgressBar.setVisibility(View.GONE);
                                     });
+
                                     if (error != null) {
-                                        Log.e(TAG, "loadApprovedCases error: "
-                                                + error.getMessage());
+                                        Log.e(TAG, "loadApprovedCases error: " + error.getMessage());
                                         return;
                                     }
+
                                     List<ReportModel> fresh = new ArrayList<>();
                                     for (io.appwrite.models.Document<Map<String, Object>> doc
                                             : result.getDocuments()) {
                                         ReportModel m = MissedFragment.parseDocument(
-                                                doc.getId(), doc.getData());
-                                        // Double-check status in memory
-                                        // (in case Appwrite index is stale)
-                                        if ("active".equals(m.status)
-                                                || "found".equals(m.status)) {
+                                                doc.getId(), doc.getData(), doc.getCreatedAt());
+                                        if ("active".equals(m.status) || "found".equals(m.status))
                                             fresh.add(m);
-                                        }
                                     }
-                                    runOnUiThread(() -> {
-                                        caseList.clear();
-                                        caseList.addAll(fresh);
-                                        if (caseAdapter != null)
-                                            caseAdapter.notifyDataSetChanged();
-                                        if (fresh.isEmpty() && txtMissingCases != null) {
-                                            Log.d(TAG, "No approved cases found");
-                                        }
-                                    });
+
+                                    if ("all".equals(filterType)) {
+                                        fetchFoundAndMerge(fresh);
+                                    } else {
+                                        runOnUiThread(() -> {
+                                            caseList.clear();
+                                            caseList.addAll(fresh);
+                                            if (caseAdapter != null)
+                                                caseAdapter.notifyDataSetChanged();
+                                        });
+                                    }
                                 })
                 );
             } catch (Exception e) {
                 Log.e(TAG, "loadApprovedCases exception: " + e.getMessage(), e);
                 runOnUiThread(() -> {
-                    if (homeProgressBar != null)
-                        homeProgressBar.setVisibility(View.GONE);
+                    if (homeProgressBar != null) homeProgressBar.setVisibility(View.GONE);
                 });
             }
         }).start();
     }
 
+    private void fetchFoundAndMerge(List<ReportModel> activeList) {
+        try {
+            List<String> foundQueries = new ArrayList<>();
+            foundQueries.add(io.appwrite.Query.Companion.equal("status", "found"));
+            foundQueries.add(io.appwrite.Query.Companion.orderDesc("$createdAt"));
+            foundQueries.add(io.appwrite.Query.Companion.limit(10));
+
+            AppwriteService.getDatabases().listDocuments(
+                    AppwriteService.DB_ID,
+                    AppwriteService.COL_REPORTS,
+                    foundQueries,
+                    new CoroutineCallback<DocumentList<Map<String, Object>>>(
+                            (foundResult, foundError) -> {
+                                List<ReportModel> merged = new ArrayList<>(activeList);
+
+                                if (foundError == null && foundResult != null) {
+                                    for (io.appwrite.models.Document<Map<String, Object>> doc
+                                            : foundResult.getDocuments()) {
+                                        ReportModel m = MissedFragment.parseDocument(
+                                                doc.getId(), doc.getData(), doc.getCreatedAt());
+                                        merged.add(m);
+                                    }
+                                }
+
+                                merged.sort((a, b) -> Long.compare(b.createdAt, a.createdAt));
+
+                                runOnUiThread(() -> {
+                                    caseList.clear();
+                                    caseList.addAll(merged);
+                                    if (caseAdapter != null) caseAdapter.notifyDataSetChanged();
+                                });
+                            })
+            );
+        } catch (Exception e) {
+            Log.e(TAG, "fetchFoundAndMerge: " + e.getMessage(), e);
+            runOnUiThread(() -> {
+                caseList.clear();
+                caseList.addAll(activeList);
+                if (caseAdapter != null) caseAdapter.notifyDataSetChanged();
+            });
+        }
+    }
+
+    // ── Search ────────────────────────────────────────────────────────────────
     private void setupSearchBar() {
         if (searchBar == null) return;
         searchBar.addTextChangedListener(new TextWatcher() {
@@ -365,9 +555,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Searches only within approved reports.
-     */
     private void searchApprovedCases(String query) {
         new Thread(() -> {
             try {
@@ -383,25 +570,21 @@ public class MainActivity extends AppCompatActivity {
                         new CoroutineCallback<DocumentList<Map<String, Object>>>(
                                 (result, error) -> {
                                     if (error != null) {
-                                        Log.e(TAG, "searchApprovedCases error: "
-                                                + error.getMessage());
+                                        Log.e(TAG, "searchApprovedCases error: " + error.getMessage());
                                         return;
                                     }
                                     List<ReportModel> found = new ArrayList<>();
                                     for (io.appwrite.models.Document<Map<String, Object>> doc
                                             : result.getDocuments()) {
                                         ReportModel m = MissedFragment.parseDocument(
-                                                doc.getId(), doc.getData());
-                                        if ("active".equals(m.status)
-                                                || "found".equals(m.status)) {
+                                                doc.getId(), doc.getData(), doc.getCreatedAt());
+                                        if ("active".equals(m.status) || "found".equals(m.status))
                                             found.add(m);
-                                        }
                                     }
                                     runOnUiThread(() -> {
                                         caseList.clear();
                                         caseList.addAll(found);
-                                        if (caseAdapter != null)
-                                            caseAdapter.notifyDataSetChanged();
+                                        if (caseAdapter != null) caseAdapter.notifyDataSetChanged();
                                     });
                                 })
                 );
@@ -411,6 +594,7 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
+    // ── Filter buttons ────────────────────────────────────────────────────────
     private void setupFilterButtons() {
         List<MaterialButton> all = new ArrayList<>();
         all.add(btnAllCases); all.add(btnMissing); all.add(btnFound);
@@ -459,10 +643,8 @@ public class MainActivity extends AppCompatActivity {
                     ContextCompat.getColor(this, R.color.filter_icon_unselected)));
         }
         if (selected == null) return;
-        selected.setBackgroundColor(
-                ContextCompat.getColor(this, R.color.filter_bg_selected));
-        selected.setTextColor(
-                ContextCompat.getColor(this, R.color.filter_text_selected));
+        selected.setBackgroundColor(ContextCompat.getColor(this, R.color.filter_bg_selected));
+        selected.setTextColor(ContextCompat.getColor(this, R.color.filter_text_selected));
         selected.setStrokeColor(ColorStateList.valueOf(Color.TRANSPARENT));
         selected.setIconTint(ColorStateList.valueOf(
                 selected.getId() == R.id.btnAllCases
@@ -471,6 +653,7 @@ public class MainActivity extends AppCompatActivity {
         selectedFilterButton = selected;
     }
 
+    // ── Bottom navigation ─────────────────────────────────────────────────────
     private void setupBottomNavigation() {
         if (bottomNav == null) return;
         bottomNav.setSelectedItemId(R.id.nav_home);
@@ -495,6 +678,59 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // ── Blocked user ──────────────────────────────────────────────────────────
+    private void checkIfUserIsBlocked() {
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String userId = prefs.getString(KEY_UID, null);
+        if (userId == null) return;
+
+        new Thread(() -> {
+            try {
+                io.appwrite.services.Databases db = AppwriteService.getDatabases();
+                io.appwrite.models.Document<?> doc =
+                        AppwriteHelper.getDocument(
+                                db, AppwriteService.DB_ID,
+                                AppwriteService.COL_USERS, userId);
+
+                @SuppressWarnings("unchecked")
+                Map<String, Object> data = (Map<String, Object>) doc.getData();
+                String status = data.get("status") != null
+                        ? data.get("status").toString() : "active";
+
+                if ("suspended".equals(status))
+                    runOnUiThread(this::forceLogoutBlocked);
+
+            } catch (Exception e) {
+                Log.w(TAG, "checkIfUserIsBlocked: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    private void forceLogoutBlocked() {
+        SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
+        prefs.edit().clear().apply();
+
+        new Thread(() -> {
+            try { AppwriteHelper.deleteCurrentSession(AppwriteService.getAccount()); }
+            catch (Exception ignored) {}
+        }).start();
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Account Suspended")
+                .setMessage("Your account has been suspended by an administrator. "
+                        + "You no longer have access to HopeConnect.")
+                .setCancelable(false)
+                .setPositiveButton("OK", (d, w) -> {
+                    Intent i = new Intent(this, LoginActivity.class);
+                    i.putExtra("explicit_login", true);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
+                })
+                .show();
+    }
+
+    // ── Promo card ────────────────────────────────────────────────────────────
     private void setupPromoCard() {
         if (btnReadMore != null)
             btnReadMore.setOnClickListener(v ->

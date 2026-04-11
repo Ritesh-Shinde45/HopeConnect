@@ -46,6 +46,11 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterPageBinding binding;
     private GoogleSignInClient  googleSignInClient;
 
+    // ── Google auth gate ──────────────────────────────────────────────────────
+    // Set to true only after a successful Google Sign-In in this session.
+    // The Sign Up button is disabled until this flag is true.
+    private boolean googleAuthCompleted = false;
+
     // ── Google Sign-In launcher ───────────────────────────────────────────────
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(
@@ -75,19 +80,64 @@ public class RegisterActivity extends AppCompatActivity {
         setupPasswordStrengthWatcher();
         setupClickListeners();
         prefillFromIntent();
+        applyGoogleGate();  // lock UI until Google auth done
     }
 
-    // ── Pre-fill from Google intent ───────────────────────────────────────────
+    // ── Lock/unlock the form based on googleAuthCompleted ────────────────────
+    /**
+     * When Google auth is NOT yet completed:
+     *   • Sign Up button is disabled and shows a hint
+     *   • Email field is read-only (will be filled by Google)
+     *   • All other fields are editable so users can browse, but submit is gated
+     *
+     * When Google auth IS completed:
+     *   • Email is locked (cannot be changed after Google sets it)
+     *   • Sign Up button becomes active
+     */
+    private void applyGoogleGate() {
+        if (!googleAuthCompleted) {
+            // Disable Sign Up button with explanatory hint
+            binding.btnSignUp.setEnabled(false);
+            binding.btnSignUp.setAlpha(0.5f);
+            binding.btnSignUp.setText("Sign in with Google first");
+
+            // Email is set by Google — make it non-editable and show hint
+            binding.etEmail.setFocusable(false);
+            binding.etEmail.setFocusableInTouchMode(false);
+            binding.etEmail.setClickable(false);
+            binding.etEmail.setHint("Filled automatically after Google sign-in");
+            binding.etEmail.setAlpha(0.6f);
+
+        } else {
+            // Google done — enable form submission
+            binding.btnSignUp.setEnabled(true);
+            binding.btnSignUp.setAlpha(1.0f);
+            binding.btnSignUp.setText("SIGNUP");
+
+            // Lock the email so the user cannot change what Google provided
+            binding.etEmail.setFocusable(false);
+            binding.etEmail.setFocusableInTouchMode(false);
+            binding.etEmail.setClickable(false);
+            binding.etEmail.setAlpha(0.85f);
+        }
+    }
+
+    // ── Pre-fill from Google intent (called when navigated from LoginActivity) ─
     private void prefillFromIntent() {
         String googleEmail = getIntent().getStringExtra("google_email");
         String googleName  = getIntent().getStringExtra("google_name");
-        if (googleEmail != null) binding.etEmail.setText(googleEmail);
-        if (googleName  != null) {
-            binding.etName.setText(googleName);
-            binding.etUsername.setText(
-                    googleName.toLowerCase(Locale.ROOT)
-                            .replace(" ", "_")
-                            .replaceAll("[^a-z0-9_]", ""));
+        if (googleEmail != null) {
+            binding.etEmail.setText(googleEmail);
+            binding.etName.setText(googleName != null ? googleName : "");
+            if (googleName != null) {
+                binding.etUsername.setText(
+                        googleName.toLowerCase(Locale.ROOT)
+                                .replace(" ", "_")
+                                .replaceAll("[^a-z0-9_]", ""));
+            }
+            // Treat a pre-filled Google intent as having already authenticated
+            googleAuthCompleted = true;
+            applyGoogleGate();
         }
     }
 
@@ -120,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
                         AppwriteHelper.findUserByField(db, col, "email", email).getDocuments();
 
                 if (!docs.isEmpty()) {
-                    // Already registered — restore session
+                    // Already registered — restore session and navigate directly
                     Document<?> doc = docs.get(0);
                     @SuppressWarnings("unchecked")
                     Map<String, Object> data = (Map<String, Object>) doc.getData();
@@ -139,21 +189,28 @@ public class RegisterActivity extends AppCompatActivity {
                                 "Welcome back, " + name + "!", Toast.LENGTH_SHORT).show();
                         navigateTo(role);
                     });
+
                 } else {
-                    // Not registered yet — pre-fill the form
+                    // New user — pre-fill form fields and unlock the Sign Up button
                     Log.d(TAG, "Google user not found in DB — pre-filling registration form");
+                    googleSignInClient.signOut();
+
                     runOnUiThread(() -> {
                         setLoading(false);
-                        googleSignInClient.signOut();
+
                         binding.etEmail.setText(email);
                         binding.etName.setText(displayName);
                         binding.etUsername.setText(
                                 displayName.toLowerCase(Locale.ROOT)
                                         .replace(" ", "_")
                                         .replaceAll("[^a-z0-9_]", ""));
+
+                        // ── Unlock the form ───────────────────────────────────
+                        googleAuthCompleted = true;
+                        applyGoogleGate();
+
                         Toast.makeText(this,
-                                "Details filled from Google. "
-                                        + "Set a password and address to complete.",
+                                "Google verified ✓  Set a password & address to complete sign-up.",
                                 Toast.LENGTH_LONG).show();
                     });
                 }
@@ -229,7 +286,16 @@ public class RegisterActivity extends AppCompatActivity {
                 googleSignInClient.signOut().addOnCompleteListener(t ->
                         googleSignInLauncher.launch(googleSignInClient.getSignInIntent())));
 
-        binding.btnSignUp.setOnClickListener(v -> attemptRegistration());
+        binding.btnSignUp.setOnClickListener(v -> {
+            // Double-check gate in case somehow the button is tapped while disabled
+            if (!googleAuthCompleted) {
+                Toast.makeText(this,
+                        "Please sign in with Google first to verify your identity.",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+            attemptRegistration();
+        });
 
         binding.tvSignIn.setOnClickListener(v -> {
             Intent i = new Intent(this, LoginActivity.class);
@@ -252,11 +318,18 @@ public class RegisterActivity extends AppCompatActivity {
         // ── Validation ────────────────────────────────────────────────────────
         if (name.isEmpty())     { binding.etName.setError("Required");     return; }
         if (username.isEmpty()) { binding.etUsername.setError("Required"); return; }
+        // Mobile is optional but must be valid if provided
         if (!mobile.isEmpty() && !mobile.matches("\\d{10}")) {
             binding.etMobile.setError("Enter a valid 10-digit number"); return;
         }
+        // Email is set by Google — just sanity-check it is present
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.etEmail.setError("Valid email required"); return;
+            Toast.makeText(this,
+                    "Email is missing. Please sign in with Google again.",
+                    Toast.LENGTH_LONG).show();
+            googleAuthCompleted = false;
+            applyGoogleGate();
+            return;
         }
         if (!isPasswordStrong(password)) {
             binding.etPass.setError(
@@ -318,12 +391,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // ── Create Appwrite auth account + session + verification email
-                // createAccountAndSignIn() handles all three steps in order:
-                //   1. account.create()
-                //   2. createEmailPasswordSession()
-                //   3. account.createVerification("https://cloud.appwrite.io")
-                // Check Logcat tag "AppwriteService" to see if step 3 succeeds.
+                // ── Create Appwrite auth account + session + verification email ─
                 boolean authAlreadyExists = false;
                 try {
                     Log.d(TAG, "Calling createAccountAndSignIn for email=" + email);
@@ -332,7 +400,6 @@ public class RegisterActivity extends AppCompatActivity {
                 } catch (AppwriteException ae) {
                     Log.w(TAG, "AppwriteException during account creation: code="
                             + ae.getCode() + "  msg=" + ae.getMessage());
-                    // Code 409 = user_already_exists in Appwrite auth
                     if (ae.getCode() == 409
                             || (ae.getMessage() != null
                             && ae.getMessage().toLowerCase().contains("already"))) {
@@ -379,15 +446,10 @@ public class RegisterActivity extends AppCompatActivity {
                         navigateTo("admin");
                     });
                 } else {
-                    // Normal user: redirect to login and ask them to verify email first.
                     runOnUiThread(() -> {
                         setLoading(false);
                         Toast.makeText(this,
-                                "Account created!\n"
-                                        + "A verification link has been sent to:\n"
-                                        + email + "\n"
-                                        + "Check your inbox (and spam folder), "
-                                        + "then log in.",
+                                "Account created! Please log in.",
                                 Toast.LENGTH_LONG).show();
                         Intent i = new Intent(this, LoginActivity.class);
                         i.putExtra("explicit_login", true);
@@ -444,7 +506,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void setLoading(boolean loading) {
         runOnUiThread(() -> {
-            binding.btnSignUp.setEnabled(!loading);
+            binding.btnSignUp.setEnabled(!loading && googleAuthCompleted);
             binding.btnSignUp.setText(loading ? "Registering..." : "SIGNUP");
             binding.progressBar.setVisibility(loading ? View.VISIBLE : View.GONE);
         });

@@ -1,0 +1,3 @@
+<resources>
+    <dimen name="grid_spacing">12dp</dimen>
+</resources>

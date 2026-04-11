@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="12dp"
+    android:padding="16dp"
     android:background="?attr/selectableItemBackground">
 
     <TextView
@@ -57,8 +57,8 @@
     <Button
         android:id="@+id/btn_row_approve"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="70dp"
-        android:layout_height="30dp"
+        android:layout_width="84dp"
+        android:layout_height="48dp"
         android:text="Approve"
         android:textSize="10sp"
         android:backgroundTint="@color/status_success"
@@ -67,8 +67,8 @@
     <Button
         android:id="@+id/btn_row_flag"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="50dp"
-        android:layout_height="30dp"
+        android:layout_width="62dp"
+        android:layout_height="48dp"
         android:text="Flag"
         android:textSize="10sp"
         android:strokeColor="@color/status_danger"

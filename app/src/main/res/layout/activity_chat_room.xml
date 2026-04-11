@@ -4,17 +4,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECE5DD">
+    android:background="#ECE5DD"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:id="@+id/statusBarSpacer"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#4A4E9D"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Header -->
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:background="#075E54"
+        android:layout_height="60dp"
+        android:background="#4A4E9D"
         android:paddingStart="8dp"
         android:paddingEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statusBarSpacer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -38,7 +48,7 @@
             android:layout_marginStart="4dp"
             android:src="@drawable/person_placeholder"/>
 
-        <!-- Fallback text avatar (shown when no photo) -->
+        <!-- Fallback text avatar -->
         <TextView
             android:id="@+id/tvAvatar"
             android:layout_width="40dp"
@@ -53,7 +63,7 @@
             android:background="@drawable/circle_indicator"
             android:visibility="gone"/>
 
-        <!-- Name + username -->
+        <!-- Name + subtitle -->
         <LinearLayout
             android:id="@+id/nameBlock"
             android:layout_width="wrap_content"
@@ -93,72 +103,6 @@
             app:tint="#FFFFFF"/>
     </RelativeLayout>
 
-    <!-- Messages list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvMessages"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toTopOf="@id/inputBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-    <!-- Input bar -->
-    <LinearLayout
-        android:id="@+id/inputBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="6dp"
-        android:background="#F0F0F0"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Attach button -->
-        <ImageButton
-            android:id="@+id/btnAttach"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_add"
-            android:padding="8dp"/>
-
-        <!-- Message input -->
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_message_input"
-            android:hint="Type a message"
-            android:textSize="15sp"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:maxLines="4"
-            android:inputType="textMultiLine|textCapSentences"
-            android:imeOptions="actionSend"
-            android:layout_marginStart="6dp"
-            android:layout_marginEnd="6dp"/>
-
-        <!-- Send button -->
-        <ImageButton
-            android:id="@+id/btnSend"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_send_btn"
-            android:src="@drawable/ic_send"
-            android:padding="10dp"
-            android:visibility="gone"/>
-
-    </LinearLayout>
-
     <!-- Attachment panel (shown above input bar) -->
     <LinearLayout
         android:id="@+id/attachPanel"
@@ -186,7 +130,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_photo"
-                app:tint="#2563EB"/>
+                app:tint="#4A4E9D"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -209,7 +153,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_document"
-                app:tint="#2563EB"/>
+                app:tint="#4A4E9D"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -231,7 +175,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_location_small"
-                app:tint="#2563EB"/>
+                app:tint="#4A4E9D"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -242,5 +186,68 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <!-- Input bar — pinned to bottom -->
+    <LinearLayout
+        android:id="@+id/inputBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="6dp"
+        android:background="#F0F0F0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnAttach"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_add"
+            android:padding="8dp"/>
+
+        <EditText
+            android:id="@+id/etMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_message_input"
+            android:hint="Type a message"
+            android:textSize="15sp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:maxLines="4"
+            android:inputType="textMultiLine|textCapSentences"
+            android:imeOptions="actionSend"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"/>
+
+        <ImageButton
+            android:id="@+id/btnSend"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/circle_send_btn"
+            android:src="@drawable/ic_send"
+            android:padding="10dp"
+            android:visibility="gone"/>
+
+    </LinearLayout>
+
+    <!-- Messages list — fills space between header and input bar -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMessages"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/attachPanel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

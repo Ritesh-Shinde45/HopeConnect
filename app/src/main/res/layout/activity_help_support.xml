@@ -5,14 +5,12 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5"
     android:orientation="vertical">
+
     <View
-        android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#4A4E9D"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:background="#4A4E9D" />
+
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -33,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Help and Support"
+            android:text="Help &amp; Support"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -49,14 +47,13 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Contact Support Card -->
+            <!-- How to Use the App -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -67,125 +64,309 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Contact Support"
+                        android:text="How to Use HopeConnect"
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <!-- Email Support -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="4dp"
+                        android:text="HopeConnect works in 6 simple steps. Here's everything you need to know to get started."
+                        android:textColor="#757575"
+                        android:textSize="14sp" />
+
+                    <!-- Step 1 -->
                     <LinearLayout
-                        android:id="@+id/layoutEmailSupport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_email"
-                            app:tint="#4A4E9D" />
-
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="1"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Email Us"
+                                android:text="Register &amp; Verify Your Email"
                                 android:textColor="#212121"
-                                android:textSize="16sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="riteshshinde472@gmail.com"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Open the app and sign up with your email and a strong password. You'll receive a verification email — confirm it to activate your account. No phone number or SIM card required."
                                 android:textColor="#757575"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
                         </LinearLayout>
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_arrow_forward"
-                            app:tint="#757575" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                    <View android:layout_width="1dp" android:layout_height="20dp"
+                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
 
-                    <!-- Phone Support -->
+                    <!-- Step 2 -->
                     <LinearLayout
-                        android:id="@+id/layoutPhoneSupport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_phone"
-                            app:tint="#4A4E9D" />
-
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="2"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
+                            android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Call Us"
+                                android:text="Browse the Missing Persons Feed"
                                 android:textColor="#212121"
-                                android:textSize="16sp"
+                                android:textSize="15sp"
                                 android:textStyle="bold" />
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="+918080769308"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Go to the Explore screen to see all active missing person cases. Use the search bar to find by name, or filter by Age Group (Children / Adults / Elderly) and Status (Missing / Found / All)."
                                 android:textColor="#757575"
-                                android:textSize="14sp" />
+                                android:textSize="13sp" />
                         </LinearLayout>
+                    </LinearLayout>
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/ic_arrow_forward"
-                            app:tint="#757575" />
+                    <View android:layout_width="1dp" android:layout_height="20dp"
+                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+
+                    <!-- Step 3 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="3"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Report a Missing Person"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Tap the '+' button to submit a report. Fill in the missing person's full name, age, gender, last known location (auto-tagged via GPS), up to 5 photos, 3 emergency contact numbers, and any additional details. You can also attach an FIR document. Once submitted, an admin reviews and approves the report before it goes public."
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View android:layout_width="1dp" android:layout_height="20dp"
+                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+
+                    <!-- Step 4 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="4"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Spotted Someone? Flag It"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:lineSpacingExtra="3dp"
+                                android:text="If you recognize someone from a report, open their case and tap 'I Have Seen This Person'. Enter details about the sighting — where and when. A notification is instantly sent to the person who filed the report. This triggers a direct chat between you and the reporter."
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View android:layout_width="1dp" android:layout_height="20dp"
+                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+
+                    <!-- Step 5 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="5"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Chat Safely &amp; Coordinate"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Use the in-app chat to communicate with reporters or witnesses. No phone numbers are shared — everything stays within HopeConnect. Messages are delivered in real time via Appwrite Realtime, and your full chat history is saved securely."
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View android:layout_width="1dp" android:layout_height="20dp"
+                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+
+                    <!-- Step 6 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_step_circle"
+                            android:gravity="center"
+                            android:text="6"
+                            android:textColor="#FFFFFF"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Case Resolved — Mark It Found"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:lineSpacingExtra="3dp"
+                                android:text="Once the person is found, the reporter confirms the resolution in the app. The case is marked as 'Found' and the helper who flagged the sighting earns points on their profile. The admin then officially closes the case."
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- FAQ Section -->
+            <!-- Notifications Guide -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@color/white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Understanding Notifications"
+                        android:textColor="#212121"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:lineSpacingExtra="5dp"
+                        android:text="HopeConnect keeps you informed in real time:\n\n🔔  Sighting Alert — Someone flagged 'I have seen this person' on your report\n💬  New Message — A chat message from a reporter or witness\n📢  Announcement — Admin broadcast about important updates or search alerts\n✅  Report Approved — Your submitted report has been reviewed and approved\n❌  Report Rejected — Your report was flagged for review (an admin will explain why)"
+                        android:textColor="#424242"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
+            <!-- FAQ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -202,141 +383,183 @@
                         android:textStyle="bold" />
 
                     <!-- FAQ 1 -->
+                    <LinearLayout android:id="@+id/layoutFaq1"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Why is my report not showing publicly yet?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="All reports are reviewed by an admin before going live. This usually takes a few hours. You will receive a notification once it is approved or if any changes are needed."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+
+                    <!-- FAQ 2 -->
+                    <LinearLayout android:id="@+id/layoutFaq2"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="How does the face matching work?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="Face matching uses MobileFaceNet (an AI model) running directly on your device. It compares photos to find potential matches. This feature is currently in development and will be available in a future update."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+
+                    <!-- FAQ 3 -->
+                    <LinearLayout android:id="@+id/layoutFaq3"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Is my personal phone number shared when I chat?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="No. All communication happens inside the app. Your personal contact details are never shared with other users. You only see the other person's in-app username."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+
+                    <!-- FAQ 4 -->
+                    <LinearLayout android:id="@+id/layoutFaq4"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Can I edit or delete my report after submitting?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="You can view your submitted reports from your profile. To edit or remove a report, please contact us at riteshshinde472@gmail.com with your case details."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+
+                    <!-- FAQ 5 -->
+                    <LinearLayout android:id="@+id/layoutFaq5"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="How do I reset my password?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="On the Login screen, tap 'Forgot Password'. Enter your registered email and you'll receive a reset link. Follow the link to set a new password."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+
+                    <!-- FAQ 6 -->
+                    <LinearLayout android:id="@+id/layoutFaq6"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp" android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" android:focusable="true" android:padding="4dp">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="How do I delete my account?"
+                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:text="Contact us at riteshshinde472@gmail.com to request account deletion. We process all deletion requests within 48 hours. Your data will be permanently removed."
+                            android:textColor="#757575" android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Contact Support -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@color/white">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Contact Support"
+                        android:textColor="#212121"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <!-- Email -->
                     <LinearLayout
-                        android:id="@+id/layoutFaq1"
+                        android:id="@+id/layoutEmailSupport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="How do I reset my password?"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="Go to Profile > Account Settings > Change Password. Enter your current password and choose a new one."
-                            android:textColor="#757575"
-                            android:textSize="14sp" />
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                            android:src="@drawable/ic_email" app:tint="#4A4E9D" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Email Us" android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp" android:text="riteshshinde472@gmail.com"
+                                android:textColor="#757575" android:textSize="13sp" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                    <View android:layout_width="match_parent" android:layout_height="1dp"
+                        android:background="#E0E0E0" android:layout_marginTop="8dp" android:layout_marginBottom="8dp"/>
 
-                    <!-- FAQ 2 -->
+                    <!-- Phone -->
                     <LinearLayout
-                        android:id="@+id/layoutFaq2"
+                        android:id="@+id/layoutPhoneSupport"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="How do I update my profile information?"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="Navigate to Profile > Edit Profile. You can update your name, email, phone number, location, and bio."
-                            android:textColor="#757575"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
-
-                    <!-- FAQ 3 -->
-                    <LinearLayout
-                        android:id="@+id/layoutFaq3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="How do I manage notifications?"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="Go to Profile > Account Settings > Notifications. Toggle switches to customize which notifications you receive."
-                            android:textColor="#757575"
-                            android:textSize="14sp" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
-
-                    <!-- FAQ 4 -->
-                    <LinearLayout
-                        android:id="@+id/layoutFaq4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical"
-                        android:padding="12dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="How do I delete my account?"
-                            android:textColor="#212121"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:lineSpacingExtra="4dp"
-                            android:text="Please contact our support team at riteshshinde472@gmail.com to request account deletion. We'll process your request within 48 hours."
-                            android:textColor="#757575"
-                            android:textSize="14sp" />
+                        <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                            android:src="@drawable/ic_phone" app:tint="#4A4E9D" />
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Call Us" android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp" android:text="+91 8080769308"
+                                android:textColor="#757575" android:textSize="13sp" />
+                        </LinearLayout>
+                        <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -345,10 +568,9 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="24dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
-
                 <LinearLayout
                     android:id="@+id/layoutReportProblem"
                     android:layout_width="match_parent"
@@ -357,33 +579,19 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:orientation="horizontal"
-                    android:padding="20dp"
-                    >
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_report"
-                        app:tint="#E53935" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                    android:padding="20dp">
+                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                        android:src="@drawable/ic_report" app:tint="#E53935" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="16dp"
-                        android:layout_weight="1"
+                        android:layout_marginStart="16dp" android:layout_weight="1"
                         android:text="Report a Problem"
-                        android:textColor="#212121"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_arrow_forward"
-                        app:tint="#757575" />
+                        android:textColor="#212121" android:textSize="16sp" android:textStyle="bold" />
+                    <ImageView android:layout_width="20dp" android:layout_height="20dp"
+                        android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
