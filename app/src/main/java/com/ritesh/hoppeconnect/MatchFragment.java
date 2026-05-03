@@ -485,9 +485,6 @@ public class MatchFragment extends Fragment {
         return all;
     }
 
-   
-   
-   
 
     private String resolveUrl(String val) {
         if (!val.startsWith("http")) return buildViewUrl(val);

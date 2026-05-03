@@ -182,6 +182,9 @@ public class MainActivity extends AppCompatActivity {
 
         TextView txtSeeAll      = findViewById(R.id.txtSeeAll);
         TextView txtSeeAllCases = findViewById(R.id.txtSeeAllCases);
+        if (profileImage != null) {
+            profileImage.setOnClickListener(v -> startActivity(new Intent(this, ProfileActivity.class)));
+        }
         if (txtSeeAll      != null) txtSeeAll.setOnClickListener(v -> openExplore());
         if (txtSeeAllCases != null) txtSeeAllCases.setOnClickListener(v -> openExplore());
 
@@ -189,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
             btnNotification.setOnClickListener(v ->
                     startActivity(new Intent(this, NotificationActivity.class)));
     }
+
+
 
    
     private void setupShareButton() {
@@ -200,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             share.putExtra(Intent.EXTRA_TEXT,
                     "I'm using HopeConnect to help reunite missing persons with their families. "
                             + "Join me and make a difference!\n\n"
-                            + "https://play.google.com/store/apps/details?id=com.ritesh.hoppeconnect");
+                            + "https://github.com/Ritesh-Shinde45/HopeConnect-App/releases/download/v1.0.0/HopeConnect.apk");
             startActivity(Intent.createChooser(share, "Share HopeConnect via"));
         });
     }
@@ -358,8 +363,8 @@ public class MainActivity extends AppCompatActivity {
                         Glide.with(MainActivity.this)
                                 .load(url)
                                 .circleCrop()
-                                .placeholder(R.drawable.profile_placeholder)
-                                .error(R.drawable.profile_placeholder)
+                                .placeholder(R.drawable.person_placeholder)
+                                .error(R.drawable.person_placeholder)
                                 .into(profileImage);
                     }
                 });
@@ -540,17 +545,47 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-   
+
+
+
     private void setupSearchBar() {
         if (searchBar == null) return;
+
+        // Search on keyboard Search/Done button press
+        searchBar.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
+                    || actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+                    || (event != null
+                    && event.getKeyCode() == android.view.KeyEvent.KEYCODE_ENTER
+                    && event.getAction() == android.view.KeyEvent.ACTION_DOWN)) {
+
+                String q = searchBar.getText().toString().trim();
+
+                // Hide keyboard after search
+                android.view.inputmethod.InputMethodManager imm =
+                        (android.view.inputmethod.InputMethodManager)
+                                getSystemService(INPUT_METHOD_SERVICE);
+                if (imm != null) imm.hideSoftInputFromWindow(searchBar.getWindowToken(), 0);
+
+                if (q.isEmpty()) {
+                    loadApprovedCases("all", null);
+                } else {
+                    searchApprovedCases(q);
+                }
+                return true;
+            }
+            return false;
+        });
+
+        // Clear search when text is deleted back to empty
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
             @Override public void afterTextChanged(Editable s) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String q = s.toString().trim();
-                if (q.isEmpty()) loadApprovedCases("all", null);
-                else searchApprovedCases(q);
+                if (s.toString().trim().isEmpty()) {
+                    loadApprovedCases("all", null);
+                }
             }
         });
     }

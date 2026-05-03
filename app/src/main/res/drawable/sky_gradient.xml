@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/sky_gradient.xml -->
+<!-- Used as an overlay that fades in during bird flight to simulate sky brightening -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:type="linear"
+        android:angle="270"
+        android:startColor="#0A1628"
+        android:centerColor="#0D1C3A"
+        android:endColor="#0D1421" />
+</shape>

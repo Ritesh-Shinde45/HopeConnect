@@ -17,7 +17,18 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <queries>
+        <package android:name="com.linkedin.android" />
+        <package android:name="com.github.android" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
@@ -85,7 +96,6 @@
         <!-- Auth screens -->
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".ForgotPasswordActivity" />
 
         <!-- Admin Dashboard -->
         <activity
@@ -106,7 +116,6 @@
         <activity android:name=".BuyTeaActivity" />
         <activity android:name=".TechnologyWithHumanityActivity" />
         <activity android:name=".NotificationActivity"/>
-        <activity android:name=".BucketDebugActivity" />
         <activity
             android:name=".ChatRoomActivity"
             android:windowSoftInputMode="adjustResize" />

@@ -22,7 +22,7 @@
             android:id="@+id/tvMessageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#1A1A1A"
+            android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:lineSpacingExtra="2dp"
             android:visibility="gone" />
@@ -41,7 +41,7 @@
             android:id="@+id/tvFileMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#3F51B5"
+            android:textColor="#A5F294"
             android:textSize="14sp"
             android:drawableStart="@android:drawable/ic_menu_share"
             android:drawablePadding="6dp"
@@ -52,7 +52,7 @@
             android:id="@+id/tvLocationMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#3F51B5"
+            android:textColor="#A5F294"
             android:textSize="14sp"
             android:visibility="gone" />
 

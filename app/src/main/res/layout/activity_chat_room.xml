@@ -30,8 +30,8 @@
 
         <ImageView
             android:id="@+id/ivBack"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:padding="6dp"
@@ -46,7 +46,7 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@id/ivBack"
             android:layout_marginStart="4dp"
-            android:src="@drawable/person_placeholder"/>
+            android:src="@drawable/person_placeholder_white"/>
 
         <!-- Fallback text avatar -->
         <TextView
@@ -60,8 +60,9 @@
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:background="@drawable/circle_indicator"
-            android:visibility="gone"/>
+
+            android:background="@drawable/person_placeholder_white"
+            />
 
         <!-- Name + subtitle -->
         <LinearLayout
@@ -94,8 +95,8 @@
         <!-- Call button -->
         <ImageView
             android:id="@+id/ivCall"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:padding="4dp"
@@ -198,12 +199,13 @@
         android:background="#F0F0F0"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp">
 
         <ImageButton
             android:id="@+id/btnAttach"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_add"
             android:padding="8dp"/>
@@ -240,6 +242,7 @@
     <!-- Messages list — fills space between header and input bar -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMessages"
+        android:background="@drawable/chat_page_wallpaper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:paddingTop="8dp"

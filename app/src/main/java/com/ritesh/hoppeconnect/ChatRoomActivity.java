@@ -20,6 +20,7 @@ import android.view.WindowInsetsController;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,7 +110,6 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         binding = ActivityChatRoomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -130,38 +130,36 @@ public class ChatRoomActivity extends AppCompatActivity {
             return;
         }
 
-       
+        // Set name
         binding.tvOtherName.setText(
                 otherName != null && !otherName.isEmpty() ? otherName : "User");
         binding.tvOtherUsername.setText("loading...");
 
-       
+        // FIX 2: Always show tvAvatar initially, hide ivAvatar
+        // until we confirm a real photo exists
         String initial = (otherName != null && !otherName.isEmpty())
                 ? String.valueOf(otherName.charAt(0)).toUpperCase(Locale.ROOT) : "?";
-        binding.tvAvatar.setText(initial);
         binding.tvAvatar.setVisibility(View.VISIBLE);
-        binding.ivAvatar.setVisibility(View.GONE);
+        binding.ivAvatar.setVisibility(View.GONE);   // hidden until photo loads
 
         binding.ivBack.setOnClickListener(v -> finish());
 
-       
         loadOtherUserProfile();
-
         setupRecycler();
         setupInput();
         setupAttachmentPanel();
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             getWindow().getInsetsController().setSystemBarsAppearance(
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
-            );
+                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS);
         }
     }
 
     @Override protected void onResume() { super.onResume(); pollHandler.post(pollRunnable); }
     @Override protected void onPause()  { super.onPause();  pollHandler.removeCallbacks(pollRunnable); }
 
-   
+    // ── Profile ──────────────────────────────────────────────────────────────
     private void loadOtherUserProfile() {
         if (otherUserId == null || otherUserId.isEmpty()) return;
 
@@ -186,18 +184,28 @@ public class ChatRoomActivity extends AppCompatActivity {
                 final String finalPhotoId  = photoId;
 
                 runOnUiThread(() -> {
+                    // Always update name and username text
                     binding.tvOtherName.setText(finalName);
                     binding.tvOtherUsername.setText(
                             finalUsername.isEmpty() ? "tap to view info" : "@" + finalUsername);
 
                     if (!finalPhotoId.isEmpty()) {
+                        // Has photo: show ivAvatar, hide tvAvatar
+                        // nameBlock is already anchored to ivAvatar in XML — correct position
+                        binding.ivAvatar.setVisibility(View.VISIBLE);
+                        binding.tvAvatar.setVisibility(View.GONE);
+
+                        // Re-anchor nameBlock to ivAvatar (in case it was changed)
+                        RelativeLayout.LayoutParams params =
+                                (RelativeLayout.LayoutParams) binding.nameBlock.getLayoutParams();
+                        params.removeRule(RelativeLayout.END_OF);
+                        params.addRule(RelativeLayout.END_OF, R.id.ivAvatar);
+                        binding.nameBlock.setLayoutParams(params);
+
                         String photoUrl = AppwriteService.ENDPOINT
                                 + "/storage/buckets/" + AppwriteService.USERS_BUCKET_ID
                                 + "/files/" + finalPhotoId
                                 + "/view?project=" + AppwriteService.PROJECT_ID;
-
-                        binding.ivAvatar.setVisibility(View.VISIBLE);
-                        binding.tvAvatar.setVisibility(View.GONE);
 
                         Glide.with(this)
                                 .load(photoUrl)
@@ -205,6 +213,20 @@ public class ChatRoomActivity extends AppCompatActivity {
                                 .error(R.drawable.person_placeholder)
                                 .circleCrop()
                                 .into(binding.ivAvatar);
+                    } else {
+                        // No photo: show tvAvatar with initial, hide ivAvatar completely (GONE)
+                        String ini = !finalName.isEmpty()
+                                ? String.valueOf(finalName.charAt(0)).toUpperCase(Locale.ROOT)
+                                : "?";
+                        binding.tvAvatar.setVisibility(View.VISIBLE);
+                        binding.ivAvatar.setVisibility(View.GONE); // GONE so it takes no space
+
+                        // Re-anchor nameBlock to tvAvatar so it sits at the same position
+                        RelativeLayout.LayoutParams params =
+                                (RelativeLayout.LayoutParams) binding.nameBlock.getLayoutParams();
+                        params.removeRule(RelativeLayout.END_OF);
+                        params.addRule(RelativeLayout.END_OF, R.id.tvAvatar);
+                        binding.nameBlock.setLayoutParams(params);
                     }
                 });
 
@@ -216,7 +238,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         }).start();
     }
 
-   
+    // ── RecyclerView ─────────────────────────────────────────────────────────
     private void setupRecycler() {
         adapter = new MessageAdapter(messages, myUserId);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -225,7 +247,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         binding.rvMessages.setAdapter(adapter);
     }
 
-   
+    // ── Input ────────────────────────────────────────────────────────────────
     private void setupInput() {
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -245,7 +267,6 @@ public class ChatRoomActivity extends AppCompatActivity {
             }
         });
 
-       
         binding.etMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEND) {
                 String text = binding.etMessage.getText().toString().trim();
@@ -259,7 +280,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-   
+    // ── Attachment panel ─────────────────────────────────────────────────────
     private void setupAttachmentPanel() {
         binding.btnAttach.setOnClickListener(v -> {
             boolean shown = binding.attachPanel.getVisibility() == View.VISIBLE;
@@ -295,7 +316,7 @@ public class ChatRoomActivity extends AppCompatActivity {
         });
     }
 
-   
+    // ── Send helpers ──────────────────────────────────────────────────────────
     private void sendTextMessage(String text) {
         buildAndSendMessage(TYPE_TEXT, text, null, null);
     }
@@ -338,8 +359,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 String locText = location.getLatitude() + "," + location.getLongitude();
                 buildAndSendMessage(TYPE_LOCATION, locText, null, null);
             } else {
-                Toast.makeText(this, "Could not get location",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Could not get location", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -351,19 +371,29 @@ public class ChatRoomActivity extends AppCompatActivity {
         final String timeStr = new SimpleDateFormat(
                 "hh:mm a", Locale.ROOT).format(new Date());
 
+        // FIX 3: Only put fileUrl/fileName when they are actually non-empty.
+        // Appwrite URL-type attributes reject empty strings — omit the key entirely
+        // when there is no value, so Appwrite uses its own default (NULL).
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("chatId",     chatId);
         msgData.put("senderId",   myUserId);
         msgData.put("senderName", myName);
         msgData.put("type",       type);
-        msgData.put("text",       text     != null ? text     : "");
-        msgData.put("fileUrl",    fileUrl  != null ? fileUrl  : "");
-        msgData.put("fileName",   fileName != null ? fileName : "");
+        msgData.put("text",       text != null ? text : "");
         msgData.put("timestamp",  String.valueOf(System.currentTimeMillis()));
         msgData.put("timeStr",    timeStr);
         msgData.put("read",       false);
 
-       
+        // Only add fileUrl if it's a real URL — avoids "invalid type" Appwrite error
+        if (fileUrl != null && !fileUrl.isEmpty()) {
+            msgData.put("fileUrl", fileUrl);
+        }
+        // Only add fileName if non-empty
+        if (fileName != null && !fileName.isEmpty()) {
+            msgData.put("fileName", fileName);
+        }
+
+        // Optimistic local insert
         messages.add(new Message(msgId, myUserId, myName, type,
                 text     != null ? text     : "",
                 fileUrl  != null ? fileUrl  : "",
@@ -385,8 +415,8 @@ public class ChatRoomActivity extends AppCompatActivity {
 
                 String preview =
                         fType == TYPE_TEXT     ? (fText != null ? fText : "") :
-                                fType == TYPE_IMAGE    ? "📷 Photo"                    :
-                                        fType == TYPE_FILE     ? "📎 " + fFileName             :
+                                fType == TYPE_IMAGE    ? "📷 Photo"                   :
+                                        fType == TYPE_FILE     ? "📎 " + fFileName            :
                                                 "📍 Location";
 
                 Map<String, Object> chatUpdate = new HashMap<>();
@@ -399,8 +429,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             } catch (Exception e) {
                 Log.e(TAG, "Send failed", e);
                 runOnUiThread(() -> Toast.makeText(this,
-                        "Send failed: " + e.getMessage(),
-                        Toast.LENGTH_SHORT).show());
+                        "Send failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -496,7 +525,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
-   
+    // ════════════════════════════════════════════════════════════════════════
+    // Message model
+    // ════════════════════════════════════════════════════════════════════════
     public static class Message {
         public final String id, senderId, senderName, text, fileUrl, fileName, timeStr;
         public final int type;
@@ -517,7 +548,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         }
     }
 
-   
+    // ════════════════════════════════════════════════════════════════════════
+    // Adapter
+    // ════════════════════════════════════════════════════════════════════════
     static class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int VIEW_SENT     = 0;
@@ -546,7 +579,6 @@ public class ChatRoomActivity extends AppCompatActivity {
                             ? R.layout.item_message_sent
                             : R.layout.item_message_received,
                     parent, false));
-
         }
 
         @Override
@@ -572,8 +604,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                             .placeholder(R.drawable.person_placeholder)
                             .into(h.ivImage);
                     h.ivImage.setOnClickListener(v -> {
-                        Intent i = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(msg.fileUrl));
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(msg.fileUrl));
                         i.setDataAndType(Uri.parse(msg.fileUrl), "image/*");
                         v.getContext().startActivity(i);
                     });
@@ -582,8 +613,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     h.tvFile.setVisibility(View.VISIBLE);
                     h.tvFile.setText("📎 " + msg.fileName);
                     h.tvFile.setOnClickListener(v -> {
-                        Intent i = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(msg.fileUrl));
+                        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(msg.fileUrl));
                         v.getContext().startActivity(i);
                     });
                     break;
@@ -592,8 +622,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     h.tvLocation.setText("📍 Tap to open location");
                     h.tvLocation.setOnClickListener(v -> {
                         Uri geo = Uri.parse("geo:" + msg.text + "?q=" + msg.text);
-                        v.getContext().startActivity(
-                                new Intent(Intent.ACTION_VIEW, geo));
+                        v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, geo));
                     });
                     break;
             }

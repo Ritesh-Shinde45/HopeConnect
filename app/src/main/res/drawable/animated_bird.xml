@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/animated_bird.xml -->
+<!-- AnimatedVectorDrawable: bird with flapping wings -->
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="80dp"
+            android:height="80dp"
+            android:viewportWidth="100"
+            android:viewportHeight="100">
+
+            <!-- ── TAIL ── -->
+            <path
+                android:name="tail"
+                android:fillColor="#2979FF"
+                android:pathData="
+                    M50,58
+                    C47,62 43,67 39,70
+                    C43,66 50,63 50,60
+                    C50,63 57,66 61,70
+                    C57,67 53,62 50,58 Z" />
+
+            <!-- ── BODY ── -->
+            <path
+                android:name="body"
+                android:fillColor="#42A5F5"
+                android:pathData="
+                    M36,52
+                    C36,44 42,38 50,38
+                    C58,38 64,44 64,52
+                    C64,58 60,62 50,63
+                    C40,62 36,58 36,52 Z" />
+
+            <!-- ── LEFT WING (will animate up/down) ── -->
+            <group android:name="leftWingGroup"
+                android:pivotX="50"
+                android:pivotY="50">
+                <path
+                    android:name="leftWing"
+                    android:fillColor="#FF6F00"
+                    android:pathData="
+                        M50,50
+                        C45,47 37,43 28,40
+                        C22,38 19,42 24,45
+                        C29,48 38,50 50,52 Z" />
+                <!-- Left wing highlight feather -->
+                <path
+                    android:name="leftFeather"
+                    android:fillColor="#FFA000"
+                    android:pathData="
+                        M50,51
+                        C46,49 40,46 33,43
+                        C29,41 27,44 31,46
+                        C35,48 42,50 50,52 Z" />
+            </group>
+
+            <!-- ── RIGHT WING (will animate up/down) ── -->
+            <group android:name="rightWingGroup"
+                android:pivotX="50"
+                android:pivotY="50">
+                <path
+                    android:name="rightWing"
+                    android:fillColor="#FF6F00"
+                    android:pathData="
+                        M50,50
+                        C55,47 63,43 72,40
+                        C78,38 81,42 76,45
+                        C71,48 62,50 50,52 Z" />
+                <!-- Right wing highlight feather -->
+                <path
+                    android:name="rightFeather"
+                    android:fillColor="#FFA000"
+                    android:pathData="
+                        M50,51
+                        C54,49 60,46 67,43
+                        C71,41 73,44 69,46
+                        C65,48 58,50 50,52 Z" />
+            </group>
+
+            <!-- ── HEAD ── -->
+            <path
+                android:name="head"
+                android:fillColor="#42A5F5"
+                android:pathData="
+                    M50,38
+                    C50,38 44,32 45,27
+                    C46,22 54,22 55,27
+                    C56,32 50,38 50,38 Z" />
+
+            <!-- ── BEAK ── -->
+            <path
+                android:name="beak"
+                android:fillColor="#FFB300"
+                android:pathData="
+                    M55,28
+                    L63,30
+                    L55,33 Z" />
+
+            <!-- ── EYE WHITE ── -->
+            <path
+                android:name="eyeWhite"
+                android:fillColor="#FFFFFF"
+                android:pathData="
+                    M51,27
+                    C52.5,27 54,28.2 54,29.5
+                    C54,30.8 52.5,32 51,32
+                    C49.5,32 48,30.8 48,29.5
+                    C48,28.2 49.5,27 51,27 Z" />
+
+            <!-- ── PUPIL ── -->
+            <path
+                android:name="pupil"
+                android:fillColor="#1A237E"
+                android:pathData="
+                    M51.5,28.5
+                    C52.5,28.5 53,29 53,30
+                    C53,31 52.5,31.5 51.5,31.5
+                    C50.5,31.5 50,31 50,30
+                    C50,29 50.5,28.5 51.5,28.5 Z" />
+
+            <!-- ── EYE SHINE ── -->
+            <path
+                android:name="eyeShine"
+                android:fillColor="#FFFFFF"
+                android:pathData="
+                    M52,29
+                    C52.5,29 53,29.3 53,29.8
+                    C53,30.3 52.5,30.5 52,30.5
+                    C51.5,30.5 51,30.3 51,29.8
+                    C51,29.3 51.5,29 52,29 Z" />
+
+            <!-- ── CHEST FEATHER DETAIL ── -->
+            <path
+                android:name="chestDetail"
+                android:fillColor="#90CAF9"
+                android:strokeColor="#00000000"
+                android:pathData="
+                    M46,48
+                    C47,44 50,42 53,44
+                    C50,43 47,46 46,48 Z" />
+
+        </vector>
+    </aapt:attr>
+
+    <!-- ══ LEFT WING: rotate up then down (flap) ══ -->
+    <target android:name="leftWingGroup">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="-30"
+                android:duration="320"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:interpolator="@android:interpolator/accelerate_decelerate" />
+        </aapt:attr>
+    </target>
+
+    <!-- ══ RIGHT WING: mirror rotation ══ -->
+    <target android:name="rightWingGroup">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="30"
+                android:duration="320"
+                android:repeatCount="infinite"
+                android:repeatMode="reverse"
+                android:interpolator="@android:interpolator/accelerate_decelerate" />
+        </aapt:attr>
+    </target>
+
+</animated-vector>
