@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme (Always Light) -->
+    <style name="Base.Theme.Hoppeconnect" parent="Theme.Material3.Light.NoActionBar">
+
+        <item name="colorPrimary">@color/brand_primary</item>
+
+        <!-- Correct background -->
+        <item name="android:colorBackground">@color/bg_primary</item>
+
+    </style>
+
+</resources>

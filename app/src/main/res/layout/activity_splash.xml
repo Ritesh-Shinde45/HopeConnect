@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/activity_splash.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1421">
+
+    <!-- Sky brightening overlay (fades in as bird flies up) -->
+    <View
+        android:id="@+id/skyOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/sky_gradient"
+        android:alpha="0" />
+
+    <!-- Stars / sparkle particles (fade in after bird leaves) -->
+    <ImageView
+        android:id="@+id/sparkle1"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/sparkle_particle"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="60dp" />
+
+    <ImageView
+        android:id="@+id/sparkle2"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:src="@drawable/sparkle_particle"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="70dp" />
+
+    <ImageView
+        android:id="@+id/sparkle3"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:src="@drawable/sparkle_particle"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="160dp"
+        android:layout_marginStart="110dp" />
+
+    <ImageView
+        android:id="@+id/sparkle4"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:src="@drawable/sparkle_particle"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="120dp" />
+
+    <ImageView
+        android:id="@+id/sparkle5"
+        android:layout_width="7dp"
+        android:layout_height="7dp"
+        android:src="@drawable/sparkle_particle"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="200dp"
+        android:layout_marginStart="40dp" />
+
+    <!-- Outer ripple ring (from hand glow) -->
+    <View
+        android:id="@+id/ripple2"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:background="@drawable/ripple_circle2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!-- Inner ripple ring -->
+    <View
+        android:id="@+id/ripple1"
+        android:layout_width="155dp"
+        android:layout_height="155dp"
+        android:background="@drawable/ripple_circle2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!-- Hand glow background -->
+    <View
+        android:id="@+id/handGlow"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/hand_glow_bg"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!-- Logo background circle -->
+    <View
+        android:id="@+id/logoBg"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:background="@drawable/splash_logo_bg2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!--
+        IMPORTANT: splashLogo is your existing launcher icon (hand + bird together).
+        It starts at center, then we animate the bird ImageView flying away from it.
+        This ImageView fades out as the bird departs.
+    -->
+    <ImageView
+        android:id="@+id/splashLogo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="fitCenter"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!--
+        BIRD VIEW — starts overlapping the logo at hand position,
+        then flies up and away. Use your ic_launcher or a dedicated bird image.
+        If you have a separate bird image (e.g., drawable/bird_only.png), use that.
+        Otherwise we animate the whole logo upward and scale it down.
+    -->
+    <ImageView
+        android:id="@+id/birdView"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@mipmap/ic_launcher"
+        android:scaleType="fitCenter"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.58" />
+
+    <!-- Flight trail dot 1 -->
+    <View
+        android:id="@+id/trailDot1"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:background="@drawable/trail_dot"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.52" />
+
+    <!-- Flight trail dot 2 -->
+    <View
+        android:id="@+id/trailDot2"
+        android:layout_width="4dp"
+        android:layout_height="4dp"
+        android:background="@drawable/trail_dot"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.44" />
+
+    <!-- Flight trail dot 3 -->
+    <View
+        android:id="@+id/trailDot3"
+        android:layout_width="3dp"
+        android:layout_height="3dp"
+        android:background="@drawable/trail_dot"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.36" />
+
+    <!-- Hand image that stays behind (the ic_launcher "hand" part remains at bottom) -->
+    <!-- App Name -->
+    <TextView
+        android:id="@+id/splashAppName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HopeConnect"
+        android:textColor="#FFFFFF"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.04"
+        android:alpha="0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.72" />
+
+    <!-- Tagline -->
+    <TextView
+        android:id="@+id/splashTagline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finding Missing Peoples"
+        android:textColor="#7BA7D8"
+        android:textSize="13sp"
+        android:letterSpacing="0.06"
+        android:alpha="0"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.78" />
+
+    <!-- Bottom tagline -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bringing Missing Persons Home"
+        android:textColor="#2A3A55"
+        android:textSize="11sp"
+        android:layout_marginBottom="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

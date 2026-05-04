@@ -1,0 +1,9 @@
+﻿# Copy this file to local.properties and fill in your own values
+# Never commit local.properties itself
+
+APPWRITE_PROJECT_ID=your_project_id_here
+APPWRITE_DB_ID=your_database_id_here
+APPWRITE_USERS_BUCKET_ID=your_users_bucket_id_here
+APPWRITE_REPORT_BUCKET_ID=your_report_bucket_id_here
+APPWRITE_CHAT_BUCKET_ID=your_chat_bucket_id_here
+ADMIN_EMAIL=your_admin_email_here

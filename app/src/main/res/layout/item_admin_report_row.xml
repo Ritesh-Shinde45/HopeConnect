@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tv_row_id"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/text_tertiary" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp">
+        <TextView
+            android:id="@+id/tv_row_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+        <TextView
+            android:id="@+id/tv_row_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="@color/text_secondary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_row_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:textColor="@color/text_tertiary"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/tv_row_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="3dp"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/btn_row_approve"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="84dp"
+        android:layout_height="48dp"
+        android:text="Approve"
+        android:textSize="10sp"
+        android:backgroundTint="@color/status_success"
+        android:layout_marginEnd="4dp" />
+
+    <Button
+        android:id="@+id/btn_row_flag"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="62dp"
+        android:layout_height="48dp"
+        android:text="Flag"
+        android:textSize="10sp"
+        android:strokeColor="@color/status_danger"
+        android:textColor="@color/status_danger" />
+</LinearLayout>
+

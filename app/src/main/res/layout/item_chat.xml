@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="?attr/selectableItemBackground"
+    android:padding="10dp">
+
+    <!-- Profile -->
+    <ImageView
+        android:id="@+id/imgProfile"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_profile"
+        android:background="@drawable/profile_circle"
+        android:layout_centerVertical="true"/>
+
+    <!-- Name -->
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/imgProfile"
+        android:layout_marginStart="12dp"
+        android:text="Rajesh Kumar"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#2C3E50"/>
+
+    <!-- Last Message -->
+    <TextView
+        android:id="@+id/tvLastMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvName"
+        android:layout_toEndOf="@id/imgProfile"
+        android:layout_marginStart="12dp"
+        android:text="Last message preview…"
+        android:textSize="13sp"
+        android:textColor="#7F8C8D"/>
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:text="10:45 AM"
+        android:textSize="12sp"
+        android:textColor="#7F8C8D"/>
+
+    <!-- Unread Badge -->
+    <TextView
+        android:id="@+id/tvUnread"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/tvTime"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/unread_badge"
+        android:gravity="center"
+        android:text="2"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"/>
+</RelativeLayout>

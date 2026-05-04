@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- Top Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#4A4E9D"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="#4A4E9D" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Technology with Humanity"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HopeConnect — Reuniting Families"
+                android:textColor="#C5CAE9"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Content Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contentCard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp"
+        app:layout_constraintTop_toBottomOf="@id/headerLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/white">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Intro -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="The Problem We Couldn't Ignore"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="Over 1,00,000 people go missing in India every year. Nearly 20% of those cases go unresolved. Families spend days running between police stations, printing posters, and posting on social media — often with little coordination and no central system to bring it all together.\n\nThe first 72 hours after a disappearance are the most critical. And most of that time gets lost to fragmented communication.\n\nHopeConnect was built to change that." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Technology serving humanity -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Technology That Serves, Not Replaces"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="HopeConnect doesn't replace human instinct or community trust — it amplifies it. Any citizen with a smartphone becomes a potential helper. No training needed. No bureaucracy. Just a report, a notification, and a conversation that could bring someone home.\n\nEvery feature was designed with one question in mind: does this reduce the time between disappearance and reunion? The GPS-tagged reports, real-time alerts, and in-app chat all exist for that single purpose." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Real engineering challenges -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Real Problems, Real Solutions"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="Building HopeConnect wasn't just a technical exercise — it was a series of real problems that demanded practical solutions.\n\nAppwrite's latest SDK had breaking compatibility issues with Java. Rather than abandoning the modern backend or rewriting the entire app, we built dedicated helper and service files in Kotlin that act as a seamless bridge — keeping the core Java codebase intact while fully leveraging Appwrite's real-time capabilities. Technology with humanity also means being resourceful.\n\nFalse reports are one of the biggest threats to a platform like this. If bad actors flood the system with fake cases, real families lose trust and the platform becomes useless. We responded by building a full admin moderation panel where every report is reviewed before it reaches the public feed. The next evolution is AI-powered false report detection that flags suspicious entries automatically — keeping the platform honest.\n\nFace matching is one of the most powerful tools for identifying found individuals. Using MobileFaceNet with TensorFlow Lite, the model runs entirely on-device — no photos are sent to external servers. Privacy is not an afterthought; it is built into the architecture." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Community and gamification -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Community Is the Feature"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="The most powerful part of HopeConnect is not any single feature — it is the network of people using it together. When someone flags a sighting, a notification reaches the family instantly. They connect through in-app chat without exposing personal contact details. That privacy-first design is what makes strangers willing to help.\n\nWe are taking this further with a reward system — families will be able to post a monetary reward on a case, and when a helper's tip leads to a reunion, they can claim it directly through the app. A tangible reason to look twice at a face you've seen before.\n\nGameification features — points, achievements, and badges for active helpers — will build a culture where community participation feels meaningful and recognized." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- What's next -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="What Comes Next"
+                    android:textColor="#4A4E9D"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:lineSpacingExtra="6dp"
+                    android:textColor="#333333"
+                    android:textSize="15sp"
+                    android:text="HopeConnect is version 1.0 — the foundation is built. The road ahead includes AI-powered location prediction based on sighting patterns, NCRB database integration so law enforcement and the community share the same information, multilingual support in Hindi and Marathi to reach rural communities, and SMS and WhatsApp alerts for people who may not have the app installed.\n\nEvery one of these features exists for the same reason the app was built in the first place — to get people home faster." />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
+
+                <!-- Closing -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Technology is most powerful when it is guided by compassion. HopeConnect is proof that a student with a laptop, a clear problem, and the will to solve it can build something that matters."
+                    android:textColor="#4A4E9D"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    android:lineSpacingExtra="6dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="— Ritesh Shinde, Developer · April 2026"
+                    android:textColor="#9E9E9E"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

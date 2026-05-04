@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- register_page.xml — OTP / mobile fields removed. Email verification is done server-side. -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- status bar spacer -->
+    <View
+        android:id="@+id/statusBarSpacer"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="#F8F9FB"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- top wave -->
+    <View
+        android:id="@+id/topBackground"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@drawable/ic_top_wave"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- character image -->
+    <ImageView
+        android:id="@+id/ivCharacter"
+        android:layout_width="180dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="0dp"
+        android:src="@drawable/connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- REGISTER title -->
+    <TextView
+        android:id="@+id/tvRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="200dp"
+        android:text="REGISTER"
+        android:textColor="#1976D2"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- ScrollView between title and bottom waves -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/tvRegister"
+        app:layout_constraintBottom_toTopOf="@id/ivWaveLight">
+
+        <LinearLayout
+            android:id="@+id/inputContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Name -->
+            <TextView
+                android:text="Name"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your name"
+                android:textSize="16sp"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+
+            <!-- Username -->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Username"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="your_username"
+                android:textSize="16sp"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Mobile"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="8080******"
+                android:textSize="16sp"
+                android:inputType="phone"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+            <!-- Email -->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Email"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="example@email.com"
+                android:textSize="16sp"
+                android:inputType="textEmailAddress"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+
+            <!-- Password -->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Password"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Create Password"
+                android:textSize="16sp"
+                android:inputType="textPassword"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+
+            <!-- Password strength indicator -->
+            <TextView
+                android:id="@+id/tvPasswordStrength"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:text="" />
+
+            <!-- Address -->
+            <TextView
+                android:layout_marginTop="16dp"
+                android:text="Address"
+                android:textColor="#448AFF"
+                android:textSize="12sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <EditText
+                android:id="@+id/etAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Your Address"
+                android:textSize="16sp"
+                android:inputType="textPostalAddress"
+                android:backgroundTint="#B3E5FC"
+                android:textColor="@color/black"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="24dp"
+                android:background="#E0E0E0"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:text="or continue with"
+                android:textColor="#448AFF"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <!-- Google Sign-In button -->
+            <ImageButton
+                android:id="@+id/btnGoogleAuth"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/googlelogo"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:padding="14dp"
+                android:contentDescription="Continue with Google"
+                android:layout_margin="16dp"/>
+
+            <!-- Bottom padding -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="24dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom waves -->
+    <ImageView
+        android:id="@+id/ivWaveLight"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_bottom_wave_light"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivWaveSolid"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_bottom_wave_solid"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- SIGNUP button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSignUp"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:text="SIGNUP"
+        android:textColor="@color/white"
+        android:backgroundTint="#FFA726"
+        android:elevation="4dp"
+        app:cornerRadius="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivWaveSolid"
+        app:layout_constraintBottom_toBottomOf="@id/ivWaveSolid"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <!-- Sign In link -->
+    <TextView
+        android:id="@+id/tvSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Already have an account? Sign In"
+        android:textColor="#000"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/btnSignUp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Progress bar -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
