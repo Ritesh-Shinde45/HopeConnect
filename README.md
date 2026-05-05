@@ -242,10 +242,10 @@ Passionate about building secure and reliable technology for social good.
  
 Kishan Alladwar — Data Science Learner
 Special thanks to Kishan for his support throughout this journey. 🤝
- 
-LinkedIn : https://www.linkedin.com/in/ritesh--shinde/
-GitHub   : https://github.com/Ritesh-Shinde45
- 
+
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ritesh--shinde/)
+[![github](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ritesh-Shinde45)
+
 ---
  
 ## ⭐ Support
