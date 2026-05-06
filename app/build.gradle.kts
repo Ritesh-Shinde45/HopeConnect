@@ -93,6 +93,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("com.github.chrisbanes:PhotoView:2.3.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
