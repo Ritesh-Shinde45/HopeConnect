@@ -66,6 +66,8 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.btnSave.setOnClickListener(v -> saveProfile());
 
         binding.ivProfile.setOnClickListener(v -> pickImage());
+        binding.btnChangePhoto.setOnClickListener(v -> pickImage());
+        binding.changePhoto.setOnClickListener(v -> pickImage());
 
         loadProfile();
     }
