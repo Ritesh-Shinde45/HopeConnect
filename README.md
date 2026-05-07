@@ -10,7 +10,7 @@ HopeConnect is a high-performance Android application that combines **on-device 
  
 ## 🚀 Download & Try the App
  
-[**📥 Download HopeConnect APK (v1.0.1)**](https://github.com/Ritesh-Shinde45/HopeConnect-App/releases/tag/v1.0.1)
+[**📥 Download HopeConnect APK (v1.0.2)**](https://github.com/Ritesh-Shinde45/HopeConnect/releases/download/v1.0.2/HopeConnect.apk)
 
 [**📥 HopeConnect App Repo**](https://github.com/Ritesh-Shinde45/HopeConnect-App.git)
 
