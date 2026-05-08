@@ -5,12 +5,11 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <!-- Example ImageView for the person's photo -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/person_image"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@mipmap/ic_launcher" /> <!-- Placeholder image -->
+        android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:layout_width="0dp"

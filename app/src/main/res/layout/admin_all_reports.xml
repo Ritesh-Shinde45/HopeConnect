@@ -112,7 +112,6 @@
         android:paddingBottom="6dp"
         android:textStyle="bold"/>
 
-    <!-- Tabs (your existing code kept) -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout_reports"
         android:layout_width="match_parent"

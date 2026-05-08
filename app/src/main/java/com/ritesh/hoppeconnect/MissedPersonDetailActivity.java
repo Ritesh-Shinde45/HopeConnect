@@ -41,12 +41,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import io.appwrite.services.Databases;
+import io.appwrite.services.Storage;
 
 public class MissedPersonDetailActivity extends AppCompatActivity {
 
     private static final String TAG            = "MissedPersonDetail";
     public  static final String EXTRA_REPORT_ID = "report_id";
-
+    public  static final String EXTRA_IS_ADMIN  = "is_admin";
     private ViewPager2              imageViewPager;
     private LinearLayout            dotsContainer;
     private CollapsingToolbarLayout collapsingToolbar;
@@ -62,7 +63,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
     private String uploaderUserId  = "";
     private String myUserId        = "";
     private String myRole          = "";
-
+    private boolean isAdminView = false;
    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +75,9 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("hoppe_prefs", MODE_PRIVATE);
         myUserId = prefs.getString("logged_in_user_id", "");
-        myRole   = prefs.getString("logged_in_role",    "user");
-
+        myRole      = prefs.getString("logged_in_role", "user");
+        isAdminView = getIntent().getBooleanExtra(EXTRA_IS_ADMIN, false)
+                || "admin".equals(myRole);
         initViews();
         setupToolbar();
 
@@ -232,20 +234,24 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
        
         boolean isReporter = !myUserId.isEmpty() && myUserId.equals(uploaderUserId);
-        boolean isAdmin    = "admin".equals(myRole);
+        boolean isAdmin = isAdminView;
         if ((isReporter || isAdmin) && cardDeleteReport != null) {
             cardDeleteReport.setVisibility(View.VISIBLE);
         }
 
-       
+
         if (btnIveSeenPerson != null) {
-            String status = model.status != null
-                    ? model.status.toLowerCase(Locale.ROOT) : "active";
-            if (isReporter || "found".equals(status) || "resolved".equals(status)) {
-               
+            if (isAdmin) {
                 btnIveSeenPerson.setVisibility(View.GONE);
+                if (cardDeleteReport != null) cardDeleteReport.setVisibility(View.VISIBLE);
             } else {
-                btnIveSeenPerson.setVisibility(View.VISIBLE);
+                String status = model.status != null
+                        ? model.status.toLowerCase(Locale.ROOT) : "active";
+                if (isReporter || "found".equals(status) || "resolved".equals(status)) {
+                    btnIveSeenPerson.setVisibility(View.GONE);
+                } else {
+                    btnIveSeenPerson.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -540,38 +546,68 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
         }).start();
     }
 
-   
+
     private void confirmDeleteReport(ReportModel model) {
         new AlertDialog.Builder(this)
                 .setTitle("Delete Report")
-                .setMessage("Are you sure you want to permanently delete \""
-                        + nz(model.name, "Unknown") + "\"? This cannot be undone.")
-                .setPositiveButton("Delete", (d, w) -> deleteReport(model.id))
+                .setMessage("This will permanently delete the report and all "
+                        + "associated photos from storage. This cannot be undone.")
+                .setPositiveButton("Delete", (d, w) -> deleteReportFull(model))
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void deleteReport(String id) {
+    private void deleteReportFull(ReportModel model) {
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
+                Storage st = AppwriteService.getStorage();
+
+                if (model.photoUrls != null) {
+                    for (String url : model.photoUrls) {
+                        if (url == null || url.isEmpty()) continue;
+                        String fileId = extractFileIdFromUrl(url);
+                        if (!fileId.isEmpty()) {
+                            try {
+                                AppwriteHelper.deleteFile(
+                                        st, AppwriteService.REPORT_BUCKET_ID, fileId);
+                                Log.d(TAG, "Deleted file: " + fileId);
+                            } catch (Exception fe) {
+                                Log.w(TAG, "File delete skipped: " + fe.getMessage());
+                            }
+                        }
+                    }
+                }
+
                 AppwriteHelper.deleteDocument(
                         db, AppwriteService.DB_ID,
-                        AppwriteService.COL_REPORTS, id);
-                ReportModelCache.remove(id);
+                        AppwriteService.COL_REPORTS, model.id);
+                ReportModelCache.remove(model.id);
+
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Report deleted",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Report deleted", Toast.LENGTH_SHORT).show();
                     finish();
                 });
             } catch (Exception e) {
-                Log.e(TAG, "deleteReport error: " + e.getMessage(), e);
+                Log.e(TAG, "deleteReportFull error: " + e.getMessage(), e);
                 runOnUiThread(() ->
                         Toast.makeText(this,
                                 "Delete failed: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show());
             }
         }).start();
+    }
+
+    private static String extractFileIdFromUrl(String url) {
+        try {
+            int idx = url.indexOf("/files/");
+            if (idx < 0) return "";
+            String after = url.substring(idx + 7);
+            int slash = after.indexOf('/');
+            return slash > 0 ? after.substring(0, slash) : after;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
    

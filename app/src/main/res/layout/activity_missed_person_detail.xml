@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="#F5F6FA">
 
-    <!-- AppBar with collapsing toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -23,14 +22,12 @@
             app:expandedTitleMarginBottom="72dp"
             app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title">
 
-            <!-- Image ViewPager for sliding photos -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/imageViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_collapseMode="parallax" />
 
-            <!-- Dark overlay gradient at bottom -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
@@ -38,7 +35,6 @@
                 android:background="@drawable/gradient_bottom_overlay"
                 app:layout_collapseMode="pin" />
 
-            <!-- Dot indicators for image pager -->
             <LinearLayout
                 android:id="@+id/dotsContainer"
                 android:layout_width="wrap_content"
@@ -49,7 +45,6 @@
                 android:padding="4dp"
                 app:layout_collapseMode="pin" />
 
-            <!-- Status badge overlay -->
             <TextView
                 android:id="@+id/statusBadgeDetail"
                 android:layout_width="wrap_content"
@@ -76,7 +71,6 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Scrollable content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -88,7 +82,6 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Main info card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,7 +97,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- Name + Age row -->
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,7 +128,6 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
 
-                    <!-- Gender -->
                     <TextView
                         android:id="@+id/tvDetailGender"
                         android:layout_width="wrap_content"
@@ -154,7 +145,6 @@
                         android:background="#F0F0F0"
                         android:layout_marginBottom="12dp"/>
 
-                    <!-- Missing Since -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -184,7 +174,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Description card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,7 +212,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Contact information card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -250,7 +238,6 @@
                         android:letterSpacing="0.15"
                         android:textStyle="bold" />
 
-                    <!-- Contact -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -295,7 +282,6 @@
                         android:background="#F5F5F5"
                         android:layout_marginVertical="4dp"/>
 
-                    <!-- Emergency 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -334,7 +320,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Emergency 2 -->
                     <LinearLayout
                         android:id="@+id/layoutEmergency2"
                         android:layout_width="match_parent"
@@ -375,7 +360,6 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <!-- Emergency 3 -->
                     <LinearLayout
                         android:id="@+id/layoutEmergency3"
                         android:layout_width="match_parent"
@@ -418,7 +402,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Report metadata card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -517,7 +500,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Action buttons section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -531,7 +513,6 @@
                 android:letterSpacing="0.15"
                 android:textStyle="bold" />
 
-            <!-- Buttons grid 2x2 + 1 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -539,7 +520,6 @@
                 android:paddingHorizontal="16dp"
                 android:layout_marginBottom="12dp">
 
-                <!-- Download PDF -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -575,7 +555,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Send Mail -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -620,7 +599,6 @@
                 android:paddingHorizontal="16dp"
                 android:layout_marginBottom="12dp">
 
-                <!-- Call Emergency -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -656,7 +634,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Chat -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -694,10 +671,7 @@
 
             </LinearLayout>
 
-            <!-- Submit/Report False button — full width, prominent -->
 
-
-                <!-- I've Seen This Person button -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -745,7 +719,6 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- Delete Report button (only visible to reporter/admin) -->
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardDeleteReport"
                     android:layout_width="match_parent"

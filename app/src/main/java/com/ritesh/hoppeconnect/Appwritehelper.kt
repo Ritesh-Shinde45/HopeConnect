@@ -48,7 +48,16 @@ object AppwriteHelper {
         db: Databases, databaseId: String, collectionId: String, documentId: String
     ) = runBlocking { db.deleteDocument(databaseId, collectionId, documentId) }
 
-   
+    @JvmStatic
+    @Throws(Exception::class)
+    fun deleteFile(
+        storage: Storage,
+        bucketId: String,
+        fileId: String
+    ) = runBlocking {
+        storage.deleteFile(bucketId, fileId)
+    }
+    
     @JvmStatic
     fun findUserByField(
         db: Databases, field: String, value: String
