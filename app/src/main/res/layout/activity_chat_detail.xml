@@ -60,7 +60,7 @@
             app:fabCustomSize="48dp"
             app:srcCompat="@drawable/ic_share" 
             app:tint="@color/white"
-            app:backgroundTint="#3F51B5"
+            app:backgroundTint="#2563EB"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

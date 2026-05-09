@@ -71,7 +71,8 @@
                     android:textSize="14sp"
                     app:icon="@drawable/ic_camera"
                     app:cornerRadius="12dp"
-                    android:layout_marginEnd="8dp"/>
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint=""/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnStartMatch"

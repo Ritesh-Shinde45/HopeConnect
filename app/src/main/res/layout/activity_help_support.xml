@@ -9,13 +9,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#4A4E9D" />
+        android:background="#2563EB" />
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4A4E9D"
+        android:background="#2563EB"
         android:padding="20dp">
 
         <ImageView
@@ -54,12 +54,13 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@color/white">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -84,6 +85,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -93,12 +95,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -106,6 +110,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -117,8 +122,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="20dp"
-                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Step 2 -->
                     <LinearLayout
@@ -126,6 +135,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -135,12 +145,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -148,6 +160,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -159,8 +172,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="20dp"
-                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Step 3 -->
                     <LinearLayout
@@ -168,6 +185,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -177,12 +195,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -190,6 +210,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -201,8 +222,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="20dp"
-                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Step 4 -->
                     <LinearLayout
@@ -210,6 +235,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -219,12 +245,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -232,6 +260,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -243,8 +272,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="20dp"
-                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Step 5 -->
                     <LinearLayout
@@ -252,6 +285,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -261,12 +295,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -274,6 +310,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -285,8 +322,12 @@
                         </LinearLayout>
                     </LinearLayout>
 
-                    <View android:layout_width="1dp" android:layout_height="20dp"
-                        android:background="#E0E0E0" android:layout_marginStart="15dp" android:layout_marginTop="4dp"/>
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Step 6 -->
                     <LinearLayout
@@ -294,6 +335,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="32dp"
                             android:layout_height="32dp"
@@ -303,12 +345,14 @@
                             android:textColor="#FFFFFF"
                             android:textSize="15sp"
                             android:textStyle="bold" />
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -316,6 +360,7 @@
                                 android:textColor="#212121"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -336,12 +381,14 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@color/white">
+                    android:padding="20dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -349,6 +396,7 @@
                         android:textColor="#212121"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -367,12 +415,13 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@color/white">
+                    android:padding="20dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -383,108 +432,218 @@
                         android:textStyle="bold" />
 
                     <!-- FAQ 1 -->
-                    <LinearLayout android:id="@+id/layoutFaq1"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Why is my report not showing publicly yet?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="All reports are reviewed by an admin before going live. This usually takes a few hours. You will receive a notification once it is approved or if any changes are needed."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- FAQ 2 -->
-                    <LinearLayout android:id="@+id/layoutFaq2"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="How does the face matching work?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="Face matching uses MobileFaceNet (an AI model) running directly on your device. It compares photos to find potential matches. This feature is currently in development and will be available in a future update."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- FAQ 3 -->
-                    <LinearLayout android:id="@+id/layoutFaq3"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Is my personal phone number shared when I chat?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="No. All communication happens inside the app. Your personal contact details are never shared with other users. You only see the other person's in-app username."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- FAQ 4 -->
-                    <LinearLayout android:id="@+id/layoutFaq4"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="Can I edit or delete my report after submitting?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="You can view your submitted reports from your profile. To edit or remove a report, please contact us at riteshshinde472@gmail.com with your case details."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- FAQ 5 -->
-                    <LinearLayout android:id="@+id/layoutFaq5"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="How do I reset my password?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="On the Login screen, tap 'Forgot Password'. Enter your registered email and you'll receive a reset link. Follow the link to set a new password."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="12dp" android:layout_marginBottom="4dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="#E0E0E0" />
 
                     <!-- FAQ 6 -->
-                    <LinearLayout android:id="@+id/layoutFaq6"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" android:orientation="vertical"
+                    <LinearLayout
+                        android:id="@+id/layoutFaq6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:background="?attr/selectableItemBackground"
-                        android:clickable="true" android:focusable="true" android:padding="4dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:orientation="vertical"
+                        android:padding="4dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:text="How do I delete my account?"
-                            android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:layout_marginTop="6dp" android:lineSpacingExtra="3dp"
+                            android:textColor="#212121"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingExtra="3dp"
                             android:text="Contact us at riteshshinde472@gmail.com to request account deletion. We process all deletion requests within 48 hours. Your data will be permanently removed."
-                            android:textColor="#757575" android:textSize="13sp" />
+                            android:textColor="#757575"
+                            android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -496,12 +655,14 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@color/white">
+                    android:padding="20dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -521,22 +682,50 @@
                         android:focusable="true"
                         android:orientation="horizontal"
                         android:padding="12dp">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                            android:src="@drawable/ic_email" app:tint="#4A4E9D" />
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="Email Us" android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp" android:text="riteshshinde472@gmail.com"
-                                android:textColor="#757575" android:textSize="13sp" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_email"
+                            app:tint="#2563EB" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Email Us"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="riteshshinde472@gmail.com"
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
                         </LinearLayout>
-                        <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                            android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="#757575" />
                     </LinearLayout>
 
-                    <View android:layout_width="match_parent" android:layout_height="1dp"
-                        android:background="#E0E0E0" android:layout_marginTop="8dp" android:layout_marginBottom="8dp"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="#E0E0E0" />
 
                     <!-- Phone -->
                     <LinearLayout
@@ -548,18 +737,42 @@
                         android:focusable="true"
                         android:orientation="horizontal"
                         android:padding="12dp">
-                        <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                            android:src="@drawable/ic_phone" app:tint="#4A4E9D" />
-                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp" android:layout_weight="1" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:text="Call Us" android:textColor="#212121" android:textSize="15sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                                android:layout_marginTop="2dp" android:text="+91 8080769308"
-                                android:textColor="#757575" android:textSize="13sp" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_phone"
+                            app:tint="#2563EB" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Call Us"
+                                android:textColor="#212121"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="+91 8080769308"
+                                android:textColor="#757575"
+                                android:textSize="13sp" />
                         </LinearLayout>
-                        <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                            android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="#757575" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -571,6 +784,7 @@
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
+
                 <LinearLayout
                     android:id="@+id/layoutReportProblem"
                     android:layout_width="match_parent"
@@ -580,15 +794,29 @@
                     android:focusable="true"
                     android:orientation="horizontal"
                     android:padding="20dp">
-                    <ImageView android:layout_width="24dp" android:layout_height="24dp"
-                        android:src="@drawable/ic_report" app:tint="#E53935" />
-                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_report"
+                        app:tint="#E53935" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginStart="16dp" android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
                         android:text="Report a Problem"
-                        android:textColor="#212121" android:textSize="16sp" android:textStyle="bold" />
-                    <ImageView android:layout_width="20dp" android:layout_height="20dp"
-                        android:src="@drawable/ic_arrow_forward" app:tint="#757575" />
+                        android:textColor="#212121"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_arrow_forward"
+                        app:tint="#757575" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

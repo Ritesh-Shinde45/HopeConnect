@@ -9,13 +9,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#4A4E9D" />
+        android:background="#2563EB" />
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#4A4E9D"
+        android:background="#2563EB"
         android:padding="20dp">
 
         <ImageView

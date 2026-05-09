@@ -24,13 +24,13 @@
             android:id="@+id/statusBarSpacer"
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#4A4E9D" />
+            android:background="#2563EB" />
 
         <!-- Header Section -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#4A4E9D"
+            android:background="#2563EB"
             android:padding="20dp">
 
             <ImageView
@@ -63,7 +63,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#4A4E9D"
+            android:background="#2563EB"
             android:paddingBottom="60dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -85,7 +85,7 @@
                 android:background="@drawable/circle_white_bg"
                 android:padding="8dp"
                 android:src="@drawable/ic_camera"
-                app:tint="#4A4E9D" />
+                app:tint="#2563EB" />
         </RelativeLayout>
 
         <!-- Profile Info Card -->
@@ -183,7 +183,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_person"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -222,7 +222,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -261,7 +261,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_notifications"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -323,7 +323,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_missing"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -384,7 +384,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_info"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -422,7 +422,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_shield"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -460,7 +460,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_help"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -521,7 +521,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_tea"
-                        app:tint="#4A4E9D" />
+                        app:tint="#2563EB" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -529,7 +529,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="Offer a Cup of Tea ☕"
+                        android:text="Offer a Cup of Tea"
                         android:textColor="#212121"
                         android:textSize="16sp" />
 

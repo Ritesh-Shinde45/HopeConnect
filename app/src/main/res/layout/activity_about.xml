@@ -13,13 +13,13 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#4A4E9D" />
+            android:background="#2563EB" />
 
         <!-- Header -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#4A4E9D"
+            android:background="#2563EB"
             android:padding="20dp">
 
             <ImageView
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:background="#4A4E9D"
+            android:background="#2563EB"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
             android:paddingBottom="32dp">
@@ -190,7 +190,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_community"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -227,7 +227,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_share"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -264,7 +264,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_connect"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -301,7 +301,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_secure"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -338,7 +338,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_report"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -400,7 +400,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_community"
-                            app:tint="#4A4E9D" />
+                            app:tint="#2563EB" />
 
                         <LinearLayout
                             android:layout_width="0dp"
