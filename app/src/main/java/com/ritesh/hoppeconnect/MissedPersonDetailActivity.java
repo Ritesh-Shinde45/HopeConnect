@@ -700,8 +700,8 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 PdfDocument.Page page1 = pdf.startPage(page1Info);
                 Canvas canvas = page1.getCanvas();
 
-               
-                p.setColor(Color.parseColor("#3F51B5"));
+
+                p.setColor(Color.parseColor("#1A1F3C"));
                 canvas.drawRect(0, 0, 595, 80, p);
                 p.setColor(Color.WHITE);
                 p.setTextSize(16f); p.setFakeBoldText(true);
@@ -807,7 +807,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                         photoCanvas.drawRect(0, 0, 595, 842, bg);
 
                        
-                        bg.setColor(Color.parseColor("#3F51B5"));
+                        bg.setColor(Color.parseColor("#1A1F3C"));
                         photoCanvas.drawRect(0, 0, 595, 44, bg);
                         bg.setColor(Color.WHITE);
                         bg.setTextSize(13f); bg.setFakeBoldText(true);
@@ -896,7 +896,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
     private void drawSectionTitle(Canvas canvas, Paint p,
                                   String title, int y) {
-        p.setColor(Color.parseColor("#3F51B5"));
+        p.setColor(Color.parseColor("#1A1F3C"));
         p.setTextSize(11f);
         p.setFakeBoldText(true);
         canvas.drawText(title, 16, y, p);

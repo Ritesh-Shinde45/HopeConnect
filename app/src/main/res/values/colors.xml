@@ -6,7 +6,7 @@
     <color name="primary_dark">#303F9F</color>
     <color name="primary_light">#C5CAE9</color>
     <color name="accent">#FF5722</color>
-    <color name="brand_primary">#2563EB</color>
+    <color name="brand_primary">#1A1F3C</color>
     <color name="brand_secondary">#1565C0</color>
 
     <!-- ── Basic ─────────────────────────────────────────────────────────── -->
@@ -65,5 +65,15 @@
 
     <!-- ── Ripple ─────────────────────────────────────────────────────────── -->
     <color name="ripple_primary">#1A2563EB</color>
+    <!-- Navy design system (Explore / Help / Achievement screens) -->
+    <color name="navy_primary">#1A1F3C</color>
+    <color name="navy_dark">#0D1128</color>
+    <color name="navy_chip">#2A3050</color>
+    <color name="accent_blue">#4F6EF7</color>
+    <color name="accent_green">#2DC97E</color>
+    <color name="accent_orange">#FF8C42</color>
+    <color name="accent_gold">#F5A623</color>
+    <color name="surface_bg">#F4F5F9</color>
+    <color name="muted_text">#8892B8</color>
 
 </resources>

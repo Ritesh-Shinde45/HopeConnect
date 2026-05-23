@@ -10,7 +10,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#2563EB" />
+        android:background="#1A1F3C" />
 
     <!-- Header bar -->
     <RelativeLayout
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_below="@id/statusBarSpacer"
-        android:background="#2563EB"
+        android:background="#1A1F3C"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
@@ -100,7 +100,7 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@id/bottomNav"
         android:layout_margin="16dp"
-        app:backgroundTint="#2563EB"
+        app:backgroundTint="#1A1F3C"
         app:srcCompat="@android:drawable/ic_input_add"
         app:tint="#FFFFFF"
         app:elevation="6dp" />

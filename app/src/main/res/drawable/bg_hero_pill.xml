@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/bg_hero_pill.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#0D1128"/>   <!-- slightly darker than #1A1F3C -->
+    <corners android:radius="12dp"/>
+</shape>

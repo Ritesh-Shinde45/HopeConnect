@@ -20,13 +20,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#4A4E9D" />
+            android:background="#1A1F3C" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:background="#1A1F3C">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -41,7 +42,7 @@
                 android:id="@+id/tvSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="HopeConnect — Reuniting Families"
+                android:text="HopeConnect: Reuniting Families"
                 android:textColor="#C5CAE9"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp" />
@@ -77,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="The Problem We Couldn't Ignore"
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -88,7 +89,7 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:text="Over 1,00,000 people go missing in India every year. Nearly 20% of those cases go unresolved. Families spend days running between police stations, printing posters, and posting on social media — often with little coordination and no central system to bring it all together.\n\nThe first 72 hours after a disappearance are the most critical. And most of that time gets lost to fragmented communication.\n\nHopeConnect was built to change that." />
+                    android:text="Over 1,00,000+ people go missing in India every year. Nearly 20% of those cases go unresolved. Families spend days running between police stations, printing posters, and posting on social media often with little coordination and no central system to bring it all together.\n\nThe first 72 hours after a disappearance are the most critical. And most of that time gets lost to fragmented communication.\n\nHopeConnect was built to change that." />
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
@@ -98,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Technology That Serves, Not Replaces"
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -109,7 +110,7 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:text="HopeConnect doesn't replace human instinct or community trust — it amplifies it. Any citizen with a smartphone becomes a potential helper. No training needed. No bureaucracy. Just a report, a notification, and a conversation that could bring someone home.\n\nEvery feature was designed with one question in mind: does this reduce the time between disappearance and reunion? The GPS-tagged reports, real-time alerts, and in-app chat all exist for that single purpose." />
+                    android:text="HopeConnect doesn't replace human instinct or community trust it amplifies it. Any citizen with a smartphone becomes a potential helper. No training needed. No bureaucracy. Just a report, a notification, and a conversation that could bring someone home.\n\nEvery feature was designed with one question in mind: does this reduce the time between disappearance and reunion? The GPS-tagged reports, real-time alerts, and in-app chat all exist for that single purpose." />
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
@@ -119,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Real Problems, Real Solutions"
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -130,8 +131,7 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:text="Building HopeConnect wasn't just a technical exercise — it was a series of real problems that demanded practical solutions.\n\nAppwrite's latest SDK had breaking compatibility issues with Java. Rather than abandoning the modern backend or rewriting the entire app, we built dedicated helper and service files in Kotlin that act as a seamless bridge — keeping the core Java codebase intact while fully leveraging Appwrite's real-time capabilities. Technology with humanity also means being resourceful.\n\nFalse reports are one of the biggest threats to a platform like this. If bad actors flood the system with fake cases, real families lose trust and the platform becomes useless. We responded by building a full admin moderation panel where every report is reviewed before it reaches the public feed. The next evolution is AI-powered false report detection that flags suspicious entries automatically — keeping the platform honest.\n\nFace matching is one of the most powerful tools for identifying found individuals. Using MobileFaceNet with TensorFlow Lite, the model runs entirely on-device — no photos are sent to external servers. Privacy is not an afterthought; it is built into the architecture." />
-
+                    android:text="HopeConnect was designed to solve real problems faced in missing person cases.\n\nOne major challenge is the spread of fake or misleading reports, which can waste valuable time and reduce trust in the platform. To address this, every submitted report goes through an admin verification process before becoming publicly visible. Future improvements include AI-based detection systems to automatically flag suspicious reports.\n\nAnother critical issue is delayed identification of found individuals. To make identification faster and more accessible, HopeConnect uses on-device face matching powered by MobileFaceNet and TensorFlow Lite. This allows facial recognition to work directly on the user's device without sending photos to external servers, helping protect user privacy while enabling quick matching.\n\nThe platform is built to provide a secure, reliable, and privacy-focused system that helps families, volunteers, and authorities connect more effectively during search and recovery efforts." />
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
 
@@ -140,7 +140,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Community Is the Feature"
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:text="The most powerful part of HopeConnect is not any single feature — it is the network of people using it together. When someone flags a sighting, a notification reaches the family instantly. They connect through in-app chat without exposing personal contact details. That privacy-first design is what makes strangers willing to help.\n\nWe are taking this further with a reward system — families will be able to post a monetary reward on a case, and when a helper's tip leads to a reunion, they can claim it directly through the app. A tangible reason to look twice at a face you've seen before.\n\nGameification features — points, achievements, and badges for active helpers — will build a culture where community participation feels meaningful and recognized." />
+                    android:text="The most powerful part of HopeConnect is not any single feature it is the network of people using it together. When someone flags a sighting, a notification reaches the family instantly. They connect through in-app chat without exposing personal contact details. That privacy-first design is what makes strangers willing to help.\n\nWe are taking this further with a reward system families will be able to post a monetary reward on a case, and when a helper's tip leads to a reunion, they can claim it directly through the app. A tangible reason to look twice at a face you've seen before.\n\nGameification features points, achievements, and badges for active helpers will build a culture where community participation feels meaningful and recognized." />
 
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
@@ -161,7 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="What Comes Next"
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -172,8 +172,7 @@
                     android:lineSpacingExtra="6dp"
                     android:textColor="#333333"
                     android:textSize="15sp"
-                    android:text="HopeConnect is version 1.0 — the foundation is built. The road ahead includes AI-powered location prediction based on sighting patterns, NCRB database integration so law enforcement and the community share the same information, multilingual support in Hindi and Marathi to reach rural communities, and SMS and WhatsApp alerts for people who may not have the app installed.\n\nEvery one of these features exists for the same reason the app was built in the first place — to get people home faster." />
-
+                    android:text="The road ahead includes AI-powered location prediction based on sighting patterns, NCRB database integration so law enforcement and the community can work with shared information, multilingual support in Hindi and Marathi to better reach rural communities, and SMS and WhatsApp alerts for people who may not have the app installed.\n\nThe face matching system is also evolving. Currently, facial recognition runs directly on the user's device for privacy and offline accessibility. Future development will introduce secure cloud-based face matching to enable faster and more scalable searches across larger datasets while maintaining strong privacy protections.\n\nEvery one of these features exists for the same reason the app was built in the first place: to help missing people return home faster." />
                 <View android:layout_width="match_parent" android:layout_height="1dp"
                     android:background="#E8EAF6" android:layout_marginTop="20dp" android:layout_marginBottom="20dp"/>
 
@@ -182,7 +181,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Technology is most powerful when it is guided by compassion. HopeConnect is proof that a student with a laptop, a clear problem, and the will to solve it can build something that matters."
-                    android:textColor="#4A4E9D"
+                    android:textColor="#1A1F3C"
                     android:textSize="15sp"
                     android:textStyle="italic"
                     android:lineSpacingExtra="6dp" />
@@ -191,7 +190,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="— Ritesh Shinde, Developer · April 2026"
+                    android:text="— Ritesh Shinde, Developer · May 2026"
                     android:textColor="#9E9E9E"
                     android:textSize="13sp" />
 

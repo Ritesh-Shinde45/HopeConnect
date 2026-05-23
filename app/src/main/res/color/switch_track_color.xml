@@ -2,9 +2,25 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- When Switch is ON -->
-    <item android:color="#4A4E9D" android:state_checked="true"/>
+    <item android:color="#1A1F3C" android:state_checked="true"/>
 
     <!-- When Switch is OFF -->
     <item android:color="#E0E0E0" android:state_checked="false"/>
 
 </selector>
+
+
+<EditText
+android:id="@+id/et_search_reports"
+android:layout_width="match_parent"
+android:layout_height="48dp"
+android:hint="Search by name or email..."
+android:paddingHorizontal="12dp"
+android:background="@drawable/bg_input_field"
+android:inputType="text"
+android:drawableStart="@drawable/ic_nav_dashboard"
+android:drawablePadding="8dp"
+android:textSize="14sp"
+android:textColor="@color/text_primary"
+android:textColorHint="@color/text_tertiary"/>
+    </LinearLayout>

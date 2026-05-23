@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:drawableStart="@drawable/ic_person"
+                        android:drawableStart="@drawable/person_placeholder"
                         android:drawablePadding="6dp"
                         android:text="Male"
                         android:textColor="#888888"
@@ -679,7 +679,7 @@
                     android:layout_marginBottom="12dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="4dp"
-                    app:cardBackgroundColor="#E8F5E9">
+                    app:cardBackgroundColor="#1A1F3C">
 
                     <LinearLayout
                         android:id="@+id/btnIveSeenPerson"
@@ -694,7 +694,7 @@
                             android:layout_height="28dp"
                             android:src="@drawable/ic_person"
                             android:layout_marginEnd="12dp"
-                            app:tint="#2E7D32"/>
+                            app:tint="#FFFFFF"/>
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -705,7 +705,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="I've Seen This Person!"
-                                android:textColor="#2E7D32"
+                                android:textColor="#FFFFFF"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -713,7 +713,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Tap to notify the reporter"
-                                android:textColor="#66BB6A"
+                                android:textColor="#FFFFFF"
                                 android:textSize="12sp"/>
                         </LinearLayout>
                     </LinearLayout>

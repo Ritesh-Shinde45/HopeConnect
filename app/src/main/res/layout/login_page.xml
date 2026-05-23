@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Username or Email"
-            android:textColor="#448AFF"
+            android:textColor="#1A1F3C"
             android:textSize="12sp"/>
         <EditText
             android:id="@+id/etLoginUsername"
@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Password"
-            android:textColor="#448AFF"
+            android:textColor="#1A1F3C"
             android:textSize="12sp"
             android:layout_marginTop="16dp"/>
         <EditText
@@ -78,7 +78,7 @@
         <TextView
             android:layout_marginTop="12dp"
             android:text="Continue with Google"
-            android:textColor="#448AFF"
+            android:textColor="#1A1F3C"
             android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -119,7 +119,7 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginHorizontal="64dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="52dp"
         android:backgroundTint="#FFA726"
         android:elevation="4dp"
         android:text="LOGIN"
@@ -127,18 +127,19 @@
         app:cornerRadius="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inputContainer" />
+        app:layout_constraintBottom_toTopOf="@id/tvSignUp"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:id="@+id/tvSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Don't have an account? Sign Up"
-        android:textColor="#000"
+        android:textColor="#FFFFFF"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

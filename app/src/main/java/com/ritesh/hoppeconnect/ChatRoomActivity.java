@@ -1,6 +1,9 @@
 package com.ritesh.hoppeconnect;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -13,13 +16,14 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsetsController;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +31,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -130,18 +135,10 @@ public class ChatRoomActivity extends AppCompatActivity {
             return;
         }
 
-        // Set name
-        binding.tvOtherName.setText(
-                otherName != null && !otherName.isEmpty() ? otherName : "User");
+        binding.tvOtherName.setText(otherName != null && !otherName.isEmpty() ? otherName : "User");
         binding.tvOtherUsername.setText("loading...");
-
-        // FIX 2: Always show tvAvatar initially, hide ivAvatar
-        // until we confirm a real photo exists
-        String initial = (otherName != null && !otherName.isEmpty())
-                ? String.valueOf(otherName.charAt(0)).toUpperCase(Locale.ROOT) : "?";
         binding.tvAvatar.setVisibility(View.VISIBLE);
-        binding.ivAvatar.setVisibility(View.GONE);   // hidden until photo loads
-
+        binding.ivAvatar.setVisibility(View.GONE);
         binding.ivBack.setOnClickListener(v -> finish());
 
         loadOtherUserProfile();
@@ -159,16 +156,13 @@ public class ChatRoomActivity extends AppCompatActivity {
     @Override protected void onResume() { super.onResume(); pollHandler.post(pollRunnable); }
     @Override protected void onPause()  { super.onPause();  pollHandler.removeCallbacks(pollRunnable); }
 
-    // ── Profile ──────────────────────────────────────────────────────────────
     private void loadOtherUserProfile() {
         if (otherUserId == null || otherUserId.isEmpty()) return;
-
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
                 Document<?> doc = AppwriteHelper.getDocument(
-                        db, AppwriteService.DB_ID,
-                        AppwriteService.COL_USERS, otherUserId);
+                        db, AppwriteService.DB_ID, AppwriteService.COL_USERS, otherUserId);
 
                 @SuppressWarnings("unchecked")
                 Map<String, Object> data = (Map<String, Object>) doc.getData();
@@ -176,78 +170,55 @@ public class ChatRoomActivity extends AppCompatActivity {
                 String name     = strVal(data, "name");
                 String username = strVal(data, "username");
                 String photoId  = strVal(data, "photoId");
-
                 if (name.isEmpty()) name = username.isEmpty() ? "User" : username;
 
-                final String finalName     = name;
-                final String finalUsername = username;
-                final String finalPhotoId  = photoId;
-
+                final String fn = name, fu = username, fp = photoId;
                 runOnUiThread(() -> {
-                    // Always update name and username text
-                    binding.tvOtherName.setText(finalName);
-                    binding.tvOtherUsername.setText(
-                            finalUsername.isEmpty() ? "tap to view info" : "@" + finalUsername);
-
-                    if (!finalPhotoId.isEmpty()) {
-                        // Has photo: show ivAvatar, hide tvAvatar
-                        // nameBlock is already anchored to ivAvatar in XML — correct position
+                    binding.tvOtherName.setText(fn);
+                    binding.tvOtherUsername.setText(fu.isEmpty() ? "tap to view info" : "@" + fu);
+                    if (!fp.isEmpty()) {
                         binding.ivAvatar.setVisibility(View.VISIBLE);
                         binding.tvAvatar.setVisibility(View.GONE);
-
-                        // Re-anchor nameBlock to ivAvatar (in case it was changed)
-                        RelativeLayout.LayoutParams params =
+                        RelativeLayout.LayoutParams p =
                                 (RelativeLayout.LayoutParams) binding.nameBlock.getLayoutParams();
-                        params.removeRule(RelativeLayout.END_OF);
-                        params.addRule(RelativeLayout.END_OF, R.id.ivAvatar);
-                        binding.nameBlock.setLayoutParams(params);
-
+                        p.removeRule(RelativeLayout.END_OF);
+                        p.addRule(RelativeLayout.END_OF, R.id.ivAvatar);
+                        binding.nameBlock.setLayoutParams(p);
                         String photoUrl = AppwriteService.ENDPOINT
                                 + "/storage/buckets/" + AppwriteService.USERS_BUCKET_ID
-                                + "/files/" + finalPhotoId
-                                + "/view?project=" + AppwriteService.PROJECT_ID;
-
-                        Glide.with(this)
-                                .load(photoUrl)
+                                + "/files/" + fp + "/view?project=" + AppwriteService.PROJECT_ID;
+                        Glide.with(this).load(photoUrl)
                                 .placeholder(R.drawable.person_placeholder)
                                 .error(R.drawable.person_placeholder)
-                                .circleCrop()
-                                .into(binding.ivAvatar);
+                                .circleCrop().into(binding.ivAvatar);
                     } else {
-                        // No photo: show tvAvatar with initial, hide ivAvatar completely (GONE)
-                        String ini = !finalName.isEmpty()
-                                ? String.valueOf(finalName.charAt(0)).toUpperCase(Locale.ROOT)
-                                : "?";
+                        String ini = !fn.isEmpty()
+                                ? String.valueOf(fn.charAt(0)).toUpperCase(Locale.ROOT) : "?";
+                        binding.tvAvatar.setText(ini);
                         binding.tvAvatar.setVisibility(View.VISIBLE);
-                        binding.ivAvatar.setVisibility(View.GONE); // GONE so it takes no space
-
-                        // Re-anchor nameBlock to tvAvatar so it sits at the same position
-                        RelativeLayout.LayoutParams params =
+                        binding.ivAvatar.setVisibility(View.GONE);
+                        RelativeLayout.LayoutParams p =
                                 (RelativeLayout.LayoutParams) binding.nameBlock.getLayoutParams();
-                        params.removeRule(RelativeLayout.END_OF);
-                        params.addRule(RelativeLayout.END_OF, R.id.tvAvatar);
-                        binding.nameBlock.setLayoutParams(params);
+                        p.removeRule(RelativeLayout.END_OF);
+                        p.addRule(RelativeLayout.END_OF, R.id.tvAvatar);
+                        binding.nameBlock.setLayoutParams(p);
                     }
                 });
-
             } catch (Exception e) {
                 Log.w(TAG, "loadOtherUserProfile failed: " + e.getMessage());
-                runOnUiThread(() ->
-                        binding.tvOtherUsername.setText("tap to view info"));
+                runOnUiThread(() -> binding.tvOtherUsername.setText("tap to view info"));
             }
         }).start();
     }
 
-    // ── RecyclerView ─────────────────────────────────────────────────────────
     private void setupRecycler() {
-        adapter = new MessageAdapter(messages, myUserId);
+        adapter = new MessageAdapter(messages, myUserId, this);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setStackFromEnd(true);
         binding.rvMessages.setLayoutManager(llm);
         binding.rvMessages.setAdapter(adapter);
     }
 
-    // ── Input ────────────────────────────────────────────────────────────────
     private void setupInput() {
         binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
@@ -258,178 +229,162 @@ public class ChatRoomActivity extends AppCompatActivity {
                 binding.btnAttach.setVisibility(hasText ? View.GONE    : View.VISIBLE);
             }
         });
-
         binding.btnSend.setOnClickListener(v -> {
             String text = binding.etMessage.getText().toString().trim();
-            if (!text.isEmpty()) {
-                binding.etMessage.setText("");
-                sendTextMessage(text);
-            }
+            if (!text.isEmpty()) { binding.etMessage.setText(""); sendTextMessage(text); }
         });
-
         binding.etMessage.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEND) {
                 String text = binding.etMessage.getText().toString().trim();
-                if (!text.isEmpty()) {
-                    binding.etMessage.setText("");
-                    sendTextMessage(text);
-                }
+                if (!text.isEmpty()) { binding.etMessage.setText(""); sendTextMessage(text); }
                 return true;
             }
             return false;
         });
     }
 
-    // ── Attachment panel ─────────────────────────────────────────────────────
     private void setupAttachmentPanel() {
         binding.btnAttach.setOnClickListener(v -> {
             boolean shown = binding.attachPanel.getVisibility() == View.VISIBLE;
             binding.attachPanel.setVisibility(shown ? View.GONE : View.VISIBLE);
         });
-
         binding.btnSendImage.setOnClickListener(v -> {
             binding.attachPanel.setVisibility(View.GONE);
-            Intent i = new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            imagePickerLauncher.launch(i);
+            imagePickerLauncher.launch(new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI));
         });
-
         binding.btnSendFile.setOnClickListener(v -> {
             binding.attachPanel.setVisibility(View.GONE);
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.setType("*/*");
             filePickerLauncher.launch(i);
         });
-
         binding.btnSendLocation.setOnClickListener(v -> {
             binding.attachPanel.setVisibility(View.GONE);
-            if (ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 sendLocationMessage();
             } else {
                 locationPermLauncher.launch(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                });
+                        Manifest.permission.ACCESS_COARSE_LOCATION});
             }
         });
     }
 
-    // ── Send helpers ──────────────────────────────────────────────────────────
     private void sendTextMessage(String text) {
         buildAndSendMessage(TYPE_TEXT, text, null, null);
     }
 
     private void sendImageMessage(Uri uri) {
-        Toast.makeText(this, "Uploading image…", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
-                String fileUrl = uploadFile(uri);
-                String name    = getFileName(uri);
-                runOnUiThread(() -> buildAndSendMessage(TYPE_IMAGE, null, fileUrl, name));
+                String[] res = uploadFile(uri);
+                runOnUiThread(() -> buildAndSendMessage(TYPE_IMAGE, null, res[0], res[1]));
             } catch (Exception e) {
+                Log.e(TAG, "Image upload failed", e);
                 runOnUiThread(() -> Toast.makeText(this,
-                        "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
 
     private void sendFileMessage(Uri uri) {
-        Toast.makeText(this, "Uploading file…", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Uploading file...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
-                String fileUrl = uploadFile(uri);
-                String name    = getFileName(uri);
-                runOnUiThread(() -> buildAndSendMessage(TYPE_FILE, name, fileUrl, name));
+                String[] res = uploadFile(uri);
+                runOnUiThread(() -> buildAndSendMessage(TYPE_FILE, res[1], res[0], res[1]));
             } catch (Exception e) {
+                Log.e(TAG, "File upload failed", e);
                 runOnUiThread(() -> Toast.makeText(this,
-                        "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        "File upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
 
     private void sendLocationMessage() {
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) return;
-
         fusedLocation.getLastLocation().addOnSuccessListener(location -> {
             if (location != null) {
-                String locText = location.getLatitude() + "," + location.getLongitude();
-                buildAndSendMessage(TYPE_LOCATION, locText, null, null);
+                buildAndSendMessage(TYPE_LOCATION,
+                        location.getLatitude() + "," + location.getLongitude(), null, null);
             } else {
                 Toast.makeText(this, "Could not get location", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void buildAndSendMessage(int type, String text,
-                                     String fileUrl, String fileName) {
-        final String msgId   = UUID.randomUUID().toString()
-                .replace("-", "").substring(0, 20);
-        final String timeStr = new SimpleDateFormat(
-                "hh:mm a", Locale.ROOT).format(new Date());
+    private void buildAndSendMessage(int type, String text, String fileUrl, String fileName) {
+        final String msgId   = generateAppwriteId();
+        final String timeStr = new SimpleDateFormat("hh:mm a", Locale.ROOT).format(new Date());
+        final String safeText     = text     != null ? text     : "";
+        final String safeFileUrl  = fileUrl  != null ? fileUrl  : "";
+        final String safeFileName = fileName != null ? fileName : "";
 
-        // FIX 3: Only put fileUrl/fileName when they are actually non-empty.
-        // Appwrite URL-type attributes reject empty strings — omit the key entirely
-        // when there is no value, so Appwrite uses its own default (NULL).
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("chatId",     chatId);
         msgData.put("senderId",   myUserId);
         msgData.put("senderName", myName);
         msgData.put("type",       type);
-        msgData.put("text",       text != null ? text : "");
+        msgData.put("text",       safeText);
         msgData.put("timestamp",  String.valueOf(System.currentTimeMillis()));
         msgData.put("timeStr",    timeStr);
         msgData.put("read",       false);
+        msgData.put("delivered",  false);
+        msgData.put("deletedFor", new ArrayList<String>());
 
-        // Only add fileUrl if it's a real URL — avoids "invalid type" Appwrite error
-        if (fileUrl != null && !fileUrl.isEmpty()) {
-            msgData.put("fileUrl", fileUrl);
-        }
-        // Only add fileName if non-empty
-        if (fileName != null && !fileName.isEmpty()) {
-            msgData.put("fileName", fileName);
-        }
+        if (!safeFileUrl.isEmpty())  msgData.put("fileUrl",  safeFileUrl);
+        if (!safeFileName.isEmpty()) msgData.put("fileName", safeFileName);
 
-        // Optimistic local insert
         messages.add(new Message(msgId, myUserId, myName, type,
-                text     != null ? text     : "",
-                fileUrl  != null ? fileUrl  : "",
-                fileName != null ? fileName : "",
-                timeStr, true));
+                safeText, safeFileUrl, safeFileName, timeStr, false, false,
+                new ArrayList<>()));
         adapter.notifyItemInserted(messages.size() - 1);
         binding.rvMessages.scrollToPosition(messages.size() - 1);
-
-        final String fText     = text;
-        final String fFileName = fileName;
-        final int    fType     = type;
 
         new Thread(() -> {
             try {
                 Databases db = AppwriteService.getDatabases();
-                AppwriteHelper.createDocument(
-                        db, AppwriteService.DB_ID,
+                AppwriteHelper.createDocument(db, AppwriteService.DB_ID,
                         AppwriteService.COL_MSGS, msgId, msgData);
 
+                Map<String, Object> delivered = new HashMap<>();
+                delivered.put("delivered", true);
+                AppwriteHelper.updateDocument(db, AppwriteService.DB_ID,
+                        AppwriteService.COL_MSGS, msgId, delivered);
+
                 String preview =
-                        fType == TYPE_TEXT     ? (fText != null ? fText : "") :
-                                fType == TYPE_IMAGE    ? "📷 Photo"                   :
-                                        fType == TYPE_FILE     ? "📎 " + fFileName            :
-                                                "📍 Location";
+                        type == TYPE_TEXT     ? safeText     :
+                                type == TYPE_IMAGE    ? "Photo"      :
+                                        type == TYPE_FILE     ? safeFileName :
+                                                "Location";
 
                 Map<String, Object> chatUpdate = new HashMap<>();
                 chatUpdate.put("lastMessage",     preview);
                 chatUpdate.put("lastMessageTime", timeStr);
-                AppwriteHelper.updateDocument(
-                        db, AppwriteService.DB_ID,
+                AppwriteHelper.updateDocument(db, AppwriteService.DB_ID,
                         AppwriteService.COL_CHATS, chatId, chatUpdate);
+
+                runOnUiThread(() -> {
+                    for (int i = 0; i < messages.size(); i++) {
+                        if (messages.get(i).id.equals(msgId)) {
+                            Message old = messages.get(i);
+                            messages.set(i, new Message(old.id, old.senderId, old.senderName,
+                                    old.type, old.text, old.fileUrl, old.fileName,
+                                    old.timeStr, true, false, old.deletedFor));
+                            adapter.notifyItemChanged(i);
+                            break;
+                        }
+                    }
+                });
 
             } catch (Exception e) {
                 Log.e(TAG, "Send failed", e);
                 runOnUiThread(() -> Toast.makeText(this,
-                        "Send failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        "Send failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
             }
         }).start();
     }
@@ -445,36 +400,140 @@ public class ChatRoomActivity extends AppCompatActivity {
                 for (Document<?> doc : docs) {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> d = (Map<String, Object>) doc.getData();
+
+                    List<String> deletedFor = new ArrayList<>();
+                    Object df = d.get("deletedFor");
+                    if (df instanceof List) {
+                        for (Object o : (List<?>) df) deletedFor.add(o.toString());
+                    }
+
+                    if (deletedFor.contains(myUserId)) continue;
+
                     fresh.add(new Message(
                             doc.getId(),
                             strVal(d, "senderId"),
                             strVal(d, "senderName"),
-                            d.get("type") != null
-                                    ? parseInt(d.get("type").toString()) : 0,
+                            d.get("type") != null ? parseInt(d.get("type").toString()) : 0,
                             strVal(d, "text"),
                             strVal(d, "fileUrl"),
                             strVal(d, "fileName"),
                             strVal(d, "timeStr"),
-                            Boolean.parseBoolean(strVal(d, "read"))
+                            Boolean.parseBoolean(strVal(d, "delivered")),
+                            Boolean.parseBoolean(strVal(d, "read")),
+                            deletedFor
                     ));
                 }
 
-                if (fresh.size() != messages.size()) {
+                markIncomingAsRead(db, docs);
+
+                boolean changed = fresh.size() != messages.size();
+                if (!changed) {
+                    for (int i = 0; i < fresh.size(); i++) {
+                        Message f = fresh.get(i);
+                        Message m = messages.get(i);
+                        if (!f.id.equals(m.id) || f.delivered != m.delivered || f.read != m.read) {
+                            changed = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (changed) {
+                    final List<Message> finalFresh = fresh;
                     runOnUiThread(() -> {
                         messages.clear();
-                        messages.addAll(fresh);
+                        messages.addAll(finalFresh);
                         adapter.notifyDataSetChanged();
                         if (!messages.isEmpty())
                             binding.rvMessages.scrollToPosition(messages.size() - 1);
                     });
                 }
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                Log.w(TAG, "loadMessages failed: " + e.getMessage());
+            }
         }).start();
     }
 
-    private String uploadFile(Uri uri) throws Exception {
-        String fileId   = UUID.randomUUID().toString()
-                .replace("-", "").substring(0, 20);
+    private void markIncomingAsRead(Databases db, List<? extends Document<?>> docs) {
+        for (Document<?> doc : docs) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> d = (Map<String, Object>) doc.getData();
+            String senderId = strVal(d, "senderId");
+            boolean alreadyRead = Boolean.parseBoolean(strVal(d, "read"));
+            if (!senderId.equals(myUserId) && !alreadyRead) {
+                try {
+                    Map<String, Object> update = new HashMap<>();
+                    update.put("read", true);
+                    AppwriteHelper.updateDocument(db, AppwriteService.DB_ID,
+                            AppwriteService.COL_MSGS, doc.getId(), update);
+                } catch (Exception ignored) {}
+            }
+        }
+    }
+
+    void deleteMessageForMe(Message msg, int position) {
+        new Thread(() -> {
+            try {
+                Databases db = AppwriteService.getDatabases();
+                @SuppressWarnings("unchecked")
+                Document<?> doc = AppwriteHelper.getDocument(db, AppwriteService.DB_ID,
+                        AppwriteService.COL_MSGS, msg.id);
+                @SuppressWarnings("unchecked")
+                Map<String, Object> d = (Map<String, Object>) doc.getData();
+
+                List<String> deletedFor = new ArrayList<>();
+                Object df = d.get("deletedFor");
+                if (df instanceof List) {
+                    for (Object o : (List<?>) df) deletedFor.add(o.toString());
+                }
+                if (!deletedFor.contains(myUserId)) deletedFor.add(myUserId);
+
+                Map<String, Object> update = new HashMap<>();
+                update.put("deletedFor", deletedFor);
+                AppwriteHelper.updateDocument(db, AppwriteService.DB_ID,
+                        AppwriteService.COL_MSGS, msg.id, update);
+
+                runOnUiThread(() -> {
+                    messages.remove(position);
+                    adapter.notifyItemRemoved(position);
+                });
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(this,
+                        "Delete failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }
+
+    void deleteMessageForAll(Message msg, int position) {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete for everyone?")
+                .setMessage("This message will be deleted for all participants.")
+                .setPositiveButton("Delete", (dialog, which) -> new Thread(() -> {
+                    try {
+                        Databases db = AppwriteService.getDatabases();
+                        Map<String, Object> update = new HashMap<>();
+                        update.put("text",      "This message was deleted");
+                        update.put("type",      TYPE_TEXT);
+                        update.put("fileUrl",   "");
+                        update.put("fileName",  "");
+                        update.put("deletedAll", true);
+                        AppwriteHelper.updateDocument(db, AppwriteService.DB_ID,
+                                AppwriteService.COL_MSGS, msg.id, update);
+                        runOnUiThread(() -> {
+                            messages.remove(position);
+                            adapter.notifyItemRemoved(position);
+                        });
+                    } catch (Exception e) {
+                        runOnUiThread(() -> Toast.makeText(this,
+                                "Delete failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    }
+                }).start())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private String[] uploadFile(Uri uri) throws Exception {
+        String fileId   = generateAppwriteId();
         String mimeType = getContentResolver().getType(uri);
         if (mimeType == null) mimeType = "application/octet-stream";
         String fileName = getFileName(uri);
@@ -482,17 +541,18 @@ public class ChatRoomActivity extends AppCompatActivity {
         Storage storage = AppwriteService.getStorage();
         io.appwrite.models.File uploaded = AppwriteHelper.uploadFileBlocking(
                 storage, BUCKET_ID, fileId, bytes, fileName, mimeType);
-        return AppwriteService.ENDPOINT
+        String fileUrl = AppwriteService.ENDPOINT
                 + "/storage/buckets/" + BUCKET_ID
                 + "/files/" + uploaded.getId()
                 + "/view?project=" + AppwriteService.PROJECT_ID;
+        return new String[]{ fileUrl, fileName };
     }
 
     private byte[] readBytes(Uri uri) throws IOException {
         InputStream is = getContentResolver().openInputStream(uri);
         if (is == null) throw new IOException("Cannot open URI");
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        byte[] buf = new byte[4096];
+        byte[] buf = new byte[8192];
         int len;
         while ((len = is.read(buf)) != -1) bos.write(buf, 0, len);
         is.close();
@@ -505,8 +565,7 @@ public class ChatRoomActivity extends AppCompatActivity {
             try (Cursor cursor = getContentResolver().query(uri,
                     new String[]{android.provider.OpenableColumns.DISPLAY_NAME},
                     null, null, null)) {
-                if (cursor != null && cursor.moveToFirst())
-                    result = cursor.getString(0);
+                if (cursor != null && cursor.moveToFirst()) result = cursor.getString(0);
             } catch (Exception ignored) {}
         }
         if (result == null) {
@@ -518,24 +577,27 @@ public class ChatRoomActivity extends AppCompatActivity {
         return result;
     }
 
+    private static String generateAppwriteId() {
+        return UUID.randomUUID().toString().replace("-", "");
+    }
+
     private static String strVal(Map<String, Object> m, String k) {
         Object v = m.get(k); return v != null ? v.toString() : "";
     }
+
     private static int parseInt(String s) {
         try { return Integer.parseInt(s); } catch (Exception e) { return 0; }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // Message model
-    // ════════════════════════════════════════════════════════════════════════
     public static class Message {
         public final String id, senderId, senderName, text, fileUrl, fileName, timeStr;
         public final int type;
-        public final boolean read;
+        public final boolean delivered, read;
+        public final List<String> deletedFor;
 
         Message(String id, String senderId, String senderName, int type,
-                String text, String fileUrl, String fileName,
-                String timeStr, boolean read) {
+                String text, String fileUrl, String fileName, String timeStr,
+                boolean delivered, boolean read, List<String> deletedFor) {
             this.id         = id;
             this.senderId   = senderId;
             this.senderName = senderName;
@@ -544,30 +606,30 @@ public class ChatRoomActivity extends AppCompatActivity {
             this.fileUrl    = fileUrl;
             this.fileName   = fileName;
             this.timeStr    = timeStr;
+            this.delivered  = delivered;
             this.read       = read;
+            this.deletedFor = deletedFor != null ? deletedFor : new ArrayList<>();
         }
     }
 
-    // ════════════════════════════════════════════════════════════════════════
-    // Adapter
-    // ════════════════════════════════════════════════════════════════════════
     static class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int VIEW_SENT     = 0;
         private static final int VIEW_RECEIVED = 1;
 
-        private final List<Message> list;
-        private final String        myUserId;
+        private final List<Message>      list;
+        private final String             myUserId;
+        private final ChatRoomActivity   activity;
 
-        MessageAdapter(List<Message> list, String myUserId) {
+        MessageAdapter(List<Message> list, String myUserId, ChatRoomActivity activity) {
             this.list     = list;
             this.myUserId = myUserId;
+            this.activity = activity;
         }
 
         @Override
         public int getItemViewType(int pos) {
-            return list.get(pos).senderId.equals(myUserId)
-                    ? VIEW_SENT : VIEW_RECEIVED;
+            return list.get(pos).senderId.equals(myUserId) ? VIEW_SENT : VIEW_RECEIVED;
         }
 
         @NonNull @Override
@@ -585,8 +647,9 @@ public class ChatRoomActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int pos) {
             Message msg = list.get(pos);
             MsgVH   h   = (MsgVH) holder;
-            h.tvTime.setText(msg.timeStr);
+            boolean isSent = msg.senderId.equals(myUserId);
 
+            h.tvTime.setText(msg.timeStr);
             h.tvText.setVisibility(View.GONE);
             h.ivImage.setVisibility(View.GONE);
             h.tvFile.setVisibility(View.GONE);
@@ -611,7 +674,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                     break;
                 case TYPE_FILE:
                     h.tvFile.setVisibility(View.VISIBLE);
-                    h.tvFile.setText("📎 " + msg.fileName);
+                    h.tvFile.setText("File: " + msg.fileName);
                     h.tvFile.setOnClickListener(v -> {
                         Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(msg.fileUrl));
                         v.getContext().startActivity(i);
@@ -619,19 +682,97 @@ public class ChatRoomActivity extends AppCompatActivity {
                     break;
                 case TYPE_LOCATION:
                     h.tvLocation.setVisibility(View.VISIBLE);
-                    h.tvLocation.setText("📍 Tap to open location");
+                    h.tvLocation.setText("Tap to open location");
                     h.tvLocation.setOnClickListener(v -> {
                         Uri geo = Uri.parse("geo:" + msg.text + "?q=" + msg.text);
                         v.getContext().startActivity(new Intent(Intent.ACTION_VIEW, geo));
                     });
                     break;
             }
+
+            if (h.tvTick != null) {
+                if (isSent) {
+                    h.tvTick.setVisibility(View.VISIBLE);
+                    if (msg.read) {
+                        h.tvTick.setText("✓✓");
+                        h.tvTick.setTextColor(0xFF34B7F1);
+                    } else if (msg.delivered) {
+                        h.tvTick.setText("✓✓");
+                        h.tvTick.setTextColor(0xFFAAAAAA);
+                    } else {
+                        h.tvTick.setText("✓");
+                        h.tvTick.setTextColor(0xFFAAAAAA);
+                    }
+                } else {
+                    h.tvTick.setVisibility(View.GONE);
+                }
+            }
+
+            View bubble = h.itemView.findViewWithTag("bubble");
+            if (bubble == null) bubble = h.itemView;
+            final View finalBubble = bubble;
+
+            finalBubble.setOnLongClickListener(v -> {
+                showMessageMenu(v, msg, pos, isSent);
+                return true;
+            });
+        }
+
+        private void showMessageMenu(View anchor, Message msg, int pos, boolean isSent) {
+            PopupMenu popup = new PopupMenu(anchor.getContext(), anchor);
+
+            if (msg.type == TYPE_TEXT) {
+                popup.getMenu().add(0, 1, 0, "Copy");
+            }
+            popup.getMenu().add(0, 2, 1, "Delete for me");
+            if (isSent) {
+                popup.getMenu().add(0, 3, 2, "Delete for everyone");
+            }
+            popup.getMenu().add(0, 4, 3, "Forward");
+            if (msg.type == TYPE_TEXT) {
+                popup.getMenu().add(0, 5, 4, "Select text");
+            }
+
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case 1:
+                        ClipboardManager cm = (ClipboardManager)
+                                anchor.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        cm.setPrimaryClip(ClipData.newPlainText("message", msg.text));
+                        Toast.makeText(anchor.getContext(), "Copied", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case 2:
+                        activity.deleteMessageForMe(msg, pos);
+                        return true;
+                    case 3:
+                        activity.deleteMessageForAll(msg, pos);
+                        return true;
+                    case 4:
+                        Intent share = new Intent(Intent.ACTION_SEND);
+                        share.setType("text/plain");
+                        share.putExtra(Intent.EXTRA_TEXT,
+                                msg.type == TYPE_TEXT ? msg.text : msg.fileUrl);
+                        anchor.getContext().startActivity(
+                                Intent.createChooser(share, "Forward via"));
+                        return true;
+                    case 5:
+                        android.text.ClipboardManager oldCm =
+                                (android.text.ClipboardManager)
+                                        anchor.getContext().getSystemService(
+                                                Context.CLIPBOARD_SERVICE);
+                        Toast.makeText(anchor.getContext(),
+                                "Long-press text to select", Toast.LENGTH_SHORT).show();
+                        return true;
+                }
+                return false;
+            });
+            popup.show();
         }
 
         @Override public int getItemCount() { return list.size(); }
 
         static class MsgVH extends RecyclerView.ViewHolder {
-            TextView  tvText, tvFile, tvLocation, tvTime;
+            TextView  tvText, tvFile, tvLocation, tvTime, tvTick;
             ImageView ivImage;
 
             MsgVH(@NonNull View v) {
@@ -640,6 +781,7 @@ public class ChatRoomActivity extends AppCompatActivity {
                 tvFile     = v.findViewById(R.id.tvFileMessage);
                 tvLocation = v.findViewById(R.id.tvLocationMessage);
                 tvTime     = v.findViewById(R.id.tvMessageTime);
+                tvTick     = v.findViewById(R.id.tvMessageTick);
                 ivImage    = v.findViewById(R.id.ivImageMessage);
             }
         }

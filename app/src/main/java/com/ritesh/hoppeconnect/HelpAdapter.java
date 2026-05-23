@@ -26,23 +26,53 @@ public class HelpAdapter extends RecyclerView.Adapter<HelpAdapter.VH> {
     @Override
     public void onBindViewHolder(@NonNull VH h, int pos) {
         HelpModel m = list.get(pos);
+
         h.tvReportName.setText(m.reportName != null ? m.reportName : "Unknown");
-        h.tvWatcherName.setText("By: " + (m.watcherName != null
-                ? m.watcherName : "Anonymous"));
+        h.tvWatcherName.setText("Spotted by: " + (m.watcherName != null ? m.watcherName : "Anonymous"));
         h.tvMessage.setText(m.message != null ? m.message : "");
-        h.tvDate.setText(m.resolvedAt != null ? m.resolvedAt : "");
+        h.tvReportId.setText(m.reportId != null && !m.reportId.isEmpty()
+                ? "#" + m.reportId.substring(0, Math.min(8, m.reportId.length())).toUpperCase()
+                : "—");
+
+        h.tvDate.setText(m.resolvedAt != null && !m.resolvedAt.isEmpty()
+                ? m.resolvedAt.substring(0, Math.min(10, m.resolvedAt.length()))
+                : "Pending");
+
+        boolean confirmed = m.resolvedAt != null && !m.resolvedAt.isEmpty();
+        if (confirmed) {
+            h.tvStatus.setText("✓ Confirmed");
+            h.tvStatus.setTextColor(0xFF2E7D32);
+            h.tvStatus.setBackgroundResource(R.drawable.bg_badge_confirmed);
+            h.viewAccentBar.setBackgroundColor(0xFF1A1F3C);
+            h.viewMsgAccent.setBackgroundColor(0xFF1A1F3C);
+        } else {
+            h.tvStatus.setText("● Pending");
+            h.tvStatus.setTextColor(0xFFF57F17);
+            h.tvStatus.setBackgroundResource(R.drawable.bg_badge_pending);
+            h.viewAccentBar.setBackgroundColor(0xFFB8861B);
+            h.viewMsgAccent.setBackgroundColor(0xFFB8861B);
+        }
     }
 
-    @Override public int getItemCount() { return list.size(); }
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView tvReportName, tvWatcherName, tvMessage, tvDate;
+        TextView tvReportName, tvWatcherName, tvMessage, tvDate, tvReportId, tvStatus;
+        View viewAccentBar, viewMsgAccent;
+
         VH(@NonNull View v) {
             super(v);
             tvReportName  = v.findViewById(R.id.tvHelpReportName);
             tvWatcherName = v.findViewById(R.id.tvHelpWatcherName);
             tvMessage     = v.findViewById(R.id.tvHelpMessage);
             tvDate        = v.findViewById(R.id.tvHelpDate);
+            tvReportId    = v.findViewById(R.id.tvHelpReportId);
+            tvStatus      = v.findViewById(R.id.tvHelpStatus);
+            viewAccentBar = v.findViewById(R.id.viewAccentBar);
+            viewMsgAccent = v.findViewById(R.id.viewMsgAccent);
         }
     }
 }

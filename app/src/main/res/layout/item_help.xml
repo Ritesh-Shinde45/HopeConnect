@@ -13,68 +13,185 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
+        <!-- Left accent bar -->
+        <View
+            android:id="@+id/viewAccentBar"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="12dp"
+            android:background="#1A1F3C"
+            android:minHeight="80dp" />
+
+        <!-- Content -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="8dp">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:text="🌟"
-                android:textSize="24sp"
-                android:gravity="center"
-                android:layout_marginEnd="12dp"/>
-
+            <!-- Top row: avatar + name + badge -->
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
+                <!-- Avatar circle -->
+                <FrameLayout
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="10dp">
+
+                    <ImageView
+                        android:id="@+id/ivAvatar"
+                        android:layout_width="42dp"
+                        android:layout_height="42dp"
+                        android:src="@drawable/ic_community"
+                        android:background="#E8EAF6"
+                        android:padding="9dp"
+                        android:tint="#1A1F3C" />
+                </FrameLayout>
+
+                <!-- Name + spotted by -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvHelpReportName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Missing Person Name"
+                        android:textColor="#1A1A1A"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvHelpWatcherName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Spotted by: Username"
+                        android:textColor="#757575"
+                        android:textSize="12sp"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <!-- Status badge -->
                 <TextView
-                    android:id="@+id/tvHelpReportName"
+                    android:id="@+id/tvHelpStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Missing Person Name"
-                    android:textColor="#1A1A1A"
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:text="Confirmed"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:background="@drawable/bg_badge_confirmed"
+                    android:textColor="#2E7D32" />
 
-                <TextView
-                    android:id="@+id/tvHelpWatcherName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="By: Username"
-                    android:textColor="#2E7D32"
-                    android:textSize="12sp"
-                    android:layout_marginTop="2dp"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvHelpDate"
-                android:layout_width="wrap_content"
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="#E0E0E0"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Meta row: Case ID + Date -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jan 01"
-                android:textColor="#AAAAAA"
-                android:textSize="11sp"/>
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="REPORT"
+                        android:textColor="#AAAAAA"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tvHelpReportId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="#RPT-0000"
+                        android:textColor="#1A1F3C"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DATE"
+                        android:textColor="#AAAAAA"
+                        android:textSize="10sp"
+                        android:letterSpacing="0.05" />
+
+                    <TextView
+                        android:id="@+id/tvHelpDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jan 01  "
+                        android:textColor="#424242"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Message box -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#F5F5F5"
+                android:layout_marginTop="12dp"
+                android:padding="10dp">
+
+                <View
+                    android:id="@+id/viewMsgAccent"
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#1A1F3C"
+                    android:layout_marginEnd="10dp"
+                    android:minHeight="16dp" />
+
+                <TextView
+                    android:id="@+id/tvHelpMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Helped locate a missing person."
+                    android:textColor="#555555"
+                    android:textSize="13sp"
+                    android:lineSpacingMultiplier="1.4" />
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvHelpMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Helped locate a missing person."
-            android:textColor="#555555"
-            android:textSize="13sp"
-            android:lineSpacingMultiplier="1.4"
-            android:background="#F1F8E9"
-            android:padding="10dp"/>
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>

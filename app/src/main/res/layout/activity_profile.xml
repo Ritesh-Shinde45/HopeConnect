@@ -13,7 +13,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,13 +25,13 @@
             android:id="@+id/statusBarSpacer"
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#2563EB" />
+            android:background="#1A1F3C" />
 
         <!-- Header Section -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2563EB"
+            android:background="#1A1F3C"
             android:padding="20dp">
 
             <ImageView
@@ -63,7 +64,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2563EB"
+            android:background="#1A1F3C"
             android:paddingBottom="60dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -71,7 +72,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_person"
+                android:src="@drawable/person_placeholder_white"
                 app:civ_border_color="#FFFFFF"
                 app:civ_border_width="4dp" />
 
@@ -85,7 +86,7 @@
                 android:background="@drawable/circle_white_bg"
                 android:padding="8dp"
                 android:src="@drawable/ic_camera"
-                app:tint="#2563EB" />
+                app:tint="#1A1F3C" />
         </RelativeLayout>
 
         <!-- Profile Info Card -->
@@ -183,7 +184,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_person"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -222,7 +223,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_lock"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -261,7 +262,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_notifications"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -323,7 +324,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_missing"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -384,7 +385,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_info"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -422,7 +423,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_shield"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -460,7 +461,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_help"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -521,7 +522,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_tea"
-                        app:tint="#2563EB" />
+                        app:tint="#1A1F3C" />
 
                     <TextView
                         android:layout_width="0dp"
