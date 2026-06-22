@@ -23,6 +23,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         AppwriteService.init(this);
+        boolean isDark = getSharedPreferences("settings", MODE_PRIVATE)
+                .getBoolean("dark_mode", false);
+        AppCompatDelegate.setDefaultNightMode(
+                isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             getWindow().getDecorView()
@@ -128,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         if (bottomNav != null) bottomNav.setSelectedItemId(R.id.nav_home);
         loadUserProfile();
     }
+
 
    
     private void proceedToInitUI() {
@@ -351,6 +358,8 @@ public class MainActivity extends AppCompatActivity {
                 prefs.edit().putString("user_display_name", name).apply();
 
                 runOnUiThread(() -> {
+                    if (isDestroyed() || isFinishing()) return;
+
                     if (userName != null) userName.setText("Hi, " + name);
 
                     Object photoId = data.get("photoId");
@@ -671,11 +680,11 @@ public class MainActivity extends AppCompatActivity {
         for (MaterialButton b : all) {
             if (b == null) continue;
             b.setBackgroundColor(Color.WHITE);
-            b.setTextColor(ContextCompat.getColor(this, R.color.filter_text_unselected));
+            b.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
             b.setStrokeColor(ColorStateList.valueOf(
                     ContextCompat.getColor(this, R.color.filter_border)));
             b.setIconTint(ColorStateList.valueOf(
-                    ContextCompat.getColor(this, R.color.filter_icon_unselected)));
+                    ContextCompat.getColor(this, R.color.text_secondary)));
         }
         if (selected == null) return;
         selected.setBackgroundColor(ContextCompat.getColor(this, R.color.filter_bg_selected));
@@ -683,7 +692,7 @@ public class MainActivity extends AppCompatActivity {
         selected.setStrokeColor(ColorStateList.valueOf(Color.TRANSPARENT));
         selected.setIconTint(ColorStateList.valueOf(
                 selected.getId() == R.id.btnAllCases
-                        ? ContextCompat.getColor(this, R.color.fire_orange)
+                        ? ContextCompat.getColor(this,  R.color.fire_orange)
                         : ContextCompat.getColor(this, R.color.filter_icon_selected)));
         selectedFilterButton = selected;
     }

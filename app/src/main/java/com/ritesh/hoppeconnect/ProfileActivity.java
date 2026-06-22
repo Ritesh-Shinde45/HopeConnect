@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -41,7 +42,7 @@ public class ProfileActivity extends AppCompatActivity {
     private boolean isDragging = false;
 
     private LinearLayout layoutBuyTea;
-    private ImageView ivBack, ivNotification, ivEditPhoto;
+    private ImageView ivBack, ivThemeToggle, ivEditPhoto;
     private CircleImageView profileImage;
     private TextView tvUserName, tvLocation;
     private LinearLayout layoutEditProfile, layoutChangePassword, layoutNotifications;
@@ -79,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
-        ivNotification = findViewById(R.id.ivNotification);
+        ivThemeToggle = findViewById(R.id.ivNotification);
         layoutBuyTea = findViewById(R.id.layoutBuyTea);
         profileImage = findViewById(R.id.profileImage);
         ivEditPhoto = findViewById(R.id.ivEditPhoto);
@@ -98,7 +99,13 @@ public class ProfileActivity extends AppCompatActivity {
         blurOverlay = findViewById(R.id.blurOverlay);
         bottomNav = findViewById(R.id.bottomNav);
     }
-
+    private void applyThemePreference() {
+        boolean isDark = getSharedPreferences("settings", MODE_PRIVATE)
+                .getBoolean("dark_mode", false);
+        AppCompatDelegate.setDefaultNightMode(
+                isDark ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+        );
+    }
     private void loadProfile() {
         new Thread(() -> {
             try {
@@ -350,8 +357,15 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupClickListeners() {
         ivBack.setOnClickListener(v -> finish());
 
-        ivNotification.setOnClickListener(v ->
-                startActivity(new Intent(this, NotificationsActivity.class)));
+        ivThemeToggle.setOnClickListener(v -> {
+            SharedPreferences prefs = getSharedPreferences("settings", MODE_PRIVATE);
+            boolean isDark = prefs.getBoolean("dark_mode", false);
+            boolean newMode = !isDark;
+            prefs.edit().putBoolean("dark_mode", newMode).apply();
+            AppCompatDelegate.setDefaultNightMode(
+                    newMode ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO
+            );
+        });
 
         profileImage.setOnClickListener(v -> openImagePreview());
 
@@ -390,14 +404,19 @@ public class ProfileActivity extends AppCompatActivity {
 
         layoutLogout.setOnClickListener(v -> showLogoutDialog());
     }
-
+    private void goHome() {
+        Intent i = new Intent(this, MainActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(i);
+        finish();
+    }
     private void setupBottomNavigation() {
         bottomNav.setSelectedItemId(R.id.nav_profile);
 
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.nav_profile) return true;
-            if (id == R.id.nav_home) { startActivity(new Intent(this, MainActivity.class)); return true; }
+            if (id == R.id.nav_home) { goHome(); return true; }
             if (id == R.id.nav_explore) { startActivity(new Intent(this, ExploreActivity.class)); return true; }
             if (id == R.id.nav_new_report) { startActivity(new Intent(this, NewReportActivity.class)); return true; }
             if (id == R.id.nav_chat) { startActivity(new Intent(this, ChatsActivity.class)); return true; }

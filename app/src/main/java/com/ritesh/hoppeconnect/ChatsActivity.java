@@ -176,6 +176,8 @@ public class ChatsActivity extends AppCompatActivity {
             else if (id == R.id.nav_explore) { startActivity(new Intent(this, ExploreActivity.class)); return true; }
             else if (id == R.id.nav_chat)    { return true; }
             else if (id == R.id.nav_profile) { startActivity(new Intent(this, ProfileActivity.class)); return true; }
+            else if (id == R.id.nav_new_report) { startActivity(new Intent(this, NewReportActivity.class)); return true; }
+
             return false;
         });
     }

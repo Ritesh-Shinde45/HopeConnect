@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FB"
+    android:background="@color/background"
     android:fitsSystemWindows="true">
 
     <!-- Status Bar Spacer -->
@@ -12,7 +12,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -22,7 +22,7 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         android:elevation="4dp"
         app:layout_constraintTop_toBottomOf="@id/statusBarSpacer"
         app:layout_constraintStart_toStartOf="parent"
@@ -40,14 +40,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:tint="#FFFFFF"/>
+            app:tint="@color/white"/>
 
         <TextView
-            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Report"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/btnBack"
@@ -77,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Missing Person Details"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
@@ -87,24 +86,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Full Name *"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/nameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#1A1F3C"
-                app:hintTextColor="#1A1F3C">
+                app:boxStrokeColor="@color/navy_primary"
+                app:hintTextColor="@color/navy_primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"
@@ -135,23 +133,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Age *"
-                        android:textColor="#1A1F3C"
+                        android:textColor="@color/navy_primary"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ageLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="outline"
-                        app:boxBackgroundColor="#FFFFFF"
+                        app:boxBackgroundColor="@color/white"
                         app:boxCornerRadiusTopStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
                         app:boxCornerRadiusBottomStart="8dp"
                         app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxStrokeColor="#1A1F3C"
-                        app:hintTextColor="#1A1F3C">
+                        app:boxStrokeColor="@color/navy_primary"
+                        app:hintTextColor="@color/navy_primary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAge"
@@ -175,23 +172,22 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Gender *"
-                        android:textColor="#1A1F3C"
+                        android:textColor="@color/navy_primary"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/genderLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:boxBackgroundMode="outline"
-                        app:boxBackgroundColor="#FFFFFF"
+                        app:boxBackgroundColor="@color/white"
                         app:boxCornerRadiusTopStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
                         app:boxCornerRadiusBottomStart="8dp"
                         app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxStrokeColor="#1A1F3C"
-                        app:hintTextColor="#1A1F3C"
+                        app:boxStrokeColor="@color/navy_primary"
+                        app:hintTextColor="@color/navy_primary"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
                         <AutoCompleteTextView
@@ -210,26 +206,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Missing Since *"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/missingSinceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#1A1F3C"
-                app:hintTextColor="#1A1F3C"
+                app:boxStrokeColor="@color/navy_primary"
+                app:hintTextColor="@color/navy_primary"
                 app:startIconDrawable="@drawable/ic_calendar"
-                app:startIconTint="#1A1F3C">
+                app:startIconTint="@color/navy_primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etMissingSince"
@@ -247,25 +242,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contact Number of Missing Person"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/contactLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/filter_border"
                 app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="#666666">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etContact"
@@ -282,7 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Emergency Contact Numbers *"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -291,25 +285,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Contact numbers to call if person is found"
-                android:textColor="#666666"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
 
             <!-- Emergency Contact 1 -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emergencyContact1Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/filter_border"
                 app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="#666666">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmergencyContact1"
@@ -323,19 +316,18 @@
 
             <!-- Emergency Contact 2 -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emergencyContact2Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/filter_border"
                 app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="#666666">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmergencyContact2"
@@ -349,19 +341,18 @@
 
             <!-- Emergency Contact 3 -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emergencyContact3Layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/filter_border"
                 app:startIconDrawable="@drawable/ic_phone"
-                app:startIconTint="#666666">
+                app:startIconTint="@color/text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etEmergencyContact3"
@@ -378,7 +369,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Photos of Missing Person *"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="4dp" />
@@ -387,7 +378,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Upload at least 1 photo (maximum 5)"
-                android:textColor="#666666"
+                android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="12dp" />
 
@@ -401,28 +392,25 @@
 
                 <!-- Photo 1 (Mandatory) -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/photoCard1"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF">
+                    app:cardBackgroundColor="@color/white">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgPhoto1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/uploadPlaceholder1"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -433,7 +421,7 @@
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
                                 android:src="@drawable/ic_add_photo"
-                                android:backgroundTint="#1A1F3C" />
+                                android:backgroundTint="@color/navy_primary" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -445,7 +433,6 @@
                         </LinearLayout>
 
                         <ImageButton
-                            android:id="@+id/btnRemovePhoto1"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="top|end"
@@ -460,28 +447,25 @@
 
                 <!-- Photo 2 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/photoCard2"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF">
+                    app:cardBackgroundColor="@color/white">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgPhoto2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/uploadPlaceholder2"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -496,14 +480,13 @@
                         </LinearLayout>
 
                         <ImageButton
-                            android:id="@+id/btnRemovePhoto2"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="top|end"
                             android:layout_margin="4dp"
                             android:background="@drawable/circle_red_bg"
                             android:src="@drawable/ic_close"
-                            android:backgroundTint="#FFFFFF"
+                            android:backgroundTint="@color/white"
                             android:padding="4dp"
                             android:visibility="gone" />
                     </FrameLayout>
@@ -511,28 +494,25 @@
 
                 <!-- Photo 3 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/photoCard3"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF">
+                    app:cardBackgroundColor="@color/white">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgPhoto3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/uploadPlaceholder3"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -547,7 +527,6 @@
                         </LinearLayout>
 
                         <ImageButton
-                            android:id="@+id/btnRemovePhoto3"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="top|end"
@@ -562,28 +541,25 @@
 
                 <!-- Photo 4 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/photoCard4"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF">
+                    app:cardBackgroundColor="@color/white">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgPhoto4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/uploadPlaceholder4"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -598,7 +574,6 @@
                         </LinearLayout>
 
                         <ImageButton
-                            android:id="@+id/btnRemovePhoto4"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="top|end"
@@ -613,27 +588,24 @@
 
                 <!-- Photo 5 -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/photoCard5"
                     android:layout_width="0dp"
                     android:layout_height="70dp"
                     android:layout_weight="1"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFFFFF">
+                    app:cardBackgroundColor="@color/white">
 
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <ImageView
-                            android:id="@+id/imgPhoto5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:scaleType="centerCrop"
                             android:visibility="gone" />
 
                         <LinearLayout
-                            android:id="@+id/uploadPlaceholder5"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -648,7 +620,6 @@
                         </LinearLayout>
 
                         <ImageButton
-                            android:id="@+id/btnRemovePhoto5"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="top|end"
@@ -672,7 +643,7 @@
                 android:text="📍 Capture GPS Location"
                 android:textAllCaps="false"
                 app:cornerRadius="10dp"
-                app:strokeColor="#1A1F3C"
+                app:strokeColor="@color/navy_primary"
                 app:strokeWidth="1dp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
 
@@ -682,7 +653,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="4dp"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:visibility="gone"/>
 
@@ -714,23 +685,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Case Description *"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:boxBackgroundMode="outline"
-                app:boxBackgroundColor="#FFFFFF"
+                app:boxBackgroundColor="@color/white"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusBottomEnd="8dp"
-                app:boxStrokeColor="#E0E0E0"
+                app:boxStrokeColor="@color/filter_border"
                 app:counterEnabled="true"
                 app:counterMaxLength="500">
 
@@ -756,9 +726,9 @@
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:backgroundTint="#1A1F3C
+                android:backgroundTint="@color/navy_primary
 "
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 app:cornerRadius="12dp"
                 android:elevation="4dp"
                 android:layout_marginBottom="16dp" />

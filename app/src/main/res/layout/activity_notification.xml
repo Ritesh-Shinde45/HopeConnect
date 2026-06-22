@@ -10,7 +10,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -22,7 +22,7 @@
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="16dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         >
 
         <ImageButton
@@ -32,7 +32,7 @@
             android:src="@drawable/ic_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
-            app:tint="#FFFFFF" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="0dp"
@@ -41,7 +41,7 @@
             android:text="Notifications"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:layout_marginStart="8dp"/>
 
         <TextView
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Mark all read"
             android:textSize="13sp"
-            android:textColor="#2563EB"
+            android:textColor="@color/status_info"
             android:padding="8dp"/>
     </LinearLayout>
 
@@ -59,12 +59,12 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         app:tabMode="fixed"
         app:tabGravity="fill"
-        app:tabTextColor="#888888"
-        app:tabSelectedTextColor="#1A1F3C"
-        app:tabIndicatorColor="#2563EB"
+        app:tabTextColor="@color/text_tertiary"
+        app:tabSelectedTextColor="@color/navy_primary"
+        app:tabIndicatorColor="@color/status_info"
         app:tabIndicatorHeight="3dp"
         app:tabTextAppearance="@android:style/TextAppearance.Small"/>
 
@@ -78,7 +78,7 @@
         android:layout_marginBottom="4dp"
         android:text="0 unread"
         android:textSize="12sp"
-        android:textColor="#666666"/>
+        android:textColor="@color/text_secondary"/>
 
     <!-- Progress -->
     <ProgressBar
@@ -119,7 +119,7 @@
             android:layout_height="wrap_content"
             android:text="Nothing here for this category"
             android:textSize="13sp"
-            android:textColor="#888888"
+            android:textColor="@color/text_tertiary"
             android:gravity="center"
             android:layout_marginTop="6dp"/>
     </LinearLayout>

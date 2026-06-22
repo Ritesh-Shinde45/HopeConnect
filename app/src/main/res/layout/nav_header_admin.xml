@@ -52,7 +52,6 @@
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/tv_admin_initials"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:gravity="center"
@@ -70,7 +69,6 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_admin_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Super Admin"
@@ -79,7 +77,6 @@
                     android:textColor="@android:color/white"/>
 
                 <TextView
-                    android:id="@+id/tv_admin_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="riteshshinde472@gmail.com"

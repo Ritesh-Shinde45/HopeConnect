@@ -10,7 +10,7 @@
     android:layout_marginBottom="6dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,12 +26,12 @@
             android:text="REPORT"
             android:textSize="10sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:background="#1A1F3C"
+            android:background="@color/navy_primary"
             android:layout_marginBottom="8dp"/>
 
         <LinearLayout
@@ -82,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
                     android:text="01 Jan, 10:00 AM"
-                    android:textColor="#999999"
+                    android:textColor="@color/text_hint"
                     android:textSize="11sp"/>
             </LinearLayout>
 

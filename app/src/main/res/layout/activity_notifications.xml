@@ -9,7 +9,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -17,7 +17,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         android:padding="20dp">
 
         <ImageView
@@ -27,14 +27,14 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back"
-            app:tint="#FFFFFF" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Notifications"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -77,7 +77,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- All Notifications -->
                     <LinearLayout
@@ -115,7 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
 
@@ -124,7 +124,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- New Post Notifications -->
                     <LinearLayout
@@ -162,7 +162,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
 
@@ -171,7 +171,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Comments Notifications -->
                     <LinearLayout
@@ -209,7 +209,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
 
@@ -218,7 +218,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Events Notifications -->
                     <LinearLayout
@@ -256,7 +256,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
                 </LinearLayout>
@@ -290,7 +290,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Email Updates -->
                     <LinearLayout
@@ -328,7 +328,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="false"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
 
@@ -337,7 +337,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Promotional Emails -->
                     <LinearLayout
@@ -375,7 +375,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="false"
-                            app:thumbTint="#FFFFFF"
+                            app:thumbTint="@color/white"
                             app:trackTint="@color/switch_track_color" />
                     </LinearLayout>
                 </LinearLayout>

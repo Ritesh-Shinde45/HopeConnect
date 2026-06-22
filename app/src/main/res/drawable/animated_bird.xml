@@ -102,7 +102,7 @@
             <!-- ── EYE WHITE ── -->
             <path
                 android:name="eyeWhite"
-                android:fillColor="#FFFFFF"
+                android:fillColor="@color/white"
                 android:pathData="
                     M51,27
                     C52.5,27 54,28.2 54,29.5
@@ -124,7 +124,7 @@
             <!-- ── EYE SHINE ── -->
             <path
                 android:name="eyeShine"
-                android:fillColor="#FFFFFF"
+                android:fillColor="@color/white"
                 android:pathData="
                     M52,29
                     C52.5,29 53,29.3 53,29.8
@@ -136,7 +136,7 @@
             <path
                 android:name="chestDetail"
                 android:fillColor="#90CAF9"
-                android:strokeColor="#00000000"
+                android:strokeColor="@color/black"
                 android:pathData="
                     M46,48
                     C47,44 50,42 53,44

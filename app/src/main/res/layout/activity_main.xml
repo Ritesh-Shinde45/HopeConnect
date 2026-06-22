@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FB"
+    android:background="@color/background"
     android:fitsSystemWindows="true">
 
     <!-- Status Bar Spacer -->
@@ -12,7 +12,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#F8F9FB"
+        android:background="@color/background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -36,18 +36,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:text="Hi, User"
-        android:textColor="#808080"
+        android:textColor="@color/text_light_gray"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintTop_toTopOf="@id/profileImage" />
 
     <!-- App label -->
     <TextView
-        android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="HopeConnect"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/userName"
         app:layout_constraintTop_toBottomOf="@id/userName" />
@@ -67,7 +66,6 @@
 
     <!-- Scrollable main content -->
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollContent"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -81,9 +79,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ═══════════════════════════════════════
-                 1. SEARCH BAR
-                 ═══════════════════════════════════════ -->
+
             <EditText
                 android:id="@+id/searchBar"
                 android:layout_width="match_parent"
@@ -101,13 +97,12 @@
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:textSize="14sp"
-                android:textColorHint="#999999" />
+                android:textColorHint="@color/text_hint" />
 
             <!-- ═══════════════════════════════════════
                  2. PROMO CARD
                  ═══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
-                android:id="@+id/promoCard"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginStart="16dp"
@@ -119,7 +114,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="#1A1F3C"
+                    android:background="@color/navy_primary"
                     android:padding="20dp">
 
                     <TextView
@@ -127,7 +122,7 @@
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
                         android:text="Technology with Humanity"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         android:lineHeight="26dp"
                         android:textStyle="bold" />
@@ -138,10 +133,10 @@
                         android:layout_height="36dp"
                         android:layout_below="@id/promoText"
                         android:layout_marginTop="16dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:text="Read more"
                         android:textAllCaps="false"
-                        android:textColor="#3F51B5"
+                        android:textColor="@color/primary"
                         android:textStyle="bold"
                         app:cornerRadius="8dp" />
 
@@ -183,11 +178,12 @@
                         android:gravity="center"
                         android:padding="14dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🔍"
-                            android:textSize="28sp" />
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_active"
+                            android:background="@drawable/rounded_blue_bg"
+                            android:padding="6dp"/>
 
                         <TextView
                             android:id="@+id/tvStatActive"
@@ -197,14 +193,14 @@
                             android:textColor="#E65100"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="6dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Active"
                             android:textColor="#BF360C"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -226,11 +222,12 @@
                         android:gravity="center"
                         android:padding="14dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="✅"
-                            android:textSize="28sp" />
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_found2"
+                            android:background="@drawable/rounded_green_bg"
+                            android:padding="6dp"/>
 
                         <TextView
                             android:id="@+id/tvStatFound"
@@ -240,14 +237,14 @@
                             android:textColor="#2E7D32"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="6dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Found"
                             android:textColor="#1B5E20"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -259,7 +256,7 @@
                     android:layout_marginStart="6dp"
                     app:cardCornerRadius="14dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#E3F2FD">
+                    app:cardBackgroundColor="@color/filter_bg_selected">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -268,28 +265,29 @@
                         android:gravity="center"
                         android:padding="14dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="🤝"
-                            android:textSize="28sp" />
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_helpers"
+                            android:background="@drawable/rounded_orange_bg"
+                            android:padding="6dp"/>
 
                         <TextView
                             android:id="@+id/tvStatHelps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
-                            android:textColor="#1565C0"
+                            android:textColor="@color/brand_secondary"
                             android:textSize="22sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="6dp"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Helpers"
                             android:textColor="#0D47A1"
-                            android:textSize="11sp" />
+                            android:textSize="11sp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -307,12 +305,11 @@
                 android:layout_marginTop="24dp">
 
                 <TextView
-                    android:id="@+id/txtRecentCases"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Recent Cases"
-                    android:textColor="#000000"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -347,12 +344,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#E3F2FD"
+                        android:backgroundTint="@color/filter_bg_selected"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="All Cases"
                         android:textAllCaps="false"
-                        android:textColor="#2196F3"
+                        android:textColor="@color/filter_text_selected"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         app:cornerRadius="22dp"
@@ -360,8 +357,8 @@
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#FF6B35"
-                        app:strokeColor="#00000000"
+                        app:iconTint="@color/fire_orange"
+                        app:strokeColor="@color/black"
                         app:strokeWidth="0dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -370,20 +367,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="Missing"
                         android:textAllCaps="false"
-                        android:textColor="#666666"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         app:cornerRadius="22dp"
                         app:icon="@drawable/ic_missing"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#666666"
-                        app:strokeColor="#E0E0E0"
+                        app:iconTint="@color/text_secondary"
+                        app:strokeColor="@color/filter_border"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -392,20 +389,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="Found"
                         android:textAllCaps="false"
-                        android:textColor="#666666"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         app:cornerRadius="22dp"
                         app:icon="@drawable/ic_found"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#666666"
-                        app:strokeColor="#E0E0E0"
+                        app:iconTint="@color/text_secondary"
+                        app:strokeColor="@color/filter_border"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -414,20 +411,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="Children"
                         android:textAllCaps="false"
-                        android:textColor="#666666"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         app:cornerRadius="22dp"
                         app:icon="@drawable/ic_children"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#666666"
-                        app:strokeColor="#E0E0E0"
+                        app:iconTint="@color/text_secondary"
+                        app:strokeColor="@color/filter_border"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -436,20 +433,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
                         android:layout_marginEnd="12dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="Adults"
                         android:textAllCaps="false"
-                        android:textColor="#666666"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         app:cornerRadius="22dp"
                         app:icon="@drawable/ic_adults"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#666666"
-                        app:strokeColor="#E0E0E0"
+                        app:iconTint="@color/text_secondary"
+                        app:strokeColor="@color/filter_border"
                         app:strokeWidth="1dp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -457,20 +454,20 @@
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="44dp"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/white"
                         android:paddingStart="14dp"
                         android:paddingEnd="18dp"
                         android:text="Elderly"
                         android:textAllCaps="false"
-                        android:textColor="#666666"
+                        android:textColor="@color/text_secondary"
                         android:textSize="14sp"
                         app:cornerRadius="22dp"
                         app:icon="@drawable/ic_elderly"
                         app:iconGravity="textStart"
                         app:iconPadding="8dp"
                         app:iconSize="20dp"
-                        app:iconTint="#666666"
-                        app:strokeColor="#E0E0E0"
+                        app:iconTint="@color/text_secondary"
+                        app:strokeColor="@color/filter_border"
                         app:strokeWidth="1dp" />
 
                 </LinearLayout>
@@ -491,7 +488,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Recent Missing Cases"
-                    android:textColor="#000000"
+                    android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -526,24 +523,20 @@
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-            <!-- ═══════════════════════════════════════
-                 5. COMMUNITY ACHIEVEMENTS BANNER
-                 ═══════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#1A1F3C"
+                android:background="@color/prim2"
                 android:padding="24dp"
                 android:layout_marginTop="24dp"
                 android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="🏆"
-                    android:textSize="52sp" />
-
+                <ImageView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:src="@drawable/ic_trophy"
+                    android:layout_marginBottom="8dp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -568,7 +561,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textColor="#FFD700"
+                        android:textColor="#FFFFFF"
                         android:textSize="36sp"
                         android:textStyle="bold" />
 
@@ -577,7 +570,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=" missing persons helped"
-                        android:textColor="#BBDEFB"
+                        android:textColor="#FFFFFF"
                         android:textSize="14sp"
                         android:layout_marginStart="8dp" />
                 </LinearLayout>
@@ -586,15 +579,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Every sighting counts. Together we find them."
-                    android:textColor="#90CAF9"
+                    android:textColor="#FFFFFF"
                     android:textSize="12sp"
                     android:layout_marginTop="8dp"
                     android:gravity="center" />
             </LinearLayout>
 
-            <!-- ═══════════════════════════════════════
-                 6. HOW IT WORKS
-                 ═══════════════════════════════════════ -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -602,9 +592,19 @@
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="28dp"
                 android:text="How HopeConnect Works"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="2dp"
+                android:text="Three simple steps to reunite families"
+                android:textColor="@color/text_tertiary"
+                android:textSize="13sp" />
 
             <!-- Step 1 -->
             <androidx.cardview.widget.CardView
@@ -612,52 +612,112 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="14dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:gravity="center"
-                        android:text="📋"
-                        android:textSize="26sp"
-                        android:background="#FFF3E0"
-                        android:padding="8dp" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="14dp">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/circle_orange_bg">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="📋"
+                                android:textSize="22sp" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="STEP 01"
+                                android:textColor="#AAAAAA"
+                                android:textSize="10sp"
+                                android:letterSpacing="0.1"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="File a Report"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="1. File a Report"
-                            android:textColor="#212121"
-                            android:textSize="15sp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:gravity="center"
+                            android:text="01"
+                            android:textColor="#F0F0F0"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Submit a missing person report with photo, age, and last seen location. It reaches the community instantly."
-                            android:textColor="#757575"
-                            android:textSize="13sp"
-                            android:layout_marginTop="4dp" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Submit a missing person report with photo, age, and last seen location. It reaches the community instantly."
+                        android:textColor="#757575"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/pill_orange"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="⏱  Takes under 2 minutes"
+                        android:textColor="#E65100"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <!-- Connector line between step 1 and 2 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="0dp">
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="24dp"
+                    android:background="@color/filter_border"
+                    android:layout_marginStart="22dp" />
+            </LinearLayout>
 
             <!-- Step 2 -->
             <androidx.cardview.widget.CardView
@@ -665,52 +725,109 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:gravity="center"
-                        android:text="👁️"
-                        android:textSize="26sp"
-                        android:background="#E8F5E9"
-                        android:padding="8dp" />
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="14dp">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/circle_green_bg">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="👁️"
+                                android:textSize="22sp" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="STEP 02"
+                                android:textColor="#AAAAAA"
+                                android:textSize="10sp"
+                                android:letterSpacing="0.1"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Community Spots &amp; Reports"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="2. Community Spots &amp; Reports"
-                            android:textColor="#212121"
-                            android:textSize="15sp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:gravity="center"
+                            android:text="02"
+                            android:textColor="#F0F0F0"
+                            android:textSize="22sp"
                             android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Anyone who spots the person can share a tip directly through the app. AI-powered face matching helps narrow down leads."
-                            android:textColor="#757575"
-                            android:textSize="13sp"
-                            android:layout_marginTop="4dp" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Anyone who spots the person can share a tip directly through the app. AI-powered face matching helps narrow down leads."
+                        android:textColor="#757575"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/pill_green"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="✦  AI-powered face matching"
+                        android:textColor="#2E7D32"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+            <!-- Connector line between step 2 and 3 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="36dp">
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="24dp"
+                    android:background="@color/filter_border"
+                    android:layout_marginStart="22dp" />
+            </LinearLayout>
 
             <!-- Step 3 -->
             <androidx.cardview.widget.CardView
@@ -718,10 +835,379 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="10dp"
-                app:cardCornerRadius="14dp"
+                app:cardCornerRadius="16dp"
                 app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/circle_blue_bg">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="🏠"
+                                android:textSize="22sp" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="12dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="STEP 03"
+                                android:textColor="#AAAAAA"
+                                android:textSize="10sp"
+                                android:letterSpacing="0.1"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Reunited &amp; Marked Found"
+                                android:textColor="@color/text_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:gravity="center"
+                            android:text="03"
+                            android:textColor="#F0F0F0"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Once the person is found, the report is marked as Found and the community helper earns an achievement badge."
+                        android:textColor="#757575"
+                        android:textSize="13sp"
+                        android:lineSpacingMultiplier="1.5" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/pill_blue"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:text="🏆  Helper earns achievement"
+                        android:textColor="@color/brand_secondary"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══════════════════════════════════════
+                 7. AWARENESS TIPS  (2×2 grid)
+                 ═══════════════════════════════════════ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginEnd="16dp"
+                android:text="Quick Awareness Tips"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="12dp"
+                android:columnCount="2"
+                android:rowCount="2"
+                android:useDefaultMargins="false">
+
+                <!-- Tip 1 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginBottom="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tip_icon_bg_amber"
+                            android:gravity="center"
+                            android:text="📸"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Keep recent photos"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Save a recent photo of elderly family members on your phone."
+                            android:textColor="@color/text_tertiary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.4" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tip 2 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginBottom="6dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tip_icon_bg_teal"
+                            android:gravity="center"
+                            android:text="📍"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Note identifiers"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Record clothing details and identifiable marks when filing."
+                            android:textColor="@color/text_tertiary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.4" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tip 3 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginEnd="6dp"
+                    android:layout_marginTop="0dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tip_icon_bg_red"
+                            android:gravity="center"
+                            android:text="⏱️"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Act in 24 hours"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="The first 24 hours are critical. Report as early as possible."
+                            android:textColor="@color/text_tertiary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.4" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tip 4 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnWeight="1"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginTop="0dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="14dp">
+
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/tip_icon_bg_purple"
+                            android:gravity="center"
+                            android:text="🤝"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="Share on social"
+                            android:textColor="@color/text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Post active cases to WhatsApp and social to extend reach."
+                            android:textColor="@color/text_tertiary"
+                            android:textSize="11sp"
+                            android:lineSpacingMultiplier="1.4" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </GridLayout>
+
+            <!-- ═══════════════════════════════════════
+                 8. COMMUNITY ACHIEVEMENTS BANNER
+                 ═══════════════════════════════════════ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/prim2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@drawable/ach_icon_bg">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="🏆"
+                            android:textSize="28sp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="COMMUNITY IMPACT"
+                            android:textColor="#90CAF9"
+                            android:textSize="10sp"
+                            android:letterSpacing="0.12"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="#FFD700"
+                            android:textSize="34sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="2dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="missing persons helped"
+                            android:textColor="#BBDEFB"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="14dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -730,234 +1216,141 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
+                    <FrameLayout
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:gravity="center"
-                        android:text="🏠"
-                        android:textSize="26sp"
-                        android:background="#E3F2FD"
-                        android:padding="8dp" />
+                        android:background="@drawable/spread_icon_bg">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="📣"
+                            android:textSize="22sp" />
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="14dp">
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="3. Reunited &amp; Marked Found"
-                            android:textColor="#212121"
-                            android:textSize="15sp"
+                            android:text="Spread the Word"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Once the person is found, the report is marked as Found and the community helper earns an achievement."
-                            android:textColor="#757575"
-                            android:textSize="13sp"
-                            android:layout_marginTop="4dp" />
+                            android:layout_marginTop="3dp"
+                            android:text="Bigger network = faster results."
+                            android:textColor="@color/text_tertiary"
+                            android:textSize="12sp" />
                     </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ═══════════════════════════════════════
-                 7. AWARENESS TIPS CARD
-                 ═══════════════════════════════════════ -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="28dp"
-                android:text="Quick Awareness Tips"
-                android:textColor="#000000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#FFFDE7">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp">
-
-                    <!-- Tip row -->
-                    <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:orientation="horizontal"
-                        android:gravity="center_vertical" android:layout_marginBottom="10dp">
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content"
-                            android:text="📸" android:textSize="18sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:layout_marginStart="10dp"
-                            android:text="Always keep a recent photo of elderly family members saved on your phone."
-                            android:textColor="#555555" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:orientation="horizontal"
-                        android:gravity="center_vertical" android:layout_marginBottom="10dp">
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content"
-                            android:text="📍" android:textSize="18sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:layout_marginStart="10dp"
-                            android:text="Note identifiable marks or clothing details when filing a report — they help enormously."
-                            android:textColor="#555555" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:orientation="horizontal"
-                        android:gravity="center_vertical" android:layout_marginBottom="10dp">
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content"
-                            android:text="⏱️" android:textSize="18sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:layout_marginStart="10dp"
-                            android:text="Report as early as possible. The first 24 hours are the most critical."
-                            android:textColor="#555555" android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <LinearLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content" android:orientation="horizontal"
-                        android:gravity="center_vertical">
-                        <TextView android:layout_width="28dp" android:layout_height="wrap_content"
-                            android:text="🤝" android:textSize="18sp"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content"
-                            android:layout_weight="1" android:layout_marginStart="10dp"
-                            android:text="Share active case cards on WhatsApp and social media to extend the search network."
-                            android:textColor="#555555" android:textSize="13sp"/>
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ═══════════════════════════════════════
-                 8. SPREAD AWARENESS BANNER
-                 ═══════════════════════════════════════ -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="3dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="#4A148C"
-                    android:padding="20dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📣"
-                        android:textSize="36sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Spread the Word"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Share HopeConnect with friends and family. The larger the network, the faster we find missing people."
-                        android:textColor="#CE93D8"
-                        android:textSize="13sp"
-                        android:gravity="center"
-                        android:layout_marginTop="6dp" />
 
                     <Button
                         android:id="@+id/btnShareApp"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="14dp"
-                        android:backgroundTint="#7B1FA2"
-                        android:text="Share App"
+                        android:layout_height="38dp"
+                        android:backgroundTint="#4A148C"
+                        android:text="Share"
                         android:textAllCaps="false"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
+                        android:textSize="13sp"
                         app:cornerRadius="20dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ═══════════════════════════════════════
-                 9. DID YOU KNOW? FACT CARD
-                 ═══════════════════════════════════════ -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginTop="20dp"
-                app:cardCornerRadius="14dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#E8EAF6">
+                app:cardBackgroundColor="@color/wpurple"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp">
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="top">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="💡  Did You Know?"
-                        android:textColor="#283593"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/dyk_icon_bg">
 
-                    <TextView
-                        android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="💡"
+                            android:textSize="18sp" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="Over 90% of missing persons in India are found within the first week when the community actively participates in sharing alerts. HopeConnect makes that network available to everyone."
-                        android:textColor="#3949AB"
-                        android:textSize="13sp"
-                        android:lineSpacingMultiplier="1.4" />
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Did You Know?"
+                            android:textColor="#283593"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:lineSpacingMultiplier="1.5"
+                            android:text="Over 90% of missing persons in India are found within the first week when the community actively participates in sharing alerts. HopeConnect makes that network available to everyone."
+                            android:textColor="#3949AB"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- ═══════════════════════════════════════
-                 10. BOTTOM SPACER
-                 ═══════════════════════════════════════ -->
-            <View
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="24dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:lineSpacingMultiplier="1.5"
+                android:text="© 2026 HopeConnect · Built with ❤️ for India"
+                android:textColor="@color/nav_unselected"
+                android:gravity="center"
+                android:layout_marginBottom="24dp"
+                android:textSize="12sp" />
+
 
         </LinearLayout>
+
+
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom Navigation -->
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:background="#FFFFFF"
-        app:elevation="12dp"
+        android:background="@color/white"
+        app:elevation="0dp"
         app:itemIconSize="28dp"
         app:itemIconTint="@color/nav_item_color_state"
-        app:itemTextColor="@color/nav_item_color_state"
+        app:itemTextColor="@color/nav_text_color_state"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_nav_menu" />

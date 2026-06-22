@@ -14,7 +14,7 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -23,7 +23,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1A1F3C"
+            android:background="@color/navy_primary"
             android:padding="20dp">
 
             <ImageView
@@ -33,14 +33,14 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_back"
-                app:tint="#FFFFFF" />
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="Buy Tea ☕"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -50,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            app:cardBackgroundColor="#E3F2FD"
+            app:cardBackgroundColor="@color/filter_bg_selected"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
 
@@ -174,7 +174,7 @@
                     android:text="Buy Tea"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="#1A1F3C"
+                    android:backgroundTint="@color/navy_primary"
                     android:layout_marginTop="20dp"/>
 
                 <!-- QR Image (hidden until generated) -->
@@ -189,7 +189,6 @@
 
                 <!-- UPI ID (displayed below QR for convenience) -->
                 <TextView
-                    android:id="@+id/tvUpiId"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="8080769308@axl"
@@ -205,7 +204,7 @@
                     android:text="Copy UPI ID"
                     android:textStyle="bold"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="#1A1F3C"
+                    android:backgroundTint="@color/navy_primary"
                     android:layout_marginTop="12dp"/>
 
             </LinearLayout>

@@ -75,10 +75,21 @@ public class MissedFragment extends Fragment implements SearchableFragment {
         chipMale     = v.findViewById(R.id.chipMale);
         chipFemale   = v.findViewById(R.id.chipFemale);
 
+
+        int offsetDp = 100;
+        int gapDp    = 0;
+
+        float density = getResources().getDisplayMetrics().density;
+        int offsetPx  = (int) (offsetDp * density);
+        int gapPx     = (int) (gapDp    * density);
+
         StaggeredGridLayoutManager staggered =
-                new StaggeredGridLayoutManager(2,
-                        StaggeredGridLayoutManager.VERTICAL);
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        staggered.setGapStrategy(
+                StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         recyclerView.setLayoutManager(staggered);
+        recyclerView.addItemDecoration(
+                new StaggeredOffsetItemDecoration(offsetPx, gapPx));
 
         adapter = new ReportAdapter(requireContext(), visibleReports, model -> {
             ReportModelCache.put(model);

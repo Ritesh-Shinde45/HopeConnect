@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F4F5F9">
+    android:background="@color/surface_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         android:padding="20dp">
 
         <!-- Top: trophy + title -->
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Community Achievements"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
 
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Every sighting counts. Together we find them."
-                    android:textColor="#8892B8"
+                    android:textColor="@color/muted_text"
                     android:textSize="11sp"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="0"
-                android:textColor="#F5A623"
+                android:textColor="@color/accent_gold"
                 android:textSize="42sp"
                 android:textStyle="bold"
                 android:lineSpacingMultiplier="1"/>
@@ -82,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="missing persons helped find their families"
-                android:textColor="#8892B8"
+                android:textColor="@color/muted_text"
                 android:textSize="12sp"
                 android:layout_marginTop="2dp"
                 android:gravity="center"/>
@@ -112,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sightings"
-                    android:textColor="#8892B8"
+                    android:textColor="@color/muted_text"
                     android:textSize="9sp"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
@@ -141,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="#2DC97E"
+                    android:textColor="@color/accent_green"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Resolved"
-                    android:textColor="#8892B8"
+                    android:textColor="@color/muted_text"
                     android:textSize="9sp"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
@@ -169,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
-                    android:textColor="#4F6EF7"
+                    android:textColor="@color/accent_blue"
                     android:textSize="20sp"
                     android:textStyle="bold"/>
 
@@ -177,7 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Helpers"
-                    android:textColor="#8892B8"
+                    android:textColor="@color/muted_text"
                     android:textSize="9sp"
                     android:layout_marginTop="2dp"/>
             </LinearLayout>
@@ -206,7 +206,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="32dp"
-        android:indeterminateTint="#4F6EF7"
+        android:indeterminateTint="@color/accent_blue"
         android:visibility="gone"/>
 
     <LinearLayout
@@ -229,7 +229,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No resolved cases yet"
-            android:textColor="#1A1F3C"
+            android:textColor="@color/navy_primary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"

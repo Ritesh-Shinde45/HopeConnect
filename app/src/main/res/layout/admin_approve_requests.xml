@@ -15,7 +15,7 @@
         android:paddingEnd="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:elevation="4dp"
         android:layout_alignParentTop="true">
 
@@ -25,7 +25,7 @@
             android:text="Approve Reports"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="#1A1A1A"/>
+            android:textColor="@color/text_primary"/>
 
         <TextView
             android:id="@+id/tv_pending_header_count"
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:text="Loading..."
             android:textSize="12sp"
-            android:textColor="#999999"
+            android:textColor="@color/text_hint"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="10dp"/>
 
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="No pending reports"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginTop="12dp"/>
@@ -114,7 +114,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="All reports have been reviewed"
-                    android:textColor="#999999"
+                    android:textColor="@color/text_hint"
                     android:textSize="13sp"
                     android:layout_marginTop="4dp"/>
 
@@ -136,7 +136,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Loading reports..."
-                    android:textColor="#999999"
+                    android:textColor="@color/text_hint"
                     android:textSize="14sp"
                     android:layout_marginTop="12dp"/>
 

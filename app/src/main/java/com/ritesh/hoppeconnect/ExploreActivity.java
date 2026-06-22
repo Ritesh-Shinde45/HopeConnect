@@ -20,6 +20,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -53,23 +54,32 @@ public class ExploreActivity extends AppCompatActivity {
 
     private int selectedCategory = CAT_MISSED;
 
-
-    private static final int COLOR_ACTIVE_MISSED  = Color.parseColor("#FF8C42"); // orange
-    private static final int COLOR_ACTIVE_MATCH   = Color.parseColor("#4F6EF7"); // accent blue
-    private static final int COLOR_ACTIVE_HELP    = Color.parseColor("#2DC97E"); // green
-    private static final int COLOR_ACTIVE_ACHIEVE = Color.parseColor("#F5A623"); // gold
-
-    private static final int COLOR_INACTIVE_BG    = Color.parseColor("#2A3050"); // dark chip
-    private static final int COLOR_INACTIVE_ICON  = Color.parseColor("#8892B8"); // muted icon
-    private static final int COLOR_INACTIVE_LABEL = Color.parseColor("#8892B8"); // muted label
-    private static final int COLOR_ACTIVE_LABEL   = Color.parseColor("#FFFFFF");
-    private static final int COLOR_ACTIVE_ICON    = Color.WHITE;
+    private int COLOR_ACTIVE_MISSED;
+    private int COLOR_ACTIVE_MATCH;
+    private int COLOR_ACTIVE_HELP;
+    private int COLOR_ACTIVE_ACHIEVE;
+    private int COLOR_INACTIVE_BG;
+    private int COLOR_INACTIVE_ICON;
+    private int COLOR_INACTIVE_LABEL;
+    private int COLOR_ACTIVE_LABEL;
+    private int COLOR_ACTIVE_ICON;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.explore);
+
+        COLOR_ACTIVE_MISSED  = ContextCompat.getColor(this, R.color.accent_orange);
+        COLOR_ACTIVE_MATCH   = ContextCompat.getColor(this, R.color.accent_blue);
+        COLOR_ACTIVE_HELP    = ContextCompat.getColor(this, R.color.accent_green);
+        COLOR_ACTIVE_ACHIEVE = ContextCompat.getColor(this, R.color.accent_gold);
+        COLOR_INACTIVE_BG    = ContextCompat.getColor(this, R.color.navy_chip);
+        COLOR_INACTIVE_ICON  = ContextCompat.getColor(this, R.color.muted_text);
+        COLOR_INACTIVE_LABEL = ContextCompat.getColor(this, R.color.muted_text);
+        COLOR_ACTIVE_LABEL   = ContextCompat.getColor(this, R.color.white);
+        COLOR_ACTIVE_ICON    = Color.WHITE;
+
         setNavyStatusBar();
 
         AppwriteService.init(this);
@@ -91,8 +101,8 @@ public class ExploreActivity extends AppCompatActivity {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.setStatusBarColor(Color.parseColor("#1A1F3C"));
-
+        // Fixed: use ContextCompat instead of Color.parseColor with @color reference
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.navy_primary));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             WindowInsetsController controller = window.getInsetsController();
@@ -127,9 +137,9 @@ public class ExploreActivity extends AppCompatActivity {
         if (profileImage != null)
             profileImage.setOnClickListener(v -> safeStartActivity(ProfileActivity.class));
 
-        catMissed      = safeFindViewById(R.id.categoryMissedReports);
-        catMatch       = safeFindViewById(R.id.categoryMatchFace);
-        catHelp        = safeFindViewById(R.id.categoryYourHelps);
+        catMissed       = safeFindViewById(R.id.categoryMissedReports);
+        catMatch        = safeFindViewById(R.id.categoryMatchFace);
+        catHelp         = safeFindViewById(R.id.categoryYourHelps);
         catAchievements = safeFindViewById(R.id.categoryAchivements);
 
         cardMissed  = safeFindViewById(R.id.cardMissed);
@@ -297,10 +307,10 @@ public class ExploreActivity extends AppCompatActivity {
 
         bottomNav.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            if (id == R.id.nav_explore)      { return true; }
-            if (id == R.id.nav_profile)      { safeStartActivity(ProfileActivity.class); return true; }
-            if (id == R.id.nav_new_report)   { safeStartActivity(NewReportActivity.class); return true; }
-            if (id == R.id.nav_chat)         { safeStartActivity(ChatsActivity.class); return true; }
+            if (id == R.id.nav_explore)    { return true; }
+            if (id == R.id.nav_profile)    { safeStartActivity(ProfileActivity.class); return true; }
+            if (id == R.id.nav_new_report) { safeStartActivity(NewReportActivity.class); return true; }
+            if (id == R.id.nav_chat)       { safeStartActivity(ChatsActivity.class); return true; }
             if (id == R.id.nav_home) {
                 Intent i = new Intent(this, MainActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -325,7 +335,6 @@ public class ExploreActivity extends AppCompatActivity {
 
 
     private void updateCategoryVisualState() {
-        int[] cards  = {0, 0, 0, 0};
         CardView[]  cvs    = {cardMissed, cardMatch, cardHelp, cardAchieve};
         ImageView[] icons  = {iconMissed, iconMatch, iconHelp, iconAchieve};
         TextView[]  labels = {labelMissed, labelMatch, labelHelp, labelAchieve};

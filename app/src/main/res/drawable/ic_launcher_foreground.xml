@@ -52,7 +52,7 @@
       android:pathData="M256,256m-210,0a210,210 0,1 1,420 0a210,210 0,1 1,-420 0"
       android:strokeAlpha="0.22"
       android:strokeWidth="2"
-      android:fillColor="#00000000"
+      android:fillColor="#000000"
       android:strokeColor="#4FC3F7"
       android:fillAlpha="0.22"/>
   <path
@@ -103,7 +103,7 @@
   <path
       android:pathData="M238,238m-130,0a130,130 0,1 1,260 0a130,130 0,1 1,-260 0"
       android:strokeWidth="18"
-      android:fillColor="#00000000">
+      android:fillColor="#000000">
     <aapt:attr name="android:strokeColor">
       <gradient
           android:startX="108"

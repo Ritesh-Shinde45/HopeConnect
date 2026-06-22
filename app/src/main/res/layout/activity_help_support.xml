@@ -9,13 +9,13 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#1A1F3C" />
+        android:background="@color/navy_primary" />
 
     <!-- Header -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1A1F3C"
+        android:background="@color/navy_primary"
         android:padding="20dp">
 
         <ImageView
@@ -25,14 +25,14 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_back"
-            app:tint="#FFFFFF" />
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="Help &amp; Support"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -92,7 +92,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="1"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -127,7 +127,7 @@
                         android:layout_height="20dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Step 2 -->
                     <LinearLayout
@@ -142,7 +142,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="2"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -177,7 +177,7 @@
                         android:layout_height="20dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Step 3 -->
                     <LinearLayout
@@ -192,7 +192,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="3"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -227,7 +227,7 @@
                         android:layout_height="20dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Step 4 -->
                     <LinearLayout
@@ -242,7 +242,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="4"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -277,7 +277,7 @@
                         android:layout_height="20dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Step 5 -->
                     <LinearLayout
@@ -292,7 +292,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="5"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -327,7 +327,7 @@
                         android:layout_height="20dp"
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Step 6 -->
                     <LinearLayout
@@ -342,7 +342,7 @@
                             android:background="@drawable/bg_step_circle"
                             android:gravity="center"
                             android:text="6"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold" />
 
@@ -466,7 +466,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- FAQ 2 -->
                     <LinearLayout
@@ -503,7 +503,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- FAQ 3 -->
                     <LinearLayout
@@ -540,7 +540,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- FAQ 4 -->
                     <LinearLayout
@@ -577,11 +577,10 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- FAQ 5 -->
                     <LinearLayout
-                        android:id="@+id/layoutFaq5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -614,11 +613,10 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="4dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- FAQ 6 -->
                     <LinearLayout
-                        android:id="@+id/layoutFaq6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -687,7 +685,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_email"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -725,7 +723,7 @@
                         android:layout_height="1dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
-                        android:background="#E0E0E0" />
+                        android:background="@color/filter_border" />
 
                     <!-- Phone -->
                     <LinearLayout
@@ -742,7 +740,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_phone"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -799,7 +797,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_report"
-                        app:tint="#E53935" />
+                        app:tint="@color/status_missing" />
 
                     <TextView
                         android:layout_width="0dp"

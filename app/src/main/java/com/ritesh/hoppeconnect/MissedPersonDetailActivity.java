@@ -701,7 +701,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                 Canvas canvas = page1.getCanvas();
 
 
-                p.setColor(Color.parseColor("#1A1F3C"));
+                p.setColor(Color.parseColor("@color/navy_primary"));
                 canvas.drawRect(0, 0, 595, 80, p);
                 p.setColor(Color.WHITE);
                 p.setTextSize(16f); p.setFakeBoldText(true);
@@ -807,7 +807,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                         photoCanvas.drawRect(0, 0, 595, 842, bg);
 
                        
-                        bg.setColor(Color.parseColor("#1A1F3C"));
+                        bg.setColor(Color.parseColor("@color/navy_primary"));
                         photoCanvas.drawRect(0, 0, 595, 44, bg);
                         bg.setColor(Color.WHITE);
                         bg.setTextSize(13f); bg.setFakeBoldText(true);
@@ -836,7 +836,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
                             Paint ph = new Paint();
                             ph.setColor(Color.parseColor("#EEEEEE"));
                             photoCanvas.drawRect(16, 54, 579, 794, ph);
-                            ph.setColor(Color.parseColor("#999999"));
+                            ph.setColor(Color.parseColor("@color/text_hint"));
                             ph.setTextSize(16f); ph.setAntiAlias(true);
                             ph.setTextAlign(Paint.Align.CENTER);
                             photoCanvas.drawText("Photo unavailable",
@@ -896,7 +896,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
     private void drawSectionTitle(Canvas canvas, Paint p,
                                   String title, int y) {
-        p.setColor(Color.parseColor("#1A1F3C"));
+        p.setColor(Color.parseColor("@color/navy_primary"));
         p.setTextSize(11f);
         p.setFakeBoldText(true);
         canvas.drawText(title, 16, y, p);
@@ -910,7 +910,7 @@ public class MissedPersonDetailActivity extends AppCompatActivity {
 
     private void drawField(Canvas canvas, Paint p,
                            String label, String value, int y) {
-        p.setColor(Color.parseColor("#888888"));
+        p.setColor(Color.parseColor("@color/text_tertiary"));
         p.setTextSize(11f);
         p.setFakeBoldText(false);
         canvas.drawText(label + ":", 16, y, p);

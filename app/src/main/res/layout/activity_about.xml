@@ -8,7 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/whiteb">
 
         <View
             android:layout_width="match_parent"
@@ -87,7 +88,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="16dp"
+            android:background="@color/whiteb">
 
             <!-- About Card -->
             <androidx.cardview.widget.CardView
@@ -108,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="What is HopeConnect?"
-                        android:textColor="#212121"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -118,7 +120,7 @@
                         android:layout_marginTop="12dp"
                         android:lineSpacingExtra="5dp"
                         android:text="HopeConnect is a community-driven Android application built to help locate missing persons and reconnect families using modern technology. Every year, over 1,00,000+ people go missing in India and the first 72 hours are critical.\n\nHopeConnect empowers ordinary citizens, volunteers, and administrators to act together faster than traditional channels by turning every smartphone into a search tool."
-                        android:textColor="#424242"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -142,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Our Mission"
-                        android:textColor="#212121"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -152,7 +154,7 @@
                         android:layout_marginTop="12dp"
                         android:lineSpacingExtra="5dp"
                         android:text="To bridge the gap between concerned citizens and missing person investigations making community-led searches faster, smarter, and more organized. We believe technology should serve humanity, not the other way around."
-                        android:textColor="#424242"
+                        android:textColor="@color/black"
                         android:textSize="15sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -176,7 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Key Features"
-                        android:textColor="#212121"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -190,7 +192,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_community"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -201,7 +203,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Missing Person Reporting"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -227,7 +229,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_share"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -238,7 +240,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Smart Search &amp; Filters"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -264,7 +266,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_connect"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -275,7 +277,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="AI Face Matching"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -301,7 +303,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_secure"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -312,7 +314,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Private In-App Chat"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -338,7 +340,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_report"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -349,7 +351,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Admin Moderation Panel"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
                             <TextView
@@ -385,7 +387,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Developer"
-                        android:textColor="#212121"
+                        android:textColor="@color/black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -400,7 +402,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:src="@drawable/ic_community"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -413,7 +415,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Ritesh Shinde"
-                                android:textColor="#212121"
+                                android:textColor="@color/black"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -430,7 +432,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
                                 android:text="riteshshinde472@gmail.com"
-                                android:textColor="#1A1F3C"
+                                android:textColor="@color/navy_primary"
                                 android:textSize="13sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -451,7 +453,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/ic_github"
-                            app:tint="#000000" />
+                            app:tint="@color/black" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -459,14 +461,14 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="github.com/Ritesh-Shinde45"
-                            android:textColor="#4A4E9D"
+                            android:textColor="@color/url_text"
                             android:textSize="14sp" />
 
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:src="@drawable/ic_arrow_forward"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                     </LinearLayout>
 
                     <!-- LinkedIn -->
@@ -493,14 +495,14 @@
                             android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:text="linkedin.com/in/ritesh--shinde"
-                            android:textColor="#4A4E9D"
+                            android:textColor="@color/url_text"
                             android:textSize="14sp" />
 
                         <ImageView
                             android:layout_width="16dp"
                             android:layout_height="16dp"
                             android:src="@drawable/ic_arrow_forward"
-                            app:tint="#1A1F3C" />
+                            app:tint="@color/navy_primary" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -514,7 +516,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="24dp"
             android:text="© 2026 HopeConnect · Built with ❤️ for India"
-            android:textColor="#9E9E9E"
+            android:textColor="@color/nav_unselected"
             android:textSize="13sp" />
 
     </LinearLayout>

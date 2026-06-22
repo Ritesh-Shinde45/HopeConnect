@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#4A4E9D"
+        android:background="@color/url_text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -20,30 +20,29 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="24dp"
-            android:background="#1A1F3C" />
+            android:background="@color/navy_primary" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:background="#1A1F3C">
+            android:background="@color/navy_primary">
 
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Technology with Humanity"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvSubtitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="HopeConnect: Reuniting Families"
-                android:textColor="#C5CAE9"
+                android:textColor="@color/primary_light"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp" />
         </LinearLayout>
@@ -51,7 +50,6 @@
 
     <!-- Content Card -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/contentCard"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
@@ -78,7 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="The Problem We Couldn't Ignore"
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -99,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Technology That Serves, Not Replaces"
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -120,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Real Problems, Real Solutions"
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -140,7 +138,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Community Is the Feature"
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -161,7 +159,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="What Comes Next"
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="17sp"
                     android:textStyle="bold" />
 
@@ -181,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Technology is most powerful when it is guided by compassion. HopeConnect is proof that a student with a laptop, a clear problem, and the will to solve it can build something that matters."
-                    android:textColor="#1A1F3C"
+                    android:textColor="@color/navy_primary"
                     android:textSize="15sp"
                     android:textStyle="italic"
                     android:lineSpacingExtra="6dp" />
@@ -191,7 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="— Ritesh Shinde, Developer · May 2026"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/nav_unselected"
                     android:textSize="13sp" />
 
             </LinearLayout>

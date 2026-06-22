@@ -7,7 +7,7 @@
     android:layout_margin="6dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="3dp"
                     android:text="Missing"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/white"
                     android:textSize="10sp"
                     android:textStyle="bold"/>
 
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="8 yrs"
-                    android:textColor="#666666"
+                    android:textColor="@color/text_secondary"
                     android:textSize="11sp"
                     android:textStyle="bold"/>
             </RelativeLayout>
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="Rajesh Kumar"
                 android:textStyle="bold"
-                android:textColor="#000000"
+                android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_marginBottom="2dp"
                 android:maxLines="1"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nanded, Maharashtra"
                 android:textSize="11sp"
-                android:textColor="#666666"
+                android:textColor="@color/text_secondary"
                 android:drawableStart="@drawable/ic_location_small"
                 android:drawablePadding="4dp"
                 android:layout_marginBottom="4dp"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="Missing since: Jan 15, 2026"
                 android:textSize="10sp"
-                android:textColor="#999999"
+                android:textColor="@color/text_hint"
                 android:layout_marginBottom="8dp"/>
 
             <Button
@@ -97,7 +97,7 @@
                 android:text="View Details"
                 android:textSize="14sp"
                 android:textAllCaps="false"
-                android:backgroundTint="#1A1F3C"
+                android:backgroundTint="@color/navy_primary"
                 app:cornerRadius="8dp"/>
 
             <RelativeLayout

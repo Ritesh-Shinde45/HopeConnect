@@ -3,17 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/explore_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1F3C"
+    android:background="@color/navy_primary"
     android:fitsSystemWindows="false">
 
-    <!-- ═══════════════════════════════════════════
-         SCROLLABLE CONTENT
-    ═══════════════════════════════════════════ -->
+
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -22,22 +18,15 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:id="@+id/containerLinear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- ═══════════════════════════════════════════
-                 NAVY HEADER BLOCK
-                 paddingTop handles the status bar height so
-                 the header colour bleeds all the way up.
-            ═══════════════════════════════════════════ -->
             <LinearLayout
-                android:id="@+id/topWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="#1A1F3C"
+                android:background="@color/navy_primary"
                 android:fitsSystemWindows="true">
 
                 <!-- Search Bar + Profile Picture -->
@@ -50,7 +39,7 @@
                     android:paddingTop="12dp"
                     android:paddingBottom="16dp"
                     android:gravity="center_vertical"
-                    android:background="#1A1F3C">
+                    android:background="@color/navy_primary">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
@@ -59,7 +48,7 @@
                         android:layout_marginEnd="12dp"
                         app:cardCornerRadius="25dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="#2A3050">
+                        app:cardBackgroundColor="@color/navy_chip">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -73,7 +62,7 @@
                                 android:layout_width="18dp"
                                 android:layout_height="18dp"
                                 android:src="@drawable/ic_search"
-                                android:tint="#8892B8"
+                                android:tint="@color/muted_text"
                                 tools:ignore="UseAppTint"/>
 
                             <EditText
@@ -84,8 +73,8 @@
                                 android:layout_marginStart="10dp"
                                 android:background="@null"
                                 android:hint="Search missing persons…"
-                                android:textColorHint="#8892B8"
-                                android:textColor="#FFFFFF"
+                                android:textColorHint="@color/muted_text"
+                                android:textColor="@color/white"
                                 android:textSize="13sp"
                                 android:inputType="text"
                                 android:maxLines="1"/>
@@ -99,7 +88,7 @@
                         android:layout_height="46dp"
                         android:src="@drawable/person_placeholder_white"
                         app:civ_border_width="2dp"
-                        app:civ_border_color="#2A3050"/>
+                        app:civ_border_color="@color/navy_chip"/>
 
                 </LinearLayout>
 
@@ -112,14 +101,13 @@
                     android:paddingEnd="16dp"
                     android:paddingTop="4dp"
                     android:paddingBottom="20dp"
-                    android:background="#1A1F3C">
+                    android:background="@color/navy_primary">
 
                     <TextView
-                        android:id="@+id/tvCategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Browse by"
-                        android:textColor="#8892B8"
+                        android:textColor="@color/muted_text"
                         android:textSize="11sp"
                         android:textAllCaps="true"
                         android:letterSpacing="0.12"
@@ -148,7 +136,7 @@
                                 android:layout_height="56dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="#FF8C42">
+                                app:cardBackgroundColor="@color/accent_orange">
 
                                 <ImageView
                                     android:id="@+id/iconMissed"
@@ -156,7 +144,7 @@
                                     android:layout_height="26dp"
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_misseed_reports"
-                                    app:tint="#FFFFFF"/>
+                                    app:tint="@color/white"/>
                             </androidx.cardview.widget.CardView>
 
                             <TextView
@@ -164,7 +152,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Missed\nReports"
-                                android:textColor="#FFFFFF"
+                                android:textColor="@color/white"
                                 android:textSize="9sp"
                                 android:gravity="center"
                                 android:layout_marginTop="7dp"
@@ -187,7 +175,7 @@
                                 android:layout_height="56dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="#2A3050">
+                                app:cardBackgroundColor="@color/navy_chip">
 
                                 <ImageView
                                     android:id="@+id/iconMatch"
@@ -195,7 +183,7 @@
                                     android:layout_height="26dp"
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_face_match"
-                                    app:tint="#8892B8"/>
+                                    app:tint="@color/muted_text"/>
                             </androidx.cardview.widget.CardView>
 
                             <TextView
@@ -203,7 +191,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Match\nFace"
-                                android:textColor="#8892B8"
+                                android:textColor="@color/muted_text"
                                 android:textSize="9sp"
                                 android:gravity="center"
                                 android:layout_marginTop="7dp"
@@ -226,7 +214,7 @@
                                 android:layout_height="56dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="#2A3050">
+                                app:cardBackgroundColor="@color/navy_chip">
 
                                 <ImageView
                                     android:id="@+id/iconHelp"
@@ -234,7 +222,7 @@
                                     android:layout_height="26dp"
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_your_helps"
-                                    app:tint="#8892B8"/>
+                                    app:tint="@color/muted_text"/>
                             </androidx.cardview.widget.CardView>
 
                             <TextView
@@ -242,7 +230,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Your\nHelps"
-                                android:textColor="#8892B8"
+                                android:textColor="@color/muted_text"
                                 android:textSize="9sp"
                                 android:gravity="center"
                                 android:layout_marginTop="7dp"
@@ -265,7 +253,7 @@
                                 android:layout_height="56dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp"
-                                app:cardBackgroundColor="#2A3050">
+                                app:cardBackgroundColor="@color/navy_chip">
 
                                 <ImageView
                                     android:id="@+id/iconAchieve"
@@ -273,7 +261,7 @@
                                     android:layout_height="26dp"
                                     android:layout_gravity="center"
                                     android:src="@drawable/ic_achievements"
-                                    app:tint="#8892B8"/>
+                                    app:tint="@color/muted_text"/>
                             </androidx.cardview.widget.CardView>
 
                             <TextView
@@ -281,7 +269,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Achieve\nments"
-                                android:textColor="#8892B8"
+                                android:textColor="@color/muted_text"
                                 android:textSize="9sp"
                                 android:gravity="center"
                                 android:layout_marginTop="7dp"
@@ -291,16 +279,11 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- ═══════════════════════════════════════════
-                     FRAGMENT CONTAINER
-                     Background #F4F5F9 so fragments sit on
-                     the light surface, not the navy header.
-                ═══════════════════════════════════════════ -->
+
                 <FrameLayout
-                    android:id="@+id/bottomColoredArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#F4F5F9"
+                    android:background="@color/surface_bg"
                     android:minHeight="500dp">
 
                     <FrameLayout
@@ -319,13 +302,15 @@
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="72dp"
-        android:layout_gravity="bottom"
-        android:background="#FFFFFF"
-        app:elevation="12dp"
-        app:itemIconSize="26dp"
+        android:background="@color/white"
+        app:elevation="0dp"
+        app:itemIconSize="28dp"
         app:itemIconTint="@color/nav_item_color_state"
-        app:itemTextColor="@color/nav_item_color_state"
+        app:itemTextColor="@color/nav_text_color_state"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        android:layout_gravity="bottom"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

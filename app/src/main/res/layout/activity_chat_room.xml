@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECE5DD"
+    android:background="@color/whitep"
     android:fitsSystemWindows="true">
 
     <View
@@ -55,7 +55,7 @@
             android:layout_toEndOf="@id/ivBack"
             android:layout_marginStart="4dp"
             android:gravity="center"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             android:background="@drawable/person_placeholder_white"/>
@@ -88,7 +88,6 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/ivCall"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentEnd="true"
@@ -106,7 +105,7 @@
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="12dp"
-        android:background="#FFFFFF"
+        android:background="@color/white"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/inputBar"
         app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +124,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_photo"
-                app:tint="#1A1F3C"/>
+                app:tint="@color/navy_primary"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,7 +147,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_document"
-                app:tint="#1A1F3C"/>
+                app:tint="@color/navy_primary"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -170,7 +169,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@drawable/ic_location_small"
-                app:tint="#1A1F3C"/>
+                app:tint="@color/navy_primary"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -190,7 +189,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:padding="6dp"
-        android:background="#F0F0F0"
+        android:background="@color/whitep"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -211,6 +210,8 @@
             android:layout_weight="1"
             android:background="@drawable/bg_message_input"
             android:hint="Type a message"
+            android:textColorHint="@color/brand_secondary2"
+            android:textColor="@color/brand_secondary2"
             android:textSize="15sp"
             android:paddingStart="14dp"
             android:paddingEnd="14dp"
@@ -240,7 +241,7 @@
         android:id="@+id/rvMessages"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#E8EEF6"
+        android:background="@color/chatbg"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:clipToPadding="false"

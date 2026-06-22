@@ -110,7 +110,6 @@
 
     <!-- Logo background circle -->
     <View
-        android:id="@+id/logoBg"
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:background="@drawable/splash_logo_bg2"

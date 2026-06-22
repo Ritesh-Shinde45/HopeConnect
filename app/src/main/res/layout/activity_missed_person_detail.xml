@@ -7,7 +7,6 @@
     android:background="#F5F6FA">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -66,7 +65,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/ic_arrow_back"
-                app:navigationIconTint="#FFFFFF" />
+                app:navigationIconTint="@color/white" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -74,6 +73,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/whiteb"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -89,7 +89,7 @@
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -108,7 +108,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentStart="true"
                             android:text="Full Name"
-                            android:textColor="#1A1A2E"
+                            android:textColor="@color/brand_primary"
                             android:textSize="22sp"
                             android:textStyle="bold"
                             android:fontFamily="sans-serif-medium" />
@@ -136,7 +136,7 @@
                         android:drawableStart="@drawable/person_placeholder"
                         android:drawablePadding="6dp"
                         android:text="Male"
-                        android:textColor="#888888"
+                        android:textColor="@color/text_tertiary"
                         android:textSize="14sp" />
 
                     <View
@@ -181,7 +181,7 @@
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -205,7 +205,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Description goes here..."
-                        android:textColor="#444444"
+                        android:textColor="@color/subdesc"
                         android:textSize="14sp"
                         android:lineSpacingMultiplier="1.5" />
 
@@ -219,7 +219,7 @@
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -270,7 +270,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="—"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/subdesc"
                                 android:textSize="14sp"
                                 android:textStyle="bold"/>
                         </LinearLayout>
@@ -314,7 +314,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="—"
-                                android:textColor="#1A1A2E"
+                                android:textColor="@color/subdesc"
                                 android:textSize="14sp"
                                 android:textStyle="bold"/>
                         </LinearLayout>
@@ -409,7 +409,7 @@
                 android:layout_marginTop="12dp"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="4dp"
-                app:cardBackgroundColor="#FFFFFF">
+                app:cardBackgroundColor="@color/white">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -447,7 +447,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
-                            android:textColor="#666666"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp"
                             android:fontFamily="monospace"/>
                     </LinearLayout>
@@ -470,7 +470,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
-                            android:textColor="#666666"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp"/>
 
                     </LinearLayout>
@@ -493,7 +493,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="—"
-                            android:textColor="#666666"
+                            android:textColor="@color/text_secondary"
                             android:textSize="13sp"/>
                     </LinearLayout>
 
@@ -527,7 +527,7 @@
                     android:layout_marginEnd="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#EEF2FF">
+                    app:cardBackgroundColor="@color/action_download_bg">
 
                     <LinearLayout
                         android:id="@+id/btnDownloadPdf"
@@ -542,13 +542,13 @@
                             android:layout_height="28dp"
                             android:src="@drawable/ic_download"
                             android:layout_marginBottom="6dp"
-                            app:tint="#3F51B5"/>
+                            app:tint="@color/action_download_icon"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Download\nReport"
-                            android:textColor="#3F51B5"
+                            android:textColor="@color/action_download_icon"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="center"/>
@@ -562,7 +562,7 @@
                     android:layout_marginStart="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFF3E0">
+                    app:cardBackgroundColor="@color/action_email_bg">
 
                     <LinearLayout
                         android:id="@+id/btnSendMail"
@@ -577,19 +577,18 @@
                             android:layout_height="28dp"
                             android:src="@drawable/ic_email"
                             android:layout_marginBottom="6dp"
-                            app:tint="#FF9800"/>
+                            app:tint="@color/action_email_icon"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Send\nEmail"
-                            android:textColor="#FF9800"
+                            android:textColor="@color/action_email_icon"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
 
             <LinearLayout
@@ -606,7 +605,7 @@
                     android:layout_marginEnd="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFEBEE">
+                    app:cardBackgroundColor="@color/action_call_bg">
 
                     <LinearLayout
                         android:id="@+id/btnCallEmergency"
@@ -621,13 +620,13 @@
                             android:layout_height="28dp"
                             android:src="@drawable/ic_phone"
                             android:layout_marginBottom="6dp"
-                            app:tint="#E53935"/>
+                            app:tint="@color/action_call_icon"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Call\nEmergency"
-                            android:textColor="#E53935"
+                            android:textColor="@color/action_call_icon"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="center"/>
@@ -641,7 +640,7 @@
                     android:layout_marginStart="6dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="2dp"
-                    app:cardBackgroundColor="#E8F5E9">
+                    app:cardBackgroundColor="@color/action_chat_bg">
 
                     <LinearLayout
                         android:id="@+id/btnChatDetail"
@@ -656,104 +655,127 @@
                             android:layout_height="28dp"
                             android:src="@drawable/ic_chat"
                             android:layout_marginBottom="6dp"
-                            app:tint="#4CAF50"/>
+                            app:tint="@color/action_chat_icon"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Chat with\nUploader"
-                            android:textColor="#4CAF50"
+                            android:textColor="@color/action_chat_icon"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:gravity="center"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
             </LinearLayout>
 
 
-                <androidx.cardview.widget.CardView
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#1A1F3C">
+
+                <LinearLayout
+                    android:id="@+id/btnIveSeenPerson"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="#1A1F3C">
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="18dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_person"
+                        android:layout_marginEnd="12dp"
+                        app:tint="#FFFFFF"/>
 
                     <LinearLayout
-                        android:id="@+id/btnIveSeenPerson"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:padding="18dp">
-
-                        <ImageView
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:src="@drawable/ic_person"
-                            android:layout_marginEnd="12dp"
-                            app:tint="#FFFFFF"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="I've Seen This Person!"
-                                android:textColor="#FFFFFF"
-                                android:textSize="16sp"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Tap to notify the reporter"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardDeleteReport"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="2dp"
-                    app:cardBackgroundColor="#FFEBEE"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:id="@+id/btnDeleteReport"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_close"
-                            android:layout_marginEnd="10dp"
-                            app:tint="#C62828"/>
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Delete This Report"
-                            android:textColor="#C62828"
-                            android:textSize="14sp"
+                            android:text="I've Seen This Person!"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
                             android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap to notify the reporter"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp"/>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardDeleteReport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFEBEE"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/btnDeleteReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_close"
+                        android:layout_marginEnd="10dp"
+                        app:tint="#C62828"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delete This Report"
+                        android:textColor="#C62828"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
 
         </LinearLayout>

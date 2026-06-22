@@ -11,14 +11,13 @@
         android:id="@+id/statusBarSpacer"
         android:layout_width="match_parent"
         android:layout_height="24dp"
-        android:background="#F8F9FB"
+        android:background="@color/background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- top wave -->
     <View
-        android:id="@+id/topBackground"
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:background="@drawable/ic_top_wave"
@@ -26,7 +25,6 @@
 
     <!-- character image -->
     <ImageView
-        android:id="@+id/ivCharacter"
         android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_marginTop="80dp"
@@ -51,7 +49,6 @@
 
     <!-- ScrollView between title and bottom waves -->
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -59,7 +56,6 @@
         app:layout_constraintBottom_toTopOf="@id/ivWaveLight">
 
         <LinearLayout
-            android:id="@+id/inputContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -68,7 +64,7 @@
             <!-- Name -->
             <TextView
                 android:text="Name"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -85,7 +81,7 @@
             <TextView
                 android:layout_marginTop="16dp"
                 android:text="Username"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -100,7 +96,7 @@
             <TextView
                 android:layout_marginTop="16dp"
                 android:text="Mobile"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -117,7 +113,7 @@
             <TextView
                 android:layout_marginTop="16dp"
                 android:text="Email"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -135,7 +131,7 @@
             <TextView
                 android:layout_marginTop="16dp"
                 android:text="Password"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -163,7 +159,7 @@
             <TextView
                 android:layout_marginTop="16dp"
                 android:text="Address"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="12sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -182,13 +178,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="24dp"
-                android:background="#E0E0E0"/>
+                android:background="@color/filter_border"/>
 
             <TextView
                 android:layout_marginTop="16dp"
                 android:layout_gravity="center"
                 android:text="or continue with"
-                android:textColor="#1A1F3C"
+                android:textColor="@color/navy_primary"
                 android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -223,7 +219,6 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
-        android:id="@+id/ivWaveSolid"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="fitXY"
@@ -254,7 +249,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Already have an account? Sign In"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

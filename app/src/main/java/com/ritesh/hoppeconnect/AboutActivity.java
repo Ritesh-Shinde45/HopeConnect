@@ -49,7 +49,6 @@ public class AboutActivity extends AppCompatActivity {
     private void openUrl(String url, String appPackage) {
         android.net.Uri uri = android.net.Uri.parse(url);
 
-        // Try native app first
         try {
             getPackageManager().getPackageInfo(appPackage, 0);
             android.content.Intent appIntent = new android.content.Intent(
@@ -58,14 +57,12 @@ public class AboutActivity extends AppCompatActivity {
             startActivity(appIntent);
             return; // opened successfully, stop here
         } catch (android.content.pm.PackageManager.NameNotFoundException e) {
-            // App not installed, fall through to browser
         }
 
-        // Fall back to browser
         try {
             android.content.Intent browserIntent = new android.content.Intent(
                     android.content.Intent.ACTION_VIEW, uri);
-            startActivity(browserIntent); // Android picks best available browser
+            startActivity(browserIntent);
         } catch (android.content.ActivityNotFoundException e) {
             android.widget.Toast.makeText(this,
                     "No browser found", android.widget.Toast.LENGTH_SHORT).show();

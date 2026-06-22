@@ -53,15 +53,15 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         switch (n.type) {
             case NotificationModel.TYPE_ANNOUNCEMENT:
                 h.tvBadge.setText("ANNOUNCEMENT");
-                h.tvBadge.setBackgroundColor(Color.parseColor("#D97706"));
+                h.tvBadge.setBackgroundColor(Color.parseColor("@color/status_warning"));
                 break;
             case NotificationModel.TYPE_MY_REPORT:
                 h.tvBadge.setText("YOUR REPORT");
-                h.tvBadge.setBackgroundColor(Color.parseColor("#16A34A"));
+                h.tvBadge.setBackgroundColor(Color.parseColor("@color/status_success"));
                 break;
             default:
                 h.tvBadge.setText("REPORT");
-                h.tvBadge.setBackgroundColor(Color.parseColor("#2563EB"));
+                h.tvBadge.setBackgroundColor(Color.parseColor("@color/status_info"));
                 break;
         }
 
