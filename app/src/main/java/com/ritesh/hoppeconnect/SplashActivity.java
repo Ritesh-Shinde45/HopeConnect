@@ -54,15 +54,12 @@ public class SplashActivity extends AppCompatActivity {
 
         Handler h = new Handler(Looper.getMainLooper());
 
-        // Set animated bird drawable (wings flap via AnimatedVectorDrawable)
         AnimatedVectorDrawableCompat avd =
                 AnimatedVectorDrawableCompat.create(this, R.drawable.animated_bird);
         if (avd != null) birdView.setImageDrawable(avd);
 
-        // Phase 1 (0ms): Logo pop-in + ripples
         startLogoAnimation(splashLogo, ripple1, ripple2);
 
-        // Phase 2 (500ms): Bird appears on hand, wings start flapping
         h.postDelayed(() -> {
             birdView.setAlpha(1f);
             birdView.setScaleX(0.5f);
@@ -93,7 +90,6 @@ public class SplashActivity extends AppCompatActivity {
                                 skyOverlay, sparkle1, sparkle2, sparkle3, sparkle4, sparkle5),
                 1100);
 
-        // Phase 5 (1900ms): App name + tagline appear
         h.postDelayed(() -> startTextReveal(appName, tagline), 1900);
 
         // Navigate away

@@ -119,11 +119,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.58" />
 
-    <!--
-        IMPORTANT: splashLogo is your existing launcher icon (hand + bird together).
-        It starts at center, then we animate the bird ImageView flying away from it.
-        This ImageView fades out as the bird departs.
-    -->
+
     <ImageView
         android:id="@+id/splashLogo"
         android:layout_width="80dp"
@@ -137,12 +133,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.58" />
 
-    <!--
-        BIRD VIEW — starts overlapping the logo at hand position,
-        then flies up and away. Use your ic_launcher or a dedicated bird image.
-        If you have a separate bird image (e.g., drawable/bird_only.png), use that.
-        Otherwise we animate the whole logo upward and scale it down.
-    -->
+
     <ImageView
         android:id="@+id/birdView"
         android:layout_width="55dp"
